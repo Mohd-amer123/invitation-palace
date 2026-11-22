@@ -1,0 +1,2732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE INVITATION PALACE | Event Reminder Management System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand text-center position-relative" id="sidebarBrandSection">
+        <div class="brand-crest-wrapper" id="brandCrestWrapper">
+          <div class="brand-crest" id="sidebarBrandIcon"><i class="fa-solid fa-crown"></i></div>
+          <img id="sidebarCompanyLogo" src="" alt="Company Logo" class="sidebar-company-logo d-none">
+        </div>
+        <h1 class="brand-name text-truncate px-2" id="sidebarBrandName">THE INVITATION PALACE</h1>
+        <div class="brand-subtitle text-truncate px-2" id="sidebarBrandSubtitle">WhatsApp Reminder System</div>
+        <div class="mt-2">
+          <button class="btn btn-sm btn-palace-gold brand-edit-badge py-1 px-3 rounded-pill shadow-sm" onclick="openBrandingModal()" title="Upload Company Logo & Customize Branding">
+            <i class="fa-solid fa-camera-retro me-1"></i> Edit Logo
+          </button>
+        </div>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="nav-item">
+          <a href="#dashboard" class="nav-link active" data-section="dashboard">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#customers" class="nav-link" data-section="customers">
+            <i class="fa-solid fa-users"></i>
+            <span>Customers</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#customer-hub" class="nav-link" data-section="customer-hub">
+            <i class="fa-solid fa-id-card-clip text-warning"></i>
+            <span>Customer Hub</span>
+            <span class="badge bg-palace-gold text-dark ms-auto font-monospace" style="font-size: 10px;">360°</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#events" class="nav-link" data-section="events">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Events</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#guests" class="nav-link" data-section="guests">
+            <i class="fa-solid fa-user-group"></i>
+            <span>Guests</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#reminders" class="nav-link" data-section="reminders">
+            <i class="fa-solid fa-bell"></i>
+            <span>Reminders</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#templates" class="nav-link" data-section="templates">
+            <i class="fa-solid fa-message"></i>
+            <span>Message Templates</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#history" class="nav-link" data-section="history">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Message History</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#reports" class="nav-link" data-section="reports">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Reports & Exports</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#settings" class="nav-link" data-section="settings">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div><i class="fa-solid fa-shield-heart text-warning me-1"></i> 100% Free WhatsApp Workflow</div>
+        <div class="text-white-50 mt-1">Local SQLite &bull; Zero Cloud Cost</div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left d-flex align-items-center">
+          <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar" title="Toggle Sidebar">
+            <i class="fa-solid fa-bars-staggered fs-5"></i>
+          </button>
+        </div>
+
+        <div class="header-right d-flex align-items-center gap-2 gap-md-3">
+          <!-- 1. Quick Action Dropdown -->
+          <div class="dropdown">
+            <button class="btn btn-sm btn-palace btn-header-pill dropdown-toggle shadow-sm" type="button" id="quickActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-circle-plus text-warning"></i>
+              <span class="fw-semibold">Quick Action</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end palace-dropdown shadow-lg border-0 mt-2 p-2" aria-labelledby="quickActionsDropdown" style="min-width: 270px;">
+              <li><h6 class="dropdown-header text-uppercase fw-bold text-muted small px-3 pt-2 pb-1">Create New</h6></li>
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openAddCustomerModal()">
+                  <div class="action-icon-circle bg-primary-subtle text-primary">
+                    <i class="fa-solid fa-user-plus"></i>
+                  </div>
+                  <div>
+                    <div class="fw-bold small text-dark">New Customer</div>
+                    <div class="text-muted" style="font-size: 11px;">Register event host or family</div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openAddEventModal()">
+                  <div class="action-icon-circle bg-danger-subtle text-danger">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                  </div>
+                  <div>
+                    <div class="fw-bold small text-dark">New Event</div>
+                    <div class="text-muted" style="font-size: 11px;">Schedule wedding, reception, etc.</div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openAddGuestModal()">
+                  <div class="action-icon-circle bg-warning-subtle text-warning-emphasis">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <div>
+                    <div class="fw-bold small text-dark">Add Single Guest</div>
+                    <div class="text-muted" style="font-size: 11px;">Manual guest phone entry</div>
+                  </div>
+                </a>
+              </li>
+              <li><hr class="dropdown-divider my-2"></li>
+              <li><h6 class="dropdown-header text-uppercase fw-bold text-muted small px-3 py-1">Bulk Operations</h6></li>
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openExcelUploadModal()">
+                  <div class="action-icon-circle bg-success-subtle text-success">
+                    <i class="fa-solid fa-file-excel"></i>
+                  </div>
+                  <div>
+                    <div class="fw-bold small text-dark">Import Excel List</div>
+                    <div class="text-muted" style="font-size: 11px;">Upload .xlsx guest contact sheet</div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 2. Step-by-Step Workflow Guide Pill Button -->
+          <button class="btn btn-sm btn-palace-gold btn-header-pill shadow-sm" onclick="openWorkflowModal()" title="View Palace Step-by-Step Operating Workflow (S.NO 01 to 06)">
+            <i class="fa-solid fa-list-ol"></i>
+            <span class="d-none d-sm-inline fw-bold">S.NO Guide</span>
+          </button>
+
+          <!-- 3. Primary Batch Dispatch Runner Button -->
+          <button class="btn btn-sm btn-batch-runner btn-header-pill shadow-sm" onclick="openBatchDispatchModal()" title="Automated 1-Click Batch WhatsApp Runner">
+            <i class="fa-solid fa-bolt text-warning"></i>
+            <span class="fw-bold d-none d-sm-inline">Batch Sender</span>
+          </button>
+
+          <!-- 4. WhatsApp Status Pill with Pulse Dot -->
+          <button class="btn btn-sm btn-wa-pill btn-header-pill shadow-sm" id="btnHeaderWhatsAppStatus" onclick="openWhatsAppLinkModal()" title="WhatsApp Connection Manager">
+            <i class="fa-brands fa-whatsapp fs-5 text-success"></i>
+            <span class="status-indicator-dot offline" id="waStatusDot"></span>
+            <span class="fw-bold small" id="headerWhatsAppStatusText">Link WhatsApp</span>
+          </button>
+
+          <!-- 5. Executive User Profile Pill -->
+          <div class="user-profile-pill d-flex align-items-center gap-2 shadow-sm px-2.5 py-1 rounded-pill">
+            <div class="user-avatar shadow-sm" id="userAvatar">A</div>
+            <div class="d-none d-md-block text-start pe-1">
+              <div class="fw-bold small lh-1 text-dark" id="userNameDisplay">Admin</div>
+              <div class="text-muted" style="font-size: 10px; letter-spacing: 0.5px;">Palace Manager</div>
+            </div>
+            <button class="btn btn-logout-icon" onclick="handleLogout()" title="Sign Out">
+              <i class="fa-solid fa-power-off"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic Content Area -->
+      <main class="content-area">
+
+        <!-- ==========================================
+             1. DASHBOARD SECTION
+             ========================================== -->
+        <section id="section-dashboard" class="view-section active">
+          <!-- Zero Cost Banner -->
+          <div class="alert alert-light border border-warning-subtle shadow-sm p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-3">
+              <div class="p-2 bg-warning-subtle text-warning-emphasis rounded-circle fs-4">
+                <i class="fa-brands fa-whatsapp text-success"></i>
+              </div>
+              <div>
+                <strong class="text-dark">THE INVITATION PALACE – Free WhatsApp Reminder Engine Active</strong>
+                <p class="text-muted small mb-0">Running on local SQLite. Automatic scheduling operates in the background. Dispatches 100% free via official WhatsApp click-to-chat!</p>
+              </div>
+            </div>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+              <i class="fa-solid fa-circle-check me-1"></i> System Healthy
+            </span>
+          </div>
+
+          <!-- Master Step-by-Step Operating Workflow Stepper Card -->
+          <div class="palace-card mb-4 border-gold shadow-sm" id="palaceWorkflowGuideCard">
+            <div class="palace-card-header bg-white d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 px-4">
+              <div class="d-flex align-items-center gap-3">
+                <div class="p-2 rounded-circle bg-warning-subtle text-warning-emphasis fs-4">
+                  <i class="fa-solid fa-route text-warning"></i>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <h3 class="palace-card-title mb-0">Master Step-by-Step Operating Workflow</h3>
+                    <span class="badge bg-palace-gold text-dark font-monospace" style="font-size: 11px;">S.NO 01 &rarr; 06</span>
+                  </div>
+                  <p class="text-muted small mb-0 mt-1">Standard sequence to manage clients, events, guests and automated reminders without confusion.</p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-palace-outline rounded-pill px-3 py-1.5" type="button" data-bs-toggle="collapse" data-bs-target="#workflowCollapse" aria-expanded="true" aria-controls="workflowCollapse">
+                  <i class="fa-solid fa-chevron-up me-1" id="workflowChevronIcon"></i> <span id="workflowToggleText">Minimize Steps</span>
+                </button>
+              </div>
+            </div>
+            <div class="collapse show" id="workflowCollapse">
+              <div class="palace-card-body p-4 pt-2">
+                <div class="workflow-stepper-container">
+                  <!-- Step 1 -->
+                  <div class="workflow-step-card">
+                    <div class="workflow-step-header">
+                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 01</span>
+                      <div class="step-icon-circle bg-success-subtle text-success">
+                        <i class="fa-brands fa-whatsapp"></i>
+                      </div>
+                    </div>
+                    <h4 class="workflow-step-title">Link WhatsApp Number(s)</h4>
+                    <p class="workflow-step-desc">Scan QR to connect Palace WhatsApp or host numbers. Multi-WhatsApp allows assigning dedicated numbers per event.</p>
+                    <button class="btn btn-sm btn-palace w-100" onclick="openWhatsAppLinkModal()">
+                      <i class="fa-brands fa-whatsapp text-success me-1"></i> Scan & Link Device
+                    </button>
+                    <div class="step-next-hint">
+                      <span>Next: Register Customer</span>
+                      <i class="fa-solid fa-arrow-right ms-auto"></i>
+                    </div>
+                  </div>
+
+                  <!-- Step 2 -->
+                  <div class="workflow-step-card">
+                    <div class="workflow-step-header">
+                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 02</span>
+                      <div class="step-icon-circle bg-primary-subtle text-primary">
+                        <i class="fa-solid fa-user-plus"></i>
+                      </div>
+                    </div>
+                    <h4 class="workflow-step-title">Register Customer / Client</h4>
+                    <p class="workflow-step-desc">Add the event family or client details. Generates an auto-incrementing Palace client code (e.g. CUST-2026-0001).</p>
+                    <button class="btn btn-sm btn-palace w-100" onclick="openAddCustomerModal()">
+                      <i class="fa-solid fa-user-plus text-warning me-1"></i> + Register Customer
+                    </button>
+                    <div class="step-next-hint">
+                      <span>Next: Create Event</span>
+                      <i class="fa-solid fa-arrow-right ms-auto"></i>
+                    </div>
+                  </div>
+
+                  <!-- Step 3 -->
+                  <div class="workflow-step-card">
+                    <div class="workflow-step-header">
+                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 03</span>
+                      <div class="step-icon-circle bg-danger-subtle text-danger">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                      </div>
+                    </div>
+                    <h4 class="workflow-step-title">Create Event & Pick Sender</h4>
+                    <p class="workflow-step-desc">Set event date, time, venue address, Google Maps link, and choose which linked WhatsApp account dispatches.</p>
+                    <button class="btn btn-sm btn-palace w-100" onclick="openAddEventModal()">
+                      <i class="fa-solid fa-calendar-check text-danger me-1"></i> + Create New Event
+                    </button>
+                    <div class="step-next-hint">
+                      <span>Next: Import Guest List</span>
+                      <i class="fa-solid fa-arrow-right ms-auto"></i>
+                    </div>
+                  </div>
+
+                  <!-- Step 4 -->
+                  <div class="workflow-step-card">
+                    <div class="workflow-step-header">
+                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 04</span>
+                      <div class="step-icon-circle bg-success-subtle text-success">
+                        <i class="fa-solid fa-file-excel"></i>
+                      </div>
+                    </div>
+                    <h4 class="workflow-step-title">Import Guests (Excel / Manual)</h4>
+                    <p class="workflow-step-desc">Upload client guest Excel list (.xlsx) or enter single guests. The engine formats 10-digit numbers into standard +91.</p>
+                    <button class="btn btn-sm btn-palace-gold w-100" onclick="openExcelUploadModal()">
+                      <i class="fa-solid fa-file-excel text-success me-1"></i> Import Excel List
+                    </button>
+                    <div class="step-next-hint">
+                      <span>Next: Verify Schedule</span>
+                      <i class="fa-solid fa-arrow-right ms-auto"></i>
+                    </div>
+                  </div>
+
+                  <!-- Step 5 -->
+                  <div class="workflow-step-card">
+                    <div class="workflow-step-header">
+                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 05</span>
+                      <div class="step-icon-circle bg-warning-subtle text-warning-emphasis">
+                        <i class="fa-solid fa-bell"></i>
+                      </div>
+                    </div>
+                    <h4 class="workflow-step-title">Verify Reminder Schedule</h4>
+                    <p class="workflow-step-desc">The Palace engine auto-schedules 7-Day, 3-Day & 1-Day secular reminder messages for every guest in seconds.</p>
+                    <button class="btn btn-sm btn-palace-outline w-100" onclick="switchSection('reminders')">
+                      <i class="fa-solid fa-bell text-warning me-1"></i> Review Reminders
+                    </button>
+                    <div class="step-next-hint">
+                      <span>Next: Automated Dispatch</span>
+                      <i class="fa-solid fa-arrow-right ms-auto"></i>
+                    </div>
+                  </div>
+
+                  <!-- Step 6 -->
+                  <div class="workflow-step-card">
+                    <div class="workflow-step-header">
+                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 06</span>
+                      <div class="step-icon-circle bg-info-subtle text-info">
+                        <i class="fa-solid fa-rocket"></i>
+                      </div>
+                    </div>
+                    <h4 class="workflow-step-title">Zero-Click Auto Dispatch</h4>
+                    <p class="workflow-step-desc">Sit back! Backend background runner delivers batches of 10 every 30 mins with human anti-ban pauses. Monitor in Customer Hub.</p>
+                    <button class="btn btn-sm btn-batch-runner w-100" onclick="openBatchDispatchModal()">
+                      <i class="fa-solid fa-bolt text-warning me-1"></i> Auto-Runner Monitor
+                    </button>
+                    <div class="step-next-hint text-success fw-bold">
+                      <i class="fa-solid fa-circle-check"></i> Complete & Monitored
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-xl-3">
+              <div class="metric-card burgundy">
+                <div>
+                  <div class="metric-label">Total Customers</div>
+                  <div class="metric-value" id="kpiCustomers">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-users"></i></div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="metric-card">
+                <div>
+                  <div class="metric-label">Total Events</div>
+                  <div class="metric-value" id="kpiEvents">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-calendar-star"></i></div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="metric-card">
+                <div>
+                  <div class="metric-label">Total Guests</div>
+                  <div class="metric-value" id="kpiGuests">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-address-book"></i></div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="metric-card warning">
+                <div>
+                  <div class="metric-label">Scheduled Reminders</div>
+                  <div class="metric-value" id="kpiScheduled">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-clock"></i></div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-4">
+              <div class="metric-card success">
+                <div>
+                  <div class="metric-label">Messages Sent</div>
+                  <div class="metric-value" id="kpiSent">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-paper-plane"></i></div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-4">
+              <div class="metric-card success">
+                <div>
+                  <div class="metric-label">Delivered Receipts</div>
+                  <div class="metric-value" id="kpiDelivered">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-check-double"></i></div>
+              </div>
+            </div>
+
+            <div class="col-12 col-xl-4">
+              <div class="metric-card danger">
+                <div>
+                  <div class="metric-label">Failed Messages</div>
+                  <div class="metric-value" id="kpiFailed">0</div>
+                </div>
+                <div class="metric-icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Reminders Notice Table -->
+          <div class="palace-card mb-4" id="readyRemindersCard">
+            <div class="palace-card-header bg-warning-subtle border-warning-subtle">
+              <h3 class="palace-card-title text-warning-emphasis">
+                <i class="fa-solid fa-bell text-warning"></i> Reminders Ready for Dispatch (Today)
+              </h3>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-success fw-bold text-white shadow-sm" onclick="openBatchDispatchModal()">
+                  <i class="fa-solid fa-rocket"></i> Send All in Batch
+                </button>
+                <a href="#reminders" class="btn btn-sm btn-palace">Go to Reminders Panel</a>
+              </div>
+            </div>
+            <div class="palace-card-body p-0">
+              <div class="table-responsive">
+                <table class="table palace-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Guest</th>
+                      <th>Phone</th>
+                      <th>Event & Host</th>
+                      <th>Stage</th>
+                      <th>Status</th>
+                      <th>Quick Send</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboardReadyRemindersTableBody">
+                    <tr><td colspan="6" class="text-center text-muted py-4">No pending reminders due right now.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upcoming Events and Reminders Grid -->
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="palace-card h-100">
+                <div class="palace-card-header">
+                  <h3 class="palace-card-title"><i class="fa-solid fa-calendar-days"></i> Upcoming Events</h3>
+                  <button class="btn btn-sm btn-palace-outline" onclick="openAddEventModal()">+ New Event</button>
+                </div>
+                <div class="palace-card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table palace-table mb-0">
+                      <thead>
+                        <tr>
+                          <th>Event & Host</th>
+                          <th>Category</th>
+                          <th>Date</th>
+                          <th>Guests</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dashboardUpcomingEventsBody">
+                        <tr><td colspan="4" class="text-center text-muted py-4">Loading events...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="palace-card h-100">
+                <div class="palace-card-header">
+                  <h3 class="palace-card-title"><i class="fa-solid fa-stopwatch"></i> Upcoming Scheduled Reminders</h3>
+                  <a href="#reminders" class="btn btn-sm btn-palace-outline">View All</a>
+                </div>
+                <div class="palace-card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table palace-table mb-0">
+                      <thead>
+                        <tr>
+                          <th>Guest Name</th>
+                          <th>Event Name</th>
+                          <th>Stage</th>
+                          <th>Scheduled Date</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dashboardUpcomingRemindersBody">
+                        <tr><td colspan="5" class="text-center text-muted py-4">Loading reminders...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             2. CUSTOMERS SECTION
+             ========================================== -->
+        <section id="section-customers" class="view-section">
+          <div class="palace-card">
+            <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div>
+                <h3 class="palace-card-title mb-0"><i class="fa-solid fa-users text-primary me-2"></i> Customer Directory</h3>
+                <div class="text-muted small">Manage client profiles, contact numbers and order references.</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-palace px-3 py-2 shadow-sm rounded-pill" onclick="openAddCustomerModal()">
+                  <i class="fa-solid fa-user-plus me-1"></i> Add New Customer
+                </button>
+              </div>
+            </div>
+            <div class="palace-card-body">
+              <!-- Filters -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-7">
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" class="form-control" id="customerSearchInput" placeholder="Search by name, mobile, customer code or order reference...">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select" id="customerStatusFilter">
+                    <option value="All">All Statuses</option>
+                    <option value="Active" selected>Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Archived">Archived</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-palace-outline w-100" onclick="loadCustomers()">
+                    <i class="fa-solid fa-filter"></i> Apply
+                  </button>
+                </div>
+              </div>
+
+              <!-- Customer Table -->
+              <div class="table-responsive">
+                <table class="table palace-table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Customer Name</th>
+                      <th>Mobile Number</th>
+                      <th>Order Ref</th>
+                      <th>Events Booked</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="customersTableBody">
+                    <tr><td colspan="7" class="text-center text-muted py-4">Loading customers...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==========================================
+             2.5 CUSTOMER HUB (360° DEDICATED WORKSPACE)
+             ========================================== -->
+        <section id="section-customer-hub" class="view-section">
+          <!-- Top Switcher & Action Bar -->
+          <div class="palace-card mb-4 border-gold">
+            <div class="palace-card-body p-3">
+              <div class="row g-3 align-items-center justify-content-between">
+                <div class="col-lg-5">
+                  <label class="form-label small fw-bold text-uppercase text-muted mb-1">
+                    <i class="fa-solid fa-folder-tree text-warning me-1"></i> Active Customer Workspace:
+                  </label>
+                  <select class="form-select form-select-lg fw-bold border-gold" id="hubCustomerSelector" onchange="switchCustomerHub(this.value)">
+                    <option value="">Choose Customer...</option>
+                  </select>
+                </div>
+                <div class="col-lg-7 d-flex flex-wrap align-items-center justify-content-lg-end gap-2 pt-lg-3">
+                  <button class="btn btn-sm btn-palace" onclick="openAddEventModalForCurrentCustomer()">
+                    <i class="fa-solid fa-calendar-plus"></i> + Add Event
+                  </button>
+                  <button class="btn btn-sm btn-palace-gold" onclick="openExcelUploadForCurrentCustomer()">
+                    <i class="fa-solid fa-file-excel"></i> Import Guests
+                  </button>
+                  <button class="btn btn-sm btn-success fw-bold" onclick="dispatchCurrentCustomerReminders()">
+                    <i class="fa-solid fa-rocket"></i> Dispatch Due Reminders
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="navigateToSection('customers')">
+                    <i class="fa-solid fa-arrow-left"></i> All Customers
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State when no customer selected -->
+          <div id="hubEmptyState" class="text-center py-5 palace-card">
+            <i class="fa-solid fa-id-card text-muted opacity-25" style="font-size: 64px;"></i>
+            <h4 class="mt-3 text-muted">No Customer Selected</h4>
+            <p class="text-muted small">Please select a customer from the dropdown above or click "Open Workspace" from the Customers table.</p>
+          </div>
+
+          <!-- Active Customer Content Area -->
+          <div id="hubContentArea" style="display: none;">
+            <!-- Customer Profile Card -->
+            <div class="palace-card mb-4">
+              <div class="palace-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="user-avatar" id="hubAvatar" style="width: 44px; height: 44px; font-size: 18px;">C</div>
+                  <div>
+                    <h3 class="palace-card-title m-0" id="hubCustomerName">Customer Name</h3>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                      <span class="badge bg-palace-gold text-dark font-monospace" id="hubCustomerCode">CUST-1001</span>
+                      <span class="badge bg-success-subtle text-success border border-success-subtle" id="hubCustomerStatus">Active</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-palace-outline" id="hubEditCustomerBtn" onclick="editCurrentHubCustomer()">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Customer
+                  </button>
+                </div>
+              </div>
+              <div class="palace-card-body">
+                <div class="row g-3">
+                  <div class="col-md-3 col-sm-6">
+                    <small class="text-muted text-uppercase fw-semibold d-block">WhatsApp / Mobile</small>
+                    <strong class="fs-6 text-dark" id="hubCustomerPhone">-</strong>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    <small class="text-muted text-uppercase fw-semibold d-block">Email Address</small>
+                    <span class="fs-6 text-dark" id="hubCustomerEmail">Not provided</span>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    <small class="text-muted text-uppercase fw-semibold d-block">Order Reference</small>
+                    <span class="fs-6 text-dark" id="hubCustomerOrderRef">-</span>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    <small class="text-muted text-uppercase fw-semibold d-block">Registered On</small>
+                    <span class="fs-6 text-dark" id="hubCustomerDate">-</span>
+                  </div>
+                  <div class="col-12" id="hubAddressRow" style="display: none;">
+                    <small class="text-muted text-uppercase fw-semibold d-block">Physical Address</small>
+                    <span class="small text-dark" id="hubCustomerAddress">-</span>
+                  </div>
+                  <div class="col-12" id="hubNotesRow" style="display: none;">
+                    <small class="text-muted text-uppercase fw-semibold d-block">Special Notes</small>
+                    <div class="alert alert-light border p-2 small mb-0 text-muted" id="hubCustomerNotes"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer KPI Metrics -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-3 col-6">
+                <div class="metric-card burgundy">
+                  <div>
+                    <div class="metric-label">Events Booked</div>
+                    <div class="metric-value" id="hubMetricEvents">0</div>
+                  </div>
+                  <div class="metric-icon-box"><i class="fa-solid fa-calendar-check"></i></div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="metric-card warning">
+                  <div>
+                    <div class="metric-label">Total Guests</div>
+                    <div class="metric-value" id="hubMetricGuests">0</div>
+                  </div>
+                  <div class="metric-icon-box"><i class="fa-solid fa-user-group"></i></div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="metric-card success">
+                  <div>
+                    <div class="metric-label">Reminders Sent</div>
+                    <div class="metric-value" id="hubMetricSent">0</div>
+                  </div>
+                  <div class="metric-icon-box"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="metric-card danger">
+                  <div>
+                    <div class="metric-label">Pending In Queue</div>
+                    <div class="metric-value" id="hubMetricPending">0</div>
+                  </div>
+                  <div class="metric-icon-box"><i class="fa-solid fa-clock"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-Dispatch Status for This Customer -->
+            <div class="alert alert-light border border-success-subtle shadow-sm p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-3">
+                <div class="p-2 bg-success-subtle text-success rounded-circle fs-5">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                  <strong class="text-dark">Zero-Click Auto-Dispatch Engine Active for this Customer</strong>
+                  <p class="text-muted small mb-0">When your scheduled reminder dates and times arrive, reminders are dispatched automatically in batches of 10 every 30 minutes via your linked WhatsApp.</p>
+                </div>
+              </div>
+              <span class="badge bg-success text-white px-3 py-2" id="hubAutoDispatchPill">
+                <i class="fa-solid fa-circle-check me-1"></i> Auto-Runner Ready
+              </span>
+            </div>
+
+            <!-- Tabs: Events, Guests, Reminders, Logs -->
+            <ul class="nav nav-pills mb-3 gap-2" id="hubTabs" role="tablist">
+              <li class="nav-item">
+                <button class="nav-link active fw-bold" id="hubTabEvents-btn" data-bs-toggle="pill" data-bs-target="#hubTabEvents" type="button">
+                  <i class="fa-solid fa-calendar-day me-1"></i> Events (<span id="hubTabCountEvents">0</span>)
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link fw-bold" id="hubTabGuests-btn" data-bs-toggle="pill" data-bs-target="#hubTabGuests" type="button">
+                  <i class="fa-solid fa-user-group me-1"></i> Guest Directory (<span id="hubTabCountGuests">0</span>)
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link fw-bold" id="hubTabReminders-btn" data-bs-toggle="pill" data-bs-target="#hubTabReminders" type="button">
+                  <i class="fa-solid fa-bell me-1"></i> Scheduled Reminders (<span id="hubTabCountReminders">0</span>)
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link fw-bold" id="hubTabLogs-btn" data-bs-toggle="pill" data-bs-target="#hubTabLogs" type="button">
+                  <i class="fa-solid fa-clock-rotate-left me-1"></i> Dispatch Logs
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="hubTabContent">
+              <!-- Tab 1: Events -->
+              <div class="tab-pane fade show active" id="hubTabEvents">
+                <div class="palace-card">
+                  <div class="palace-card-header d-flex justify-content-between align-items-center">
+                    <h4 class="palace-card-title fs-6"><i class="fa-solid fa-calendar-check"></i> Customer Events</h4>
+                    <button class="btn btn-sm btn-palace" onclick="openAddEventModalForCurrentCustomer()">+ Add Another Event</button>
+                  </div>
+                  <div class="palace-card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table palace-table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Event Name</th>
+                            <th>Host Name</th>
+                            <th>Category</th>
+                            <th>Event Date & Time</th>
+                            <th>Venue</th>
+                            <th>Guests</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="hubEventsTableBody">
+                          <tr><td colspan="8" class="text-center text-muted py-4">No events found for this customer.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2: Guests -->
+              <div class="tab-pane fade" id="hubTabGuests">
+                <div class="palace-card">
+                  <div class="palace-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="palace-card-title fs-6"><i class="fa-solid fa-users"></i> All Guests for This Customer</h4>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-sm btn-palace-gold" onclick="openExcelUploadForCurrentCustomer()">
+                        <i class="fa-solid fa-file-excel"></i> Import Excel Sheet
+                      </button>
+                      <button class="btn btn-sm btn-palace-outline" onclick="openAddGuestModal()">
+                        <i class="fa-solid fa-user-plus"></i> Add Single Guest
+                      </button>
+                    </div>
+                  </div>
+                  <div class="palace-card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table palace-table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Guest Name</th>
+                            <th>Mobile Number</th>
+                            <th>Assigned Event</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="hubGuestsTableBody">
+                          <tr><td colspan="5" class="text-center text-muted py-4">No guests linked yet.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 3: Reminders -->
+              <div class="tab-pane fade" id="hubTabReminders">
+                <div class="palace-card">
+                  <div class="palace-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="palace-card-title fs-6"><i class="fa-solid fa-stopwatch"></i> Scheduled & Sent Reminders</h4>
+                    <button class="btn btn-sm btn-success fw-bold" onclick="dispatchCurrentCustomerReminders()">
+                      <i class="fa-solid fa-rocket"></i> Dispatch Due for this Customer
+                    </button>
+                  </div>
+                  <div class="palace-card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table palace-table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Guest</th>
+                            <th>Mobile</th>
+                            <th>Event</th>
+                            <th>Stage</th>
+                            <th>Scheduled Date & Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="hubRemindersTableBody">
+                          <tr><td colspan="7" class="text-center text-muted py-4">No reminders generated.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 4: Logs -->
+              <div class="tab-pane fade" id="hubTabLogs">
+                <div class="palace-card">
+                  <div class="palace-card-header">
+                    <h4 class="palace-card-title fs-6"><i class="fa-solid fa-clock-rotate-left"></i> Message History & Delivery Proof</h4>
+                  </div>
+                  <div class="palace-card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table palace-table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Recipient</th>
+                            <th>Phone</th>
+                            <th>Event</th>
+                            <th>Message</th>
+                            <th>Sent At</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody id="hubLogsTableBody">
+                          <tr><td colspan="6" class="text-center text-muted py-4">No messages sent yet.</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        
+
+        <!-- ==========================================
+             3. EVENTS SECTION
+             ========================================== -->
+        <section id="section-events" class="view-section">
+          <div class="palace-card">
+            <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div>
+                <h3 class="palace-card-title mb-0"><i class="fa-solid fa-calendar-check text-danger me-2"></i> Event Management</h3>
+                <div class="text-muted small">Schedule ceremonies, assign dedicated WhatsApp senders, and manage venues.</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-palace px-3 py-2 shadow-sm rounded-pill" onclick="openAddEventModal()">
+                  <i class="fa-solid fa-calendar-plus me-1"></i> Create New Event
+                </button>
+              </div>
+            </div>
+            <div class="palace-card-body">
+              <!-- Filters -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" class="form-control" id="eventSearchInput" placeholder="Search event, host name or venue...">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select" id="eventCategoryFilter">
+                    <option value="All">All Categories</option>
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select" id="eventStatusFilter">
+                    <option value="All">All Statuses</option>
+                    <option value="Active" selected>Active</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-palace-outline w-100" onclick="loadEvents()">
+                    <i class="fa-solid fa-filter"></i> Filter
+                  </button>
+                </div>
+              </div>
+
+              <!-- Events Table -->
+              <div class="table-responsive">
+                <table class="table palace-table">
+                  <thead>
+                    <tr>
+                      <th>Event Name</th>
+                      <th>Host / Main Person</th>
+                      <th>Customer</th>
+                      <th>Category</th>
+                      <th>Date & Time</th>
+                      <th>Venue</th>
+                      <th>Guests</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="eventsTableBody">
+                    <tr><td colspan="9" class="text-center text-muted py-4">Loading events...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             4. GUESTS SECTION (BY EVENT & CUSTOMER CARDS)
+             ========================================== -->
+        <section id="section-guests" class="view-section">
+          <!-- Top Control Header Card -->
+          <div class="palace-card mb-4 border-gold">
+            <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div>
+                <h3 class="palace-card-title mb-0">
+                  <i class="fa-solid fa-users-rectangle text-warning me-2"></i> Event & Customer Guest Lists
+                </h3>
+                <div class="text-muted small">Each event has its own isolated Excel guest list, reminders schedule, and sender WhatsApp.</div>
+              </div>
+              <div class="d-flex align-items-center flex-wrap gap-2">
+                <!-- View Mode Switcher -->
+                <div class="btn-group shadow-sm rounded-pill p-1 bg-light border" role="group">
+                  <button type="button" class="btn btn-sm btn-palace rounded-pill px-3 py-1 fw-semibold" id="btnViewGuestCards" onclick="switchGuestViewMode('cards')">
+                    <i class="fa-solid fa-layer-group me-1"></i> Cards by Event
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold border-0" id="btnViewGuestTable" onclick="switchGuestViewMode('table')">
+                    <i class="fa-solid fa-table-list me-1"></i> Master Table
+                  </button>
+                </div>
+
+                <button class="btn btn-sm btn-palace px-3 py-2 shadow-sm rounded-pill" onclick="openAddGuestModal()">
+                  <i class="fa-solid fa-user-plus me-1"></i> + Single Guest
+                </button>
+                <button class="btn btn-sm btn-palace-gold px-3 py-2 shadow-sm rounded-pill" onclick="openExcelUploadModal()">
+                  <i class="fa-solid fa-file-excel text-success me-1"></i> Import Excel List
+                </button>
+                <a href="/api/guests/sample-template" class="btn btn-sm btn-outline-secondary px-3 py-2 rounded-pill shadow-sm" title="Download Excel Format">
+                  <i class="fa-solid fa-download me-1 text-primary"></i> Sample Excel
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 1: CARDS BY EVENT CONTAINER -->
+          <div id="guestEventCardsView">
+            <!-- Filter Bar for Cards -->
+            <div class="palace-card mb-4">
+              <div class="palace-card-body p-3">
+                <div class="row g-3 align-items-center">
+                  <div class="col-md-5">
+                    <div class="input-group">
+                      <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                      <input type="text" class="form-control" id="guestCardSearchInput" placeholder="Search event, host name or customer..." oninput="filterGuestCards()">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <select class="form-select" id="guestCardCustomerFilter" onchange="filterGuestCards()">
+                      <option value="">All Customers</option>
+                      <!-- Populated dynamically -->
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <select class="form-select" id="guestCardCategoryFilter" onchange="filterGuestCards()">
+                      <option value="">All Categories</option>
+                      <!-- Populated dynamically -->
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="guest-event-cards-grid" id="guestEventCardsGrid">
+              <div class="text-center text-muted py-5 col-12">
+                <div class="spinner-border text-warning mb-2" role="status"></div>
+                <div>Loading event guest cards...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 2: DEDICATED EVENT GUEST WORKSPACE (INSIDE AN EVENT) -->
+          <div id="eventGuestWorkspace" style="display: none;">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+              <button class="btn btn-sm btn-outline-secondary px-3 py-1.5 rounded-pill shadow-sm" onclick="closeEventGuestWorkspace()">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back to All Event Guest Lists
+              </button>
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-sm btn-outline-success px-3 py-1.5 rounded-pill shadow-sm fw-semibold" id="btnEventWsShareWhatsApp" onclick="openShareClientLinkModal(currentEventWsId)" title="Share linking link with host to connect their WhatsApp">
+                  <i class="fa-brands fa-whatsapp me-1"></i> Share Link to Host
+                </button>
+                <button class="btn btn-sm btn-palace-gold px-3 py-1.5 rounded-pill shadow-sm" id="btnEventWsImportExcel" onclick="openExcelUploadForCurrentEvent()">
+                  <i class="fa-solid fa-file-excel text-success me-1"></i> Upload Excel for This Event
+                </button>
+                <button class="btn btn-sm btn-palace px-3 py-1.5 rounded-pill shadow-sm" id="btnEventWsAddGuest" onclick="openAddGuestForCurrentEvent()">
+                  <i class="fa-solid fa-user-plus me-1"></i> + Add Guest
+                </button>
+                <button class="btn btn-sm btn-batch-runner px-3 py-1.5 rounded-pill shadow-sm" id="btnEventWsDispatch" onclick="dispatchCurrentEventReminders()">
+                  <i class="fa-solid fa-bolt text-warning me-1"></i> Batch Dispatch
+                </button>
+              </div>
+            </div>
+
+            <!-- Event Workspace Banner -->
+            <div class="event-workspace-banner" id="eventWsBanner">
+              <div class="row g-3 align-items-center justify-content-between">
+                <div class="col-lg-8">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-palace-gold text-dark font-monospace" id="eventWsCategory">Wedding</span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle" id="eventWsStatus">Active</span>
+                  </div>
+                  <h3 class="fw-bold text-dark mb-1" id="eventWsTitle">Event Name</h3>
+                  <div class="text-muted small mb-2" id="eventWsSubtitle">
+                    Customer: <strong id="eventWsCustomer">Client Name</strong> &bull; Host: <strong id="eventWsHost">Host Name</strong>
+                  </div>
+                  <div class="d-flex flex-wrap gap-3 text-muted small">
+                    <div><i class="fa-regular fa-calendar text-warning me-1"></i> <span id="eventWsDateTime">-</span></div>
+                    <div><i class="fa-solid fa-location-dot text-danger me-1"></i> <span id="eventWsVenue">-</span></div>
+                    <div><i class="fa-brands fa-whatsapp text-success me-1"></i> Sender: <strong id="eventWsSender">Palace WhatsApp</strong> <button class="btn btn-xs btn-outline-success py-0 px-2 rounded-pill ms-1" onclick="openShareClientLinkModal(currentEventWsId)" title="Share link to host"><i class="fa-solid fa-share-nodes"></i> Share Link</button></div>
+                  </div>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                  <div class="d-inline-flex gap-2 text-center">
+                    <div class="p-2.5 bg-white border rounded shadow-sm px-3">
+                      <div class="fs-4 fw-bold text-dark font-monospace" id="eventWsTotalGuests">0</div>
+                      <div class="small text-muted" style="font-size: 11px;">Total Guests</div>
+                    </div>
+                    <div class="p-2.5 bg-white border rounded shadow-sm px-3">
+                      <div class="fs-4 fw-bold text-warning font-monospace" id="eventWsScheduledReminders">0</div>
+                      <div class="small text-muted" style="font-size: 11px;">Reminders</div>
+                    </div>
+                    <div class="p-2.5 bg-white border rounded shadow-sm px-3">
+                      <div class="fs-4 fw-bold text-success font-monospace" id="eventWsSentReminders">0</div>
+                      <div class="small text-muted" style="font-size: 11px;">Sent</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Event Guest Table Card -->
+            <div class="palace-card">
+              <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <h4 class="palace-card-title mb-0"><i class="fa-solid fa-address-book text-primary me-2"></i> Event Guest List</h4>
+                  <span class="badge bg-light text-dark border" id="eventWsGuestListCount">0 Guests</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="input-group input-group-sm" style="max-width: 280px;">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" class="form-control" id="eventWsGuestSearchInput" placeholder="Search guests in this event..." oninput="filterEventSpecificGuests()">
+                  </div>
+                </div>
+              </div>
+              <div class="palace-card-body p-0">
+                <div class="table-responsive">
+                  <table class="table palace-table mb-0">
+                    <thead>
+                      <tr>
+                        <th style="width: 50px;">#</th>
+                        <th>Guest Name</th>
+                        <th>WhatsApp Mobile</th>
+                        <th>Language</th>
+                        <th>Consent Status</th>
+                        <th>RSVP Status</th>
+                        <th>WhatsApp Action</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="eventWsGuestsTableBody">
+                      <tr><td colspan="8" class="text-center text-muted py-4">Loading guests for this event...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 3: MASTER ALL GUESTS TABLE CONTAINER -->
+          <div id="guestMasterTableView" style="display: none;">
+            <div class="palace-card">
+              <div class="palace-card-header py-3 px-4">
+                <h3 class="palace-card-title mb-0"><i class="fa-solid fa-table-list text-muted me-2"></i> All Guests Global Database</h3>
+                <div class="text-muted small">Global registry of all contacts across every customer and event.</div>
+              </div>
+              <div class="palace-card-body">
+                <!-- Filters -->
+                <div class="row g-3 mb-4">
+                  <div class="col-md-5">
+                    <div class="input-group">
+                      <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                      <input type="text" class="form-control" id="guestSearchInput" placeholder="Search by guest name, mobile or email...">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <select class="form-select" id="guestEventFilter">
+                      <option value="">All Events</option>
+                      <!-- Populated dynamically -->
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <button class="btn btn-palace-outline w-100" onclick="loadGuests()">
+                      <i class="fa-solid fa-filter"></i> Apply Filter
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Guests Table -->
+                <div class="table-responsive">
+                  <table class="table palace-table">
+                    <thead>
+                      <tr>
+                        <th>Guest Name</th>
+                        <th>WhatsApp Mobile</th>
+                        <th>Language</th>
+                        <th>Consent Status</th>
+                        <th>Events Registered</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="guestsTableBody">
+                      <tr><td colspan="6" class="text-center text-muted py-4">Loading guests...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             5. REMINDERS SECTION
+             ========================================== -->
+        <section id="section-reminders" class="view-section">
+          <div class="palace-card">
+            <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div>
+                <h3 class="palace-card-title mb-0"><i class="fa-solid fa-bell text-warning me-2"></i> Scheduled Reminders Center</h3>
+                <div class="text-muted small">Automatic 7-Day, 3-Day & 1-Day schedules with 100% Free WhatsApp dispatch.</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-batch-runner px-3 py-2 shadow-sm rounded-pill" onclick="openBatchDispatchModal()">
+                  <i class="fa-solid fa-rocket me-1"></i> Start Batch Sending
+                </button>
+                <button class="btn btn-sm btn-palace-outline px-3 py-2 rounded-pill" onclick="loadReminders()">
+                  <i class="fa-solid fa-rotate me-1"></i> Refresh
+                </button>
+              </div>
+            </div>
+            <div class="palace-card-body">
+              <!-- Filters -->
+              <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                  <label class="form-label small text-muted">Status</label>
+                  <select class="form-select" id="reminderStatusFilter">
+                    <option value="All">All Statuses</option>
+                    <option value="Ready to Send">Ready to Send (Due)</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Awaiting WhatsApp">Awaiting WhatsApp</option>
+                    <option value="Sent">Sent</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Failed">Failed</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Skipped">Skipped (Overdue)</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label small text-muted">Event</label>
+                  <select class="form-select" id="reminderEventFilter">
+                    <option value="">All Events</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label small text-muted">Stage</label>
+                  <select class="form-select" id="reminderStageFilter">
+                    <option value="All">All Stages</option>
+                    <option value="7-Day Reminder">7-Day</option>
+                    <option value="3-Day Reminder">3-Day</option>
+                    <option value="1-Day Reminder">1-Day</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small text-muted">Search Guest / Phone</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="reminderSearchInput" placeholder="Name or number...">
+                    <button class="btn btn-palace" onclick="loadReminders()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reminders Table -->
+              <div class="table-responsive">
+                <table class="table palace-table">
+                  <thead>
+                    <tr>
+                      <th>Guest & Phone</th>
+                      <th>Event & Host</th>
+                      <th>Stage</th>
+                      <th>Scheduled Date</th>
+                      <th>Status</th>
+                      <th>Free WhatsApp Action</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="remindersTableBody">
+                    <tr><td colspan="7" class="text-center text-muted py-4">Loading reminders...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             6. MESSAGE TEMPLATES SECTION
+             ========================================== -->
+        <section id="section-templates" class="view-section">
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <div class="palace-card">
+                <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between">
+                  <div>
+                    <h3 class="palace-card-title mb-0"><i class="fa-solid fa-message text-success me-2"></i> Reminder Message Templates</h3>
+                    <div class="text-muted small">Customize secular wording with dynamic tags like {{guest_name}} and {{venue_name}}.</div>
+                  </div>
+                </div>
+                <div class="palace-card-body">
+                  <!-- Reminder Stage Tabs -->
+                  <ul class="nav nav-pills mb-4 gap-2" id="templateTabs">
+                    <li class="nav-item">
+                      <button class="nav-link active btn-sm" onclick="selectTemplateStage(7)">7-Day Reminder</button>
+                    </li>
+                    <li class="nav-item">
+                      <button class="nav-link btn-sm" onclick="selectTemplateStage(3)">3-Day Reminder</button>
+                    </li>
+                    <li class="nav-item">
+                      <button class="nav-link btn-sm" onclick="selectTemplateStage(1)">1-Day Reminder</button>
+                    </li>
+                  </ul>
+
+                  <!-- Dynamic Variables Picker -->
+                  <div class="mb-3">
+                    <label class="form-label d-flex justify-content-between">
+                      <span>Click to insert dynamic variable:</span>
+                      <small class="text-muted"><i class="fa-solid fa-clock"></i> {{time_greeting}} auto-detects morning/afternoon/evening</small>
+                    </label>
+                    <div class="p-2 border rounded bg-light mb-2">
+                      <span class="variable-chip" onclick="insertVariable('{{time_greeting}}')">{{time_greeting}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{guest_name}}')">{{guest_name}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{event_name}}')">{{event_name}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{host_name}}')">{{host_name}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{event_date}}')">{{event_date}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{event_time}}')">{{event_time}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{venue_name}}')">{{venue_name}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{venue_address}}')">{{venue_address}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{maps_link}}')">{{maps_link}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{business_name}}')">{{business_name}}</span>
+                    </div>
+                  </div>
+
+                  <!-- Template Editor Form -->
+                  <form id="templateEditForm">
+                    <input type="hidden" id="currentTemplateId">
+                    <div class="mb-3">
+                      <label for="templateTextInput" class="form-label">Template Message Text</label>
+                      <textarea class="form-control" id="templateTextInput" rows="12" style="font-family: inherit; font-size: 13.5px;"></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="resetCurrentTemplateDefault()">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Default
+                      </button>
+                      <button type="submit" class="btn btn-palace">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Template
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Preview Column -->
+            <div class="col-lg-5">
+              <div class="palace-card">
+                <div class="palace-card-header bg-light">
+                  <h3 class="palace-card-title"><i class="fa-brands fa-whatsapp text-success"></i> WhatsApp Live Preview</h3>
+                  <span class="badge bg-success-subtle text-success">Real-Time</span>
+                </div>
+                <div class="palace-card-body">
+                  <div class="alert alert-info py-2 px-3 small mb-3">
+                    <i class="fa-solid fa-circle-info me-1"></i> Preview shows how the message renders with sample guest and host data.
+                  </div>
+
+                  <div class="whatsapp-preview-box">
+                    <div class="whatsapp-bubble" id="whatsappLivePreviewBubble">
+                      Loading preview...
+                    </div>
+                    <div class="whatsapp-bubble-time" id="previewTimeDisplay">10:00 AM &bull; WhatsApp</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             7. MESSAGE HISTORY SECTION
+             ========================================== -->
+        <section id="section-history" class="view-section">
+          <div class="palace-card">
+            <div class="palace-card-header">
+              <h3 class="palace-card-title"><i class="fa-solid fa-clock-rotate-left"></i> Message Dispatch History</h3>
+              <a href="/api/reports/export-csv?type=history" class="btn btn-palace-outline btn-sm">
+                <i class="fa-solid fa-file-csv"></i> Export History CSV
+              </a>
+            </div>
+            <div class="palace-card-body">
+              <div class="row g-3 mb-4">
+                <div class="col-md-9">
+                  <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" class="form-control" id="historySearchInput" placeholder="Search by recipient name, phone or message words...">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-palace w-100" onclick="loadMessageHistory()">
+                    <i class="fa-solid fa-filter"></i> Search Logs
+                  </button>
+                </div>
+              </div>
+
+              <!-- History Table -->
+              <div class="table-responsive">
+                <table class="table palace-table">
+                  <thead>
+                    <tr>
+                      <th>Date & Time</th>
+                      <th>Recipient</th>
+                      <th>Event</th>
+                      <th>Send Method</th>
+                      <th>Status</th>
+                      <th>Message Preview</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyTableBody">
+                    <tr><td colspan="6" class="text-center text-muted py-4">Loading history...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             8. REPORTS SECTION
+             ========================================== -->
+        <section id="section-reports" class="view-section">
+          <!-- Event-Wise Report -->
+          <div class="palace-card mb-4">
+            <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between">
+              <div>
+                <h3 class="palace-card-title mb-0"><i class="fa-solid fa-calendar-week text-primary me-2"></i> Event-Wise Reminder Report</h3>
+                <div class="text-muted small">Live analytics and delivery rates grouped per event.</div>
+              </div>
+              <a href="/api/reports/export-csv?type=events" class="btn btn-sm btn-palace-outline px-3 py-1.5 rounded-pill shadow-sm">
+                <i class="fa-solid fa-file-csv me-1 text-success"></i> Download CSV
+              </a>
+            </div>
+            <div class="palace-card-body p-0">
+              <div class="table-responsive">
+                <table class="table palace-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Event Name</th>
+                      <th>Host / Person</th>
+                      <th>Customer</th>
+                      <th>Date</th>
+                      <th>Total Guests</th>
+                      <th>Sent</th>
+                      <th>Delivered</th>
+                      <th>Pending</th>
+                      <th>Failed</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportEventsTableBody">
+                    <tr><td colspan="9" class="text-center text-muted py-4">Loading event statistics...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer-Wise Report -->
+          <div class="palace-card">
+            <div class="palace-card-header py-3 px-4 d-flex align-items-center justify-content-between">
+              <div>
+                <h3 class="palace-card-title mb-0"><i class="fa-solid fa-user-tie text-warning me-2"></i> Customer-Wise Summary Report</h3>
+                <div class="text-muted small">Aggregated statistics by customer account and invitation counts.</div>
+              </div>
+              <a href="/api/reports/export-csv?type=customers" class="btn btn-sm btn-palace-outline px-3 py-1.5 rounded-pill shadow-sm">
+                <i class="fa-solid fa-file-csv me-1 text-success"></i> Download CSV
+              </a>
+            </div>
+            <div class="palace-card-body p-0">
+              <div class="table-responsive">
+                <table class="table palace-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Customer Code</th>
+                      <th>Name</th>
+                      <th>Mobile</th>
+                      <th>Registration Date</th>
+                      <th>Events</th>
+                      <th>Guests Invited</th>
+                      <th>Reminders Sent</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportCustomersTableBody">
+                    <tr><td colspan="7" class="text-center text-muted py-4">Loading customer statistics...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <!-- ==========================================
+             9. SETTINGS SECTION
+             ========================================== -->
+        <section id="section-settings" class="view-section">
+          <div class="row g-4">
+            <!-- Company Logo & Visual Branding -->
+            <div class="col-12">
+              <div class="palace-card border-gold shadow-sm">
+                <div class="palace-card-header d-flex align-items-center justify-content-between py-3 px-4">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="action-icon-circle bg-warning-subtle text-warning-emphasis">
+                      <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <div>
+                      <h3 class="palace-card-title mb-0">Company Branding & Custom Logo</h3>
+                      <div class="text-muted small">Upload your company logo to appear in the navbar, sidebar, and login page.</div>
+                    </div>
+                  </div>
+                  <span class="badge bg-palace-gold text-dark font-monospace px-3 py-2">PRO BRANDING</span>
+                </div>
+                <div class="palace-card-body p-4">
+                  <div class="row g-4 align-items-center">
+                    <div class="col-md-4 text-center border-end-md">
+                      <label class="form-label fw-bold text-muted small text-uppercase mb-2">Active Brand Logo</label>
+                      <div class="logo-preview-box mb-3 shadow-sm mx-auto" id="settingsLogoPreviewBox" style="max-width: 280px;">
+                        <img id="settingsCurrentLogoImg" src="" alt="Company Logo" class="logo-preview-img d-none">
+                        <div id="settingsLogoFallbackCrest" class="text-center py-3 text-muted">
+                          <i class="fa-solid fa-crown fs-1 text-warning mb-2 d-block"></i>
+                          <span class="small fw-semibold">Default Royal Monogram Active</span>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-sm btn-outline-danger px-3 py-1.5 rounded-pill" id="btnResetLogo" onclick="handleResetLogo()">
+                        <i class="fa-solid fa-trash me-1"></i> Reset Logo to Default
+                      </button>
+                    </div>
+                    <div class="col-md-8">
+                      <form id="brandingUploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                          <label class="form-label fw-bold">Select New Logo Image <span class="text-muted fw-normal">(PNG, JPG, SVG, WebP &bull; Max 5MB)</span></label>
+                          <input type="file" class="form-control" id="companyLogoFileInput" name="logo" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+                          <small class="text-muted">Recommended: Transparent background PNG or SVG for highest quality display.</small>
+                        </div>
+                        <div class="row g-3 mb-3">
+                          <div class="col-sm-6">
+                            <label class="form-label fw-bold">Company / Business Name</label>
+                            <input type="text" class="form-control" id="brandCompanyNameInput" name="business_name" placeholder="THE INVITATION PALACE" required>
+                          </div>
+                          <div class="col-sm-6">
+                            <label class="form-label fw-bold">Business Tagline</label>
+                            <input type="text" class="form-control" id="brandTaglineInput" name="business_tagline" placeholder="Luxury Wedding & Event Stationery">
+                          </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                          <button type="submit" class="btn btn-palace px-4 py-2" id="btnSaveBranding">
+                            <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload & Apply Brand Logo
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Information -->
+            <div class="col-lg-6">
+              <div class="palace-card">
+                <div class="palace-card-header">
+                  <h3 class="palace-card-title"><i class="fa-solid fa-building"></i> Business Profile</h3>
+                </div>
+                <div class="palace-card-body">
+                  <form id="businessSettingsForm">
+                    <div class="mb-3">
+                      <label class="form-label">Business Name</label>
+                      <input type="text" class="form-control" name="business_name" id="set_business_name" value="THE INVITATION PALACE" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Contact WhatsApp Number</label>
+                      <input type="text" class="form-control" name="business_phone" id="set_business_phone" value="+919876543210" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Email Address</label>
+                      <input type="email" class="form-control" name="business_email" id="set_business_email" value="contact@theinvitationpalace.com">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Physical Address</label>
+                      <textarea class="form-control" name="business_address" id="set_business_address" rows="2"></textarea>
+                    </div>
+                    <div class="row g-2 mb-3">
+                      <div class="col-6">
+                        <label class="form-label">Default Country Code</label>
+                        <input type="text" class="form-control" name="default_country_code" id="set_default_country_code" value="+91">
+                      </div>
+                      <div class="col-6">
+                        <label class="form-label">Timezone</label>
+                        <input type="text" class="form-control" name="default_timezone" id="set_default_timezone" value="Asia/Kolkata" readonly>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-palace">Save Business Details</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Admin Password Change -->
+              <div class="palace-card">
+                <div class="palace-card-header">
+                  <h3 class="palace-card-title"><i class="fa-solid fa-lock"></i> Change Admin Password</h3>
+                </div>
+                <div class="palace-card-body">
+                  <form id="changePasswordForm">
+                    <div class="mb-3">
+                      <label class="form-label">Current Password</label>
+                      <input type="password" class="form-control" id="currPassword" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">New Password (Min 6 characters)</label>
+                      <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-palace">Update Password</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- WhatsApp & Database Backups -->
+            <div class="col-lg-6">
+              <!-- WhatsApp Sending Configuration -->
+              <div class="palace-card">
+                <div class="palace-card-header">
+                  <h3 class="palace-card-title"><i class="fa-brands fa-whatsapp text-success"></i> WhatsApp Integration Mode</h3>
+                </div>
+                <div class="palace-card-body">
+                  <form id="whatsappSettingsForm">
+                    <div class="mb-3">
+                      <label class="form-label">Dispatch Strategy</label>
+                      <select class="form-select" name="whatsapp_mode" id="set_whatsapp_mode">
+                        <option value="manual_free" selected>100% Free WhatsApp Manual Dispatch (Zero Cost - Recommended)</option>
+                        <option value="meta_cloud_api">Official Meta WhatsApp Cloud API (Requires Meta Account)</option>
+                      </select>
+                      <small class="text-muted mt-1 d-block">
+                        <i class="fa-solid fa-circle-check text-success"></i> In <strong>100% Free mode</strong>, reminders open the official WhatsApp chat with pre-filled personalized messages at zero cost.
+                      </small>
+                    </div>
+
+                    <div id="metaCloudApiFields" class="p-3 border rounded bg-light mb-3" style="display: none;">
+                      <h6 class="text-dark fw-bold mb-2"><i class="fa-brands fa-meta text-primary"></i> Meta Cloud API Settings</h6>
+                      <div class="mb-2">
+                        <label class="form-label small">Phone Number ID</label>
+                        <input type="text" class="form-control form-control-sm" name="meta_phone_number_id" id="set_meta_phone_number_id" placeholder="e.g. 1029384756">
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label small">WhatsApp Business Account ID (WABA)</label>
+                        <input type="text" class="form-control form-control-sm" name="meta_waba_id" id="set_meta_waba_id" placeholder="e.g. 5647382910">
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label small">Permanent Access Token</label>
+                        <input type="password" class="form-control form-control-sm" name="meta_access_token" id="set_meta_access_token" placeholder="Bearer EAAG...">
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label small">Graph API Version</label>
+                        <input type="text" class="form-control form-control-sm" name="meta_api_version" id="set_meta_api_version" value="v21.0">
+                      </div>
+                      <div class="form-check form-switch mt-2">
+                        <input class="form-check-input" type="checkbox" id="set_meta_api_enabled" name="meta_api_enabled">
+                        <label class="form-check-label small" for="set_meta_api_enabled">Enable Automatic Meta API Sending (Only if free allowance or authorized)</label>
+                      </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-palace">Save WhatsApp Settings</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Database Backup & Restore -->
+              <div class="palace-card">
+                <div class="palace-card-header">
+                  <h3 class="palace-card-title"><i class="fa-solid fa-database"></i> Local SQLite Backup & Restore</h3>
+                </div>
+                <div class="palace-card-body">
+                  <div class="mb-4">
+                    <label class="form-label">Database Backup</label>
+                    <p class="text-muted small">Download an exact, timestamped copy of your local SQLite database containing all customers, events, and records.</p>
+                    <a href="/api/settings/backup" class="btn btn-palace-outline">
+                      <i class="fa-solid fa-download"></i> Download Database Backup (.db)
+                    </a>
+                    <a href="/api/settings/export-data" class="btn btn-palace-outline ms-2">
+                      <i class="fa-solid fa-file-code"></i> Export Full JSON
+                    </a>
+                  </div>
+
+                  <hr>
+
+                  <div>
+                    <label class="form-label">Restore Database</label>
+                    <p class="text-muted small">Upload a previously backed-up <code>.db</code> file to restore your entire database.</p>
+                    <form id="dbRestoreForm" class="d-flex gap-2">
+                      <input type="file" class="form-control" id="dbRestoreFileInput" accept=".db,.sqlite,.sqlite3" required>
+                      <button type="submit" class="btn btn-danger text-nowrap">
+                        <i class="fa-solid fa-upload"></i> Restore DB
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==============================================================
+       MODALS
+       ============================================================== -->
+
+  <!-- Modal: Add / Edit Customer -->
+  <div class="modal fade" id="customerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="customerModalTitle">Add New Customer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="customerForm">
+          <input type="hidden" id="customerIdInput">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Full Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="custNameInput" required placeholder="e.g. Farhan Ali">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control" id="custMobileInput" required placeholder="e.g. 9876543210 or +919876543210">
+              <small class="text-muted">International or 10-digit Indian phone number.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email Address (Optional)</label>
+              <input type="email" class="form-control" id="custEmailInput" placeholder="e.g. farhan@example.com">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Order / Reference Number</label>
+              <input type="text" class="form-control" id="custOrderRefInput" placeholder="e.g. INV-2026-089">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Address (Optional)</label>
+              <textarea class="form-control" id="custAddressInput" rows="2"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Customer Status</label>
+              <select class="form-select" id="custStatusInput">
+                <option value="Active" selected>Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notes</label>
+              <textarea class="form-control" id="custNotesInput" rows="2" placeholder="Special preferences or notes..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-palace">Save Customer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: View Customer Details & Events -->
+  <div class="modal fade" id="customerDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="custDetailTitle">Customer Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3 mb-4 p-3 bg-light rounded" id="custDetailInfoBox">
+            <!-- Dynamic info -->
+          </div>
+          <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-calendar-star me-2 text-warning"></i> Associated Events</h6>
+          <div class="table-responsive">
+            <table class="table palace-table mb-0">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Host / Main Person</th>
+                  <th>Date</th>
+                  <th>Guests</th>
+                  <th>Reminders</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="custDetailEventsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Event -->
+  <div class="modal fade" id="eventModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventModalTitle">Create New Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="eventForm">
+          <input type="hidden" id="eventIdInput">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Customer <span class="text-danger">*</span></label>
+                <select class="form-select" id="eventCustomerSelect" required>
+                  <option value="">Select Customer...</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Event Category <span class="text-danger">*</span></label>
+                <select class="form-select" id="eventCategorySelect" required>
+                  <!-- Populated from constants -->
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Event Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="eventNameInput" required placeholder="e.g. Amina & Farhan's Grand Wedding">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">
+                  <strong>Host Name / Main Person Name</strong> <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control border-warning" id="eventHostNameInput" required placeholder="e.g. Farhan & Amina, Rahul & Priya">
+                <small class="text-muted">Appears automatically in WhatsApp reminder templates as <code>{{host_name}}</code>.</small>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Event Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" id="eventDateInput" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Event Time <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="eventTimeInput" required placeholder="e.g. 07:30 PM">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Venue Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="eventVenueNameInput" required placeholder="e.g. Royal Heritage Ballroom">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Google Maps Link (Optional)</label>
+                <input type="url" class="form-control" id="eventMapsLinkInput" placeholder="https://maps.app.goo.gl/...">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Venue Full Address <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="eventVenueAddressInput" rows="2" required placeholder="Full street address and city..."></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Reminder Stages (Days Before)</label>
+                <input type="text" class="form-control" id="eventReminderDaysInput" value="7,3,1">
+                <small class="text-muted">Comma-separated days before event date (Default: 7,3,1).</small>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Daily Reminder Dispatch Time</label>
+                <input type="time" class="form-control" id="eventReminderTimeInput" value="10:00">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-bold">
+                  <i class="fa-brands fa-whatsapp text-success me-1"></i> Dedicated Sender WhatsApp Account
+                </label>
+                <select class="form-select" id="eventWhatsAppAccountSelect">
+                  <option value="">Default (Primary Palace WhatsApp)</option>
+                </select>
+                <small class="text-muted">Choose which linked WhatsApp number sends reminders for this specific event.</small>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Event Description / Additional Notes</label>
+                <textarea class="form-control" id="eventDescInput" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-palace">Save Event</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Event Details & Guest Roster -->
+  <div class="modal fade" id="eventDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventDetailHeaderTitle">Event Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3 p-3 bg-light rounded mb-4" id="eventDetailCardInfo">
+            <!-- Dynamic Event Info -->
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0"><i class="fa-solid fa-address-book text-warning me-2"></i> Registered Guests (<span id="eventGuestCountSpan">0</span>)</h6>
+            <button class="btn btn-sm btn-palace-gold" onclick="openAddGuestModal(currentViewEventId)">
+              <i class="fa-solid fa-user-plus"></i> Add Guest to Event
+            </button>
+          </div>
+
+          <div class="table-responsive mb-4" style="max-height: 250px; overflow-y: auto;">
+            <table class="table palace-table mb-0">
+              <thead>
+                <tr>
+                  <th>Guest Name</th>
+                  <th>WhatsApp Number</th>
+                  <th>Consent</th>
+                  <th>Registered Date</th>
+                </tr>
+              </thead>
+              <tbody id="eventGuestsTableBody"></tbody>
+            </table>
+          </div>
+
+          <h6 class="fw-bold mb-3"><i class="fa-solid fa-bell text-warning me-2"></i> Reminder Schedules for this Event</h6>
+          <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+            <table class="table palace-table mb-0">
+              <thead>
+                <tr>
+                  <th>Guest</th>
+                  <th>Stage</th>
+                  <th>Scheduled Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="eventRemindersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Guest -->
+  <div class="modal fade" id="guestModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="guestModalTitle">Add Single Guest</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="guestForm">
+          <input type="hidden" id="guestIdInput">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Guest Full Name <span class="text-muted small">(Optional)</span></label>
+              <input type="text" class="form-control" id="guestNameInput" placeholder="e.g. Mohammad Tariq (Optional)">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">WhatsApp Mobile Number <span class="text-danger">*</span></label>
+              <input type="tel" class="form-control" id="guestMobileInput" required placeholder="e.g. 9876543210 or +919876543210">
+              <small class="text-muted">Normalized into international format (+91...).</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Associate with Event</label>
+              <select class="form-select" id="guestEventSelect">
+                <option value="">Select Event (Optional)...</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Preferred Language</label>
+              <input type="text" class="form-control" id="guestLangInput" value="English">
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="guestConsentCheck" checked>
+                <label class="form-check-label" for="guestConsentCheck">
+                  Guest has provided consent to receive WhatsApp event reminders
+                </label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Notes (Optional)</label>
+              <textarea class="form-control" id="guestNotesInput" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-palace">Save Guest</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Bulk Excel / CSV Upload & Preview -->
+  <div class="modal fade" id="excelUploadModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fa-solid fa-file-excel text-success me-2"></i> Import Guest List from Excel / CSV</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Step 1: File Selection & Event Assignment -->
+          <div class="card p-3 mb-3 bg-light border-0">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-5">
+                <label class="form-label fw-bold">1. Select Target Event <span class="text-danger">*</span></label>
+                <select class="form-select" id="excelTargetEventSelect" required>
+                  <option value="">Choose Event...</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">2. Upload Excel (.xlsx) or CSV file</label>
+                <input type="file" class="form-control" id="excelFileInput" accept=".xlsx,.xls,.csv" required>
+              </div>
+              <div class="col-md-3 d-flex gap-2">
+                <button type="button" class="btn btn-palace w-100" id="btnPreviewExcel" onclick="handlePreviewExcel()">
+                  <i class="fa-solid fa-magnifying-glass"></i> Preview & Validate
+                </button>
+              </div>
+            </div>
+            <div class="mt-2 d-flex justify-content-between align-items-center">
+              <small class="text-muted">Ensure your file has columns for Name, Mobile and optional Consent.</small>
+              <a href="/api/guests/sample-template" class="text-decoration-none small text-primary fw-semibold">
+                <i class="fa-solid fa-download"></i> Download Sample Excel Template
+              </a>
+            </div>
+          </div>
+
+          <!-- Step 2: Validation Summary & Record Preview -->
+          <div id="excelValidationResults" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6 me-2" id="badgeValidCount">
+                  0 Valid Records
+                </span>
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 fs-6" id="badgeInvalidCount">
+                  0 Invalid / Duplicate Records
+                </span>
+              </div>
+              <button class="btn btn-success fw-bold px-4" id="btnConfirmImport" onclick="handleConfirmImport()">
+                <i class="fa-solid fa-check-double"></i> Confirm & Import Valid Guests
+              </button>
+            </div>
+
+            <!-- Preview Tabs: Valid vs Invalid -->
+            <ul class="nav nav-tabs mb-3" id="importPreviewTabs">
+              <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabValidRecords">
+                  Valid Records (<span id="tabValidCount">0</span>)
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link text-danger" data-bs-toggle="tab" data-bs-target="#tabInvalidRecords">
+                  Issues / Duplicate (<span id="tabInvalidCount">0</span>)
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <!-- Valid Records Tab -->
+              <div class="tab-pane fade show active" id="tabValidRecords">
+                <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+                  <table class="table palace-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Guest Name</th>
+                        <th>Normalized Phone</th>
+                        <th>Email</th>
+                        <th>Language</th>
+                        <th>Consent</th>
+                        <th>Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody id="excelValidTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Invalid Records Tab -->
+              <div class="tab-pane fade" id="tabInvalidRecords">
+                <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+                  <table class="table palace-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>Row</th>
+                        <th>Name</th>
+                        <th>Raw Mobile</th>
+                        <th>Validation Issues</th>
+                      </tr>
+                    </thead>
+                    <tbody id="excelInvalidTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Message Preview & WhatsApp Dispatch -->
+  <div class="modal fade" id="reminderDispatchModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fa-brands fa-whatsapp text-success me-2"></i> Free WhatsApp Dispatch
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="p-3 bg-light rounded mb-3 small" id="dispatchGuestDetailsBox">
+            <!-- Dynamic Details -->
+          </div>
+
+          <label class="form-label fw-bold">Personalized Message Preview</label>
+          <div class="whatsapp-preview-box mb-3">
+            <div class="whatsapp-bubble" id="dispatchModalMessageBubble">
+              Loading message...
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-outline-secondary btn-sm w-50" onclick="copyDispatchMessage()">
+              <i class="fa-regular fa-copy"></i> Copy Message
+            </button>
+            <a href="#" target="_blank" class="btn btn-whatsapp btn-sm w-50" id="dispatchModalWaLink" onclick="onWaLinkClicked()">
+              <i class="fa-brands fa-whatsapp"></i> Open in WhatsApp
+            </a>
+          </div>
+
+          <div class="alert alert-warning py-2 px-3 small">
+            <i class="fa-solid fa-circle-exclamation me-1"></i> Opening WhatsApp or copying the message does not mark it sent. Click <strong>Mark as Sent</strong> below after you complete sending in WhatsApp.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="btnConfirmMarkSent" onclick="confirmMarkSent()">
+            <i class="fa-solid fa-check"></i> Mark as Sent
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Batch WhatsApp Dispatch Runner -->
+  <div class="modal fade" id="batchDispatchModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-success shadow-lg">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title text-white">
+            <i class="fa-solid fa-rocket me-2"></i> Batch WhatsApp Dispatch Runner
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="stopBatchDispatch()"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Filter / Queue Selector (Shown when starting) -->
+          <div id="batchSetupView">
+            <div id="batchWhatsAppStatusNotice" class="alert alert-info py-2 px-3 small mb-3 d-flex align-items-center justify-content-between">
+              <div>
+                <i class="fa-brands fa-whatsapp text-success fs-5 me-2"></i>
+                <span id="batchWhatsAppStatusNoticeText">Checking WhatsApp connection...</span>
+              </div>
+              <button class="btn btn-sm btn-outline-success" onclick="openWhatsAppLinkModal()">
+                <i class="fa-solid fa-qrcode"></i> Scan QR
+              </button>
+            </div>
+
+            <div class="card p-3 mb-3 bg-light border-0">
+              <h6 class="fw-bold mb-3"><i class="fa-solid fa-sliders text-success me-1"></i> Smart Automated Batch Settings</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Target Event</label>
+                  <select class="form-select form-select-sm" id="batchEventSelect">
+                    <option value="">All Events (Due/Pending Reminders)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold">Which Reminders?</label>
+                  <select class="form-select form-select-sm" id="batchStatusSelect">
+                    <option value="Ready to Send" selected>Due & Pending Reminders</option>
+                    <option value="include_sent">All Reminders (Include Already Sent / Test Re-send)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold"><i class="fa-solid fa-layer-group text-primary me-1"></i> Batch Limit</label>
+                  <select class="form-select form-select-sm" id="batchSizeSelect">
+                    <option value="10" selected>10 Messages per Batch (Recommended)</option>
+                    <option value="5">5 Messages per Batch</option>
+                    <option value="15">15 Messages per Batch</option>
+                    <option value="20">20 Messages per Batch</option>
+                  </select>
+                  <small class="text-muted" style="font-size: 11px;">Exceeding numbers are divided into batches automatically.</small>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold"><i class="fa-solid fa-hourglass-half text-warning me-1"></i> Delay Between Batches</label>
+                  <select class="form-select form-select-sm" id="batchIntervalSelect">
+                    <option value="30" selected>30 Minutes (Recommended)</option>
+                    <option value="15">15 Minutes</option>
+                    <option value="45">45 Minutes</option>
+                    <option value="60">60 Minutes</option>
+                    <option value="0">Immediate (No Cooldown)</option>
+                  </select>
+                  <small class="text-muted" style="font-size: 11px;">Rest period between batches to protect WhatsApp account.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted small">
+                <i class="fa-solid fa-shield-heart text-success me-1"></i> 100% Free & automated. Click once to dispatch the queue in safe batches!
+              </span>
+              <button class="btn btn-success btn-lg fw-bold px-4 shadow" onclick="initiateBatchQueue()">
+                <i class="fa-solid fa-bolt me-1"></i> Start 1-Click Batch Dispatch
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Dispatch Runner (Shown when running) -->
+          <div id="batchRunnerView" style="display: none;">
+            <!-- Overall Progress Bar -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1 small fw-bold">
+                <span id="batchProgressText">Processing Guest 1 of 10</span>
+                <span id="batchPercentText" class="badge bg-success">10%</span>
+              </div>
+              <div class="progress" style="height: 12px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="batchProgressBar" role="progressbar" style="width: 10%;"></div>
+              </div>
+            </div>
+
+            <!-- Current Batch Banner -->
+            <div class="alert alert-light border border-success d-flex align-items-center justify-content-between p-2 mb-3">
+              <div>
+                <span class="badge bg-success me-2" id="currentBatchBadge">Batch 1</span>
+                <span class="fw-bold small text-dark" id="currentBatchInfoText">Sending 10 messages in this batch</span>
+              </div>
+              <span class="badge bg-light text-dark border small" id="batchSpeedBadge"><i class="fa-solid fa-gauge-high text-success me-1"></i> 3s interval</span>
+            </div>
+
+            <!-- Active Guest Card -->
+            <div id="activeSendingCard" class="p-3 bg-light rounded border mb-3">
+              <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                  <div class="text-muted small">Sending to WhatsApp Number:</div>
+                  <div class="fs-4 fw-bold text-dark font-monospace" id="batchCurrentPhone">+91 9876543210</div>
+                </div>
+                <div class="col-md-6">
+                  <div class="text-muted small">Event:</div>
+                  <div class="fw-semibold text-dark" id="batchCurrentEvent">Amina Wedding</div>
+                  <span class="badge bg-warning-subtle text-warning-emphasis" id="batchCurrentStage">1-Day Reminder</span>
+                </div>
+              </div>
+              <div class="mt-2 pt-2 border-top small text-success fw-semibold" id="batchCurrentStatusMsg">
+                <span class="spinner-grow spinner-grow-sm me-1 text-success"></span> Opening WhatsApp and recording dispatch...
+              </div>
+            </div>
+
+            <!-- 30-Minute Cooldown Screen (Shown when waiting for next batch) -->
+            <div id="batchCooldownCard" class="card p-4 text-center border-warning bg-warning-subtle mb-3" style="display: none;">
+              <div class="fs-1 text-warning mb-1"><i class="fa-solid fa-hourglass-half"></i></div>
+              <h5 class="fw-bold text-dark mb-1">Batch Completed! Cooldown Active</h5>
+              <p class="text-muted small mb-3">
+                To protect your WhatsApp number from spam limits, the software is resting.<br>
+                Next batch of <strong id="cooldownNextBatchSize">10</strong> guests will start automatically in:
+              </p>
+              <div class="display-5 fw-bold font-monospace text-warning-emphasis mb-3" id="cooldownTimerDisplay">30:00</div>
+              <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-warning fw-bold px-3" onclick="skipCooldownAndSendNow()">
+                  <i class="fa-solid fa-forward-step me-1"></i> Skip Cooldown & Send Next Batch Now
+                </button>
+                <button class="btn btn-outline-danger" onclick="stopBatchDispatch()">
+                  <i class="fa-solid fa-stop"></i> Stop Queue
+                </button>
+              </div>
+            </div>
+
+            <!-- Runner Controls -->
+            <div class="d-flex justify-content-between align-items-center" id="runnerActionButtons">
+              <span class="text-muted small" id="batchCounterStats">Sent: 0 | Remaining: 0</span>
+              <button class="btn btn-outline-danger btn-sm" onclick="stopBatchDispatch()">
+                <i class="fa-solid fa-stop me-1"></i> Stop Automated Dispatch
+              </button>
+            </div>
+          </div>
+
+          <!-- Batch Completed Screen -->
+          <div id="batchCompleteView" style="display: none;" class="text-center py-4">
+            <div class="display-3 text-success mb-2"><i class="fa-solid fa-circle-check"></i></div>
+            <h4 class="fw-bold text-dark">Batch Dispatch Completed!</h4>
+            <p class="text-muted" id="batchSummaryStats">All eligible guests have been processed.</p>
+            <button class="btn btn-palace px-4" data-bs-dismiss="modal" onclick="finishBatchDispatch()">
+              Done & Return to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Multi-WhatsApp Accounts Manager -->
+  <div class="modal fade" id="whatsappLinkModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content border-success shadow-lg">
+        <div class="modal-header bg-success text-white d-flex justify-content-between align-items-center">
+          <h5 class="modal-title text-white m-0">
+            <i class="fa-brands fa-whatsapp me-2"></i> Multi-WhatsApp Accounts Manager (Event Specific Senders)
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row g-4">
+            <!-- Left: Accounts List & Add Account -->
+            <div class="col-lg-5 border-end">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold m-0 text-dark">
+                  <i class="fa-solid fa-mobile-screen text-success me-1"></i> Configured Senders
+                </h6>
+                <button class="btn btn-sm btn-palace-gold" onclick="toggleNewAccountForm()">
+                  <i class="fa-solid fa-plus me-1"></i> + Link Another Number
+                </button>
+              </div>
+
+              <!-- New Account Form (Hidden by default) -->
+              <div id="waNewAccountFormBox" class="card p-3 mb-3 bg-light border-gold" style="display: none;">
+                <label class="form-label small fw-bold">Account Name / Label</label>
+                <div class="input-group mb-2">
+                  <input type="text" class="form-control form-control-sm" id="waNewAccountNameInput" placeholder="e.g. Host Jenny's Phone, Sharma Family...">
+                  <button class="btn btn-sm btn-success fw-bold" onclick="handleCreateWhatsAppAccount()">
+                    <i class="fa-solid fa-qrcode me-1"></i> Create & Scan
+                  </button>
+                </div>
+                <small class="text-muted">Give it a recognizable label so you can select it when creating events.</small>
+              </div>
+
+              <!-- Account List Group -->
+              <div class="list-group shadow-sm" id="waAccountsListGroup" style="max-height: 400px; overflow-y: auto;">
+                <div class="text-center py-4 text-muted small">Loading accounts...</div>
+              </div>
+            </div>
+
+            <!-- Right: Active Account Status & QR Code Scanner -->
+            <div class="col-lg-7 text-center">
+              <div class="d-flex justify-content-between align-items-center mb-3 text-start">
+                <div>
+                  <h5 class="fw-bold m-0 text-dark" id="waActiveAccountTitle">Primary Palace WhatsApp</h5>
+                  <small class="text-muted" id="waActiveAccountSubtitle">Default System Sender</small>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <button class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-semibold" onclick="openShareClientLinkModal(null, currentActiveAccountId)" title="Share linking link to customer">
+                    <i class="fa-solid fa-share-nodes me-1"></i> Share Client Link
+                  </button>
+                  <div id="waActiveAccountBadgeBox">
+                    <span class="badge bg-secondary" id="waActiveAccountStatusBadge">Checking...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- QR Scanner View -->
+              <div id="waQrContainer" style="display: none;">
+                <p class="text-muted small mb-3">
+                  1. Open WhatsApp on <strong>this specific phone</strong>.<br>
+                  2. Tap <strong>Menu (⋮)</strong> or <strong>Settings</strong> ➔ <strong>Linked Devices</strong>.<br>
+                  3. Tap <strong>Link a Device</strong> and scan this QR code:
+                </p>
+                <div class="p-3 bg-white border rounded d-inline-block shadow-sm mb-3">
+                  <img id="waQrImage" src="" alt="WhatsApp QR Code" style="width: 230px; height: 230px; display: none;">
+                  <div id="waQrLoading" class="py-5" style="width: 230px;">
+                    <div class="spinner-border text-success mb-2" role="status"></div>
+                    <div class="small text-muted">Generating fresh QR code...</div>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="requestNewWhatsAppQr()">
+                    <i class="fa-solid fa-rotate-right me-1"></i> Refresh QR Code
+                  </button>
+                </div>
+              </div>
+
+              <!-- Connected State View -->
+              <div id="waConnectedContainer" style="display: none;" class="py-3">
+                <div class="display-3 text-success mb-2"><i class="fa-solid fa-circle-check"></i></div>
+                <h5 class="fw-bold text-dark">WhatsApp Successfully Connected!</h5>
+                <p class="text-muted">
+                  Sending Number: <strong class="text-success fs-5 font-monospace" id="waConnectedPhone">+91 ...</strong>
+                </p>
+                <div class="alert alert-success small mb-4 mx-auto" style="max-width: 480px;">
+                  <i class="fa-solid fa-shield-check text-success me-1"></i>
+                  <strong>Ready for Event-Specific Dispatch!</strong><br>
+                  Events assigned to this account will dispatch reminders directly from this WhatsApp number.
+                </div>
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-outline-primary btn-sm" id="waMakeDefaultBtn" onclick="handleMakeAccountDefault()">
+                    <i class="fa-solid fa-star me-1"></i> Set as Default Sender
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" onclick="disconnectWhatsAppDevice()">
+                    <i class="fa-solid fa-unlink me-1"></i> Unlink Number
+                  </button>
+                </div>
+              </div>
+
+              <!-- Disconnected / Idle State -->
+              <div id="waIdleContainer" style="display: none;" class="py-5">
+                <i class="fa-brands fa-whatsapp text-muted opacity-25" style="font-size: 64px;"></i>
+                <h6 class="mt-3 text-muted">Account is currently disconnected</h6>
+                <button class="btn btn-sm btn-success fw-bold mt-2" onclick="startActiveAccountConnection()">
+                  <i class="fa-solid fa-qrcode me-1"></i> Generate QR Code to Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Share Client Remote WhatsApp Link -->
+  <div class="modal fade" id="shareClientLinkModal" tabindex="-1" aria-labelledby="shareClientLinkModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content palace-card border-gold shadow-lg" style="border-radius: 16px;">
+        <div class="modal-header py-3 px-4 text-white" style="background: linear-gradient(180deg, #2D0810 0%, #4A0E18 100%); border-bottom: 2px solid #D4AF37;">
+          <h5 class="modal-title m-0 text-white fw-bold d-flex align-items-center" id="shareClientLinkModalTitle">
+            <i class="fa-brands fa-whatsapp text-success fs-4 me-2"></i> Share Remote WhatsApp Link with Host
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Loading State -->
+          <div id="shareLinkModalLoading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="small text-muted mt-2">Generating Secure WhatsApp Link...</div>
+          </div>
+
+          <!-- Main Content (Hidden while loading) -->
+          <div id="shareLinkModalContent" style="display: none;">
+            <!-- Event & Host Info Banner -->
+            <div class="p-3 bg-light rounded-3 border mb-3">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="badge bg-palace-gold text-dark px-2 py-1 fw-bold" id="shareLinkEventCategory">Event</span>
+                <span class="small text-success fw-bold"><i class="fa-solid fa-lock me-1"></i> End-to-End Encrypted</span>
+              </div>
+              <h6 class="fw-bold mb-1 text-dark" id="shareLinkEventName">Sharma Wedding</h6>
+              <div class="small text-muted">
+                <i class="fa-solid fa-user text-primary me-1"></i> Host: <strong id="shareLinkHostName">Rajesh Sharma</strong> 
+                (<span id="shareLinkHostPhone">+91 ...</span>)
+              </div>
+            </div>
+
+            <!-- How it works explanation -->
+            <div class="alert alert-warning py-2.5 px-3 small border-0 mb-3" style="background: #FFF8E7; color: #856404; border-radius: 10px;">
+              <i class="fa-solid fa-mobile-screen-button text-success me-1"></i> <strong>Effortless 1-Phone Linking:</strong><br>
+              The client opens this link on their mobile phone, enters their number, and gets an <strong>8-digit code</strong> to paste in WhatsApp (<em>Linked Devices &gt; Link with phone number</em>). They don't need a 2nd phone or QR scan!
+            </div>
+
+            <!-- Network Mode Switcher -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label fw-bold small text-dark m-0">Send Link For:</label>
+                <span class="small text-success fw-bold" id="currentNetworkBadge"><i class="fa-solid fa-wifi me-1"></i> Wi-Fi Mobile / Phone</span>
+              </div>
+              <div class="btn-group w-100" role="group">
+                <input type="radio" class="btn-check" name="linkNetworkMode" id="netModeWifi" autocomplete="off" checked onchange="switchLinkNetworkMode('wifi')">
+                <label class="btn btn-sm btn-outline-success fw-semibold py-1.5" for="netModeWifi" title="Opens on mobile phones on same Wi-Fi">
+                  <i class="fa-solid fa-wifi me-1"></i> Phone on Wi-Fi
+                </label>
+
+                <input type="radio" class="btn-check" name="linkNetworkMode" id="netModePublic" autocomplete="off" onchange="switchLinkNetworkMode('public')">
+                <label class="btn btn-sm btn-outline-primary fw-semibold py-1.5" for="netModePublic" title="Opens for remote clients anywhere over internet">
+                  <i class="fa-solid fa-globe me-1"></i> Remote Client (Internet)
+                </label>
+
+                <input type="radio" class="btn-check" name="linkNetworkMode" id="netModeLocalhost" autocomplete="off" onchange="switchLinkNetworkMode('localhost')">
+                <label class="btn btn-sm btn-outline-secondary py-1.5" for="netModeLocalhost" title="Only for this computer">
+                  <i class="fa-solid fa-laptop me-1"></i> This PC
+                </label>
+              </div>
+
+              <!-- Tunnel URL Input Box (Collapsible) -->
+              <div id="publicTunnelSettingsBox" class="mt-2 p-2.5 bg-white border rounded shadow-sm" style="display: none;">
+                <label class="form-label small fw-bold text-dark mb-1">Your Public Internet URL (ngrok / Cloudflare / localtunnel):</label>
+                <div class="input-group input-group-sm mb-1">
+                  <input type="url" class="form-control" id="customTunnelUrlInput" placeholder="e.g. https://xyz.ngrok-free.app">
+                  <button class="btn btn-primary fw-semibold" onclick="saveCustomTunnelUrl()">Save URL</button>
+                </div>
+                <div class="small text-muted" style="font-size: 11px;">
+                  <i class="fa-solid fa-circle-info text-primary me-1"></i> For remote clients outside your shop/home Wi-Fi, run <code>npx.cmd localtunnel --port 3000</code> or ngrok and paste your HTTPS link above.
+                </div>
+              </div>
+            </div>
+
+            <!-- Share Link Box -->
+            <label class="form-label fw-bold small text-dark mb-1">Secure Client Portal Link</label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control font-monospace small" id="shareClientLinkInput" readonly style="background: #F9F9F9; font-size: 0.85rem;">
+              <button class="btn btn-outline-secondary px-3" type="button" id="btnCopyShareLink" onclick="copyClientShareLink()">
+                <i class="fa-regular fa-copy me-1"></i> Copy
+              </button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2">
+              <a href="#" target="_blank" class="btn btn-success fw-bold py-2.5 shadow-sm" id="shareViaWhatsAppBtn">
+                <i class="fa-brands fa-whatsapp me-2 fs-5"></i> Send Link to Host via WhatsApp
+              </a>
+              <button type="button" class="btn btn-palace-outline py-2" onclick="previewClientLinkInNewTab()">
+                <i class="fa-solid fa-arrow-up-right-from-square me-2"></i> Open &amp; Preview Client Page
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Company Logo & Branding Modal -->
+  <div class="modal fade" id="brandingModal" tabindex="-1" aria-labelledby="brandingModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content palace-card border-gold">
+        <div class="modal-header py-3 px-4">
+          <h5 class="modal-title palace-card-title m-0" id="brandingModalTitle">
+            <i class="fa-solid fa-gem text-warning me-2"></i> Company Logo & Branding
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="modalBrandingForm" enctype="multipart/form-data">
+            <div class="text-center mb-3">
+              <label class="form-label small fw-bold text-muted text-uppercase d-block mb-2">Active Brand Logo</label>
+              <div class="logo-preview-box mx-auto mb-2" style="max-width: 260px;" id="modalLogoPreviewBox">
+                <img id="modalLogoPreviewImg" src="" alt="Company Logo" class="logo-preview-img d-none">
+                <div id="modalLogoFallbackCrest" class="text-center py-3 text-muted">
+                  <i class="fa-solid fa-crown fs-1 text-warning mb-2 d-block"></i>
+                  <span class="small fw-semibold">Default Royal Monogram</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Select Logo File <span class="text-muted fw-normal">(PNG, JPG, SVG, WebP)</span></label>
+              <input type="file" class="form-control" id="modalLogoFileInput" name="logo" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+              <small class="text-muted">A crisp logo image gives your entire software a luxury, professional feel.</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Company / Business Name</label>
+              <input type="text" class="form-control" id="modalCompanyNameInput" name="business_name" placeholder="THE INVITATION PALACE" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Business Tagline</label>
+              <input type="text" class="form-control" id="modalCompanyTaglineInput" name="business_tagline" placeholder="Luxury Wedding & Event Stationery">
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-4">
+              <button type="button" class="btn btn-sm btn-outline-danger" onclick="handleResetLogo()">
+                <i class="fa-solid fa-trash me-1"></i> Reset Logo
+              </button>
+              <button type="submit" class="btn btn-palace px-4" id="btnModalSaveBranding">
+                <i class="fa-solid fa-check me-1"></i> Save & Apply
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Master Workflow Step-by-Step Guide Modal -->
+  <div class="modal fade" id="workflowGuideModal" tabindex="-1" aria-labelledby="workflowModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content palace-card border-gold">
+        <div class="modal-header py-3 px-4">
+          <div class="d-flex align-items-center gap-2">
+            <span class="sno-badge"><i class="fa-solid fa-route"></i> STEP-BY-STEP</span>
+            <h5 class="modal-title palace-card-title mb-0" id="workflowModalTitle">Palace Operating Workflow Guide</h5>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="alert alert-light border border-warning-subtle p-3 mb-4 d-flex align-items-center gap-3">
+            <i class="fa-solid fa-circle-info fs-3 text-warning"></i>
+            <div class="small">
+              <strong>How to operate THE INVITATION PALACE step-by-step:</strong><br>
+              Follow S.NO 01 through S.NO 06 in sequence for every client or event. Direct action buttons below let you proceed straight to each step!
+            </div>
+          </div>
+
+          <div class="list-group shadow-sm border-0">
+            <!-- S.NO 01 -->
+            <div class="list-group-item p-3 border rounded mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="sno-badge">S.NO 01</span>
+                  <h6 class="fw-bold mb-0 text-dark">Link WhatsApp Senders</h6>
+                </div>
+                <button class="btn btn-sm btn-palace" onclick="bootstrap.Modal.getInstance(document.getElementById('workflowGuideModal')).hide(); openWhatsAppLinkModal();">
+                  <i class="fa-brands fa-whatsapp text-success me-1"></i> Scan QR & Link
+                </button>
+              </div>
+              <p class="text-muted small mb-0">Connect the Palace primary WhatsApp number or link host numbers for event-specific dispatch.</p>
+              <div class="step-next-hint mt-2">Next: S.NO 02 &bull; Register Customer <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- S.NO 02 -->
+            <div class="list-group-item p-3 border rounded mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="sno-badge">S.NO 02</span>
+                  <h6 class="fw-bold mb-0 text-dark">Register Customer / Client</h6>
+                </div>
+                <button class="btn btn-sm btn-palace" onclick="bootstrap.Modal.getInstance(document.getElementById('workflowGuideModal')).hide(); openAddCustomerModal();">
+                  <i class="fa-solid fa-user-plus text-warning me-1"></i> + Register Customer
+                </button>
+              </div>
+              <p class="text-muted small mb-0">Add client name, contact number, and order reference to generate their unique Palace client profile.</p>
+              <div class="step-next-hint mt-2">Next: S.NO 03 &bull; Create Event <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- S.NO 03 -->
+            <div class="list-group-item p-3 border rounded mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="sno-badge">S.NO 03</span>
+                  <h6 class="fw-bold mb-0 text-dark">Create Event & Pick WhatsApp Sender</h6>
+                </div>
+                <button class="btn btn-sm btn-palace" onclick="bootstrap.Modal.getInstance(document.getElementById('workflowGuideModal')).hide(); openAddEventModal();">
+                  <i class="fa-solid fa-calendar-plus text-danger me-1"></i> + Create Event
+                </button>
+              </div>
+              <p class="text-muted small mb-0">Set event date, time, venue, Google Maps location, and select which linked WhatsApp account sends reminders.</p>
+              <div class="step-next-hint mt-2">Next: S.NO 04 &bull; Import Guest Contacts <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- S.NO 04 -->
+            <div class="list-group-item p-3 border rounded mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="sno-badge">S.NO 04</span>
+                  <h6 class="fw-bold mb-0 text-dark">Import Guests (Excel or Single)</h6>
+                </div>
+                <button class="btn btn-sm btn-palace-gold" onclick="bootstrap.Modal.getInstance(document.getElementById('workflowGuideModal')).hide(); openExcelUploadModal();">
+                  <i class="fa-solid fa-file-excel text-success me-1"></i> Import Excel
+                </button>
+              </div>
+              <p class="text-muted small mb-0">Upload an Excel sheet (.xlsx) of guest contacts. Phone numbers are automatically sanitized and prefixed with +91.</p>
+              <div class="step-next-hint mt-2">Next: S.NO 05 &bull; Verify Reminder Schedule <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- S.NO 05 -->
+            <div class="list-group-item p-3 border rounded mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="sno-badge">S.NO 05</span>
+                  <h6 class="fw-bold mb-0 text-dark">Verify Secular Reminder Schedule</h6>
+                </div>
+                <button class="btn btn-sm btn-palace-outline" onclick="bootstrap.Modal.getInstance(document.getElementById('workflowGuideModal')).hide(); switchSection('reminders');">
+                  <i class="fa-solid fa-bell text-warning me-1"></i> View Reminders
+                </button>
+              </div>
+              <p class="text-muted small mb-0">The scheduler automatically calculates 7-Day, 3-Day & 1-Day countdown reminders with zero religious tags.</p>
+              <div class="step-next-hint mt-2">Next: S.NO 06 &bull; Automated Background Dispatch <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+
+            <!-- S.NO 06 -->
+            <div class="list-group-item p-3 border rounded">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="sno-badge">S.NO 06</span>
+                  <h6 class="fw-bold mb-0 text-dark">Zero-Click Automated WhatsApp Dispatch</h6>
+                </div>
+                <button class="btn btn-sm btn-batch-runner" onclick="bootstrap.Modal.getInstance(document.getElementById('workflowGuideModal')).hide(); openBatchDispatchModal();">
+                  <i class="fa-solid fa-bolt text-warning me-1"></i> Dispatch Monitor
+                </button>
+              </div>
+              <p class="text-muted small mb-0">Background queue automatically sends batches of 10 every 30 mins once scheduled time is reached. Track in Customer Hub 360°!</p>
+              <div class="step-next-hint mt-2 text-success fw-bold"><i class="fa-solid fa-circle-check"></i> Complete Workflow!</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Close Guide</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 2000;">
+    <div id="palaceToast" class="toast align-items-center text-white bg-dark border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          Notification message
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

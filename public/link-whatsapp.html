@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Scan WhatsApp | THE INVITATION PALACE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #07090E;
+      --card-bg: rgba(16, 20, 31, 0.82);
+      --palace-gold: #D4AF37;
+      --palace-gold-glow: rgba(212, 175, 55, 0.45);
+      --palace-gold-light: #F6E6B4;
+      --wa-emerald: #25D366;
+      --wa-emerald-glow: rgba(37, 211, 102, 0.4);
+      --text-main: #FFFFFF;
+      --text-muted: #94A3B8;
+      --border-glass: rgba(212, 175, 55, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(114, 9, 36, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 85% 20%, rgba(37, 211, 102, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(212, 175, 55, 0.22) 0%, transparent 50%),
+        linear-gradient(180deg, #07090E 0%, #0F121C 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* Ambient animated glow orbs */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.65;
+      animation: floatOrb 12s infinite alternate ease-in-out;
+    }
+    .orb-1 { width: 380px; height: 380px; background: rgba(212, 175, 55, 0.18); top: -80px; left: -80px; }
+    .orb-2 { width: 320px; height: 320px; background: rgba(37, 211, 102, 0.16); bottom: -60px; right: -60px; animation-delay: -5s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(35px, 45px) scale(1.1); }
+    }
+
+    /* Main Glass Card */
+    .scanner-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+      background: var(--card-bg);
+      backdrop-filter: blur(32px) saturate(180%);
+      -webkit-backdrop-filter: blur(32px) saturate(180%);
+      border-radius: 28px;
+      border: 1px solid var(--border-glass);
+      box-shadow: 
+        0 25px 60px -15px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(212, 175, 55, 0.12),
+        inset 0 1px 1px rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+      animation: cardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Card Header */
+    .scanner-header {
+      padding: 28px 24px 18px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+    }
+
+    .ai-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      background: rgba(37, 211, 102, 0.14);
+      border: 1px solid rgba(37, 211, 102, 0.35);
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #6EE7B7;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .radar-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--wa-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--wa-emerald);
+      animation: blinkDot 1.4s infinite;
+    }
+    @keyframes blinkDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    .brand-crest {
+      margin-bottom: 10px;
+      position: relative;
+      display: inline-block;
+    }
+    .crown-glow {
+      font-size: 36px;
+      color: var(--palace-gold-light);
+      filter: drop-shadow(0 0 16px var(--palace-gold-glow));
+      animation: crownShine 3s infinite alternate ease-in-out;
+    }
+    @keyframes crownShine {
+      0% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+      100% { filter: drop-shadow(0 0 24px rgba(246, 230, 180, 0.8)); }
+    }
+    .company-logo-img {
+      max-height: 48px;
+      max-width: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+
+    .palace-heading {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #FFF;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .palace-subtext {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Event Chip */
+    .event-chip-card {
+      margin-top: 14px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.14) 0%, rgba(114, 9, 36, 0.2) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 16px;
+      padding: 12px 14px;
+      text-align: center;
+    }
+    .event-chip-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 2px;
+    }
+    .event-chip-host {
+      font-size: 0.8rem;
+      color: var(--palace-gold-light);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Card Body */
+    .scanner-body {
+      padding: 24px 20px 26px;
+      text-align: center;
+    }
+
+    /* Cyber-Palace QR Scanner Frame */
+    .scanner-stage {
+      position: relative;
+      display: inline-block;
+      margin: 4px auto 18px;
+    }
+
+    .qr-frame {
+      position: relative;
+      background: #FFFFFF;
+      padding: 18px;
+      border-radius: 24px;
+      box-shadow: 
+        0 14px 45px rgba(0, 0, 0, 0.7),
+        0 0 35px rgba(212, 175, 55, 0.25);
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    /* Glowing Cyber Corner Brackets */
+    .corner {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 3.5px solid var(--palace-gold);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 18px; }
+    .corner-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 18px; }
+    .corner-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 18px; }
+    .corner-br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 18px; }
+
+    /* Moving Laser Scanline */
+    .scan-beam {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, rgba(37, 211, 102, 0.9) 50%, transparent 100%);
+      box-shadow: 0 0 14px var(--wa-emerald);
+      top: 0;
+      animation: laserSweep 2.4s infinite ease-in-out;
+      z-index: 3;
+      pointer-events: none;
+    }
+    @keyframes laserSweep {
+      0% { top: 6%; opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { top: 94%; opacity: 0; }
+    }
+
+    .qr-img {
+      width: 230px;
+      height: 230px;
+      display: block;
+      margin: 0 auto;
+      border-radius: 10px;
+    }
+
+    .qr-spinner {
+      width: 230px;
+      height: 230px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #475569;
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+
+    /* Auto-Sync Radar Pulse */
+    .radar-pulse-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #94A3B8;
+      margin-bottom: 20px;
+    }
+    .pulse-ring {
+      width: 8px;
+      height: 8px;
+      background: var(--wa-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--wa-emerald);
+      animation: pulseAnim 1.6s infinite ease-in-out;
+    }
+    @keyframes pulseAnim {
+      0% { transform: scale(0.9); opacity: 0.5; }
+      50% { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.5; }
+    }
+
+    /* Simple 1-2-3 Step Cards */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .step-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .step-item:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--palace-gold) 0%, #856404 100%);
+      color: #07090E;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-txt {
+      font-size: 0.85rem;
+      color: #CBD5E1;
+      line-height: 1.4;
+    }
+    .step-txt strong {
+      color: #FFFFFF;
+    }
+    .step-txt .highlight-wa {
+      color: #4ADE80;
+      font-weight: 700;
+    }
+
+    /* Refresh QR Button */
+    .btn-refresh-qr {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #FFFFFF;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-refresh-qr:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--palace-gold);
+      transform: translateY(-1px);
+    }
+
+    /* Celebration Screen (Connected) */
+    .celebrate-screen {
+      text-align: center;
+      padding: 24px 10px;
+      animation: zoomIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .celebrate-orb {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.3) 0%, rgba(37, 211, 102, 0.05) 70%);
+      border: 2px solid var(--wa-emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      color: var(--wa-emerald);
+      box-shadow: 0 0 35px var(--wa-emerald-glow);
+      animation: bounceCheck 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes bounceCheck {
+      0% { transform: scale(0.3); opacity: 0; }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .celebrate-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .connected-phone-badge {
+      display: inline-block;
+      background: rgba(37, 211, 102, 0.15);
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #86EFAC;
+      margin-bottom: 16px;
+    }
+    .celebrate-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 0.85rem;
+      color: #CBD5E1;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* Footer Security */
+    .scanner-footer {
+      padding: 14px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      text-align: center;
+      font-size: 0.74rem;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .d-none { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glowing Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+
+  <!-- Main Glassmorphism Scanner Card -->
+  <div class="scanner-card">
+
+    <!-- Card Header -->
+    <div class="scanner-header">
+      <div class="ai-live-badge">
+        <span class="radar-dot"></span>
+        Instant WhatsApp Scanner
+      </div>
+
+      <div class="brand-crest">
+        <i class="fa-solid fa-crown crown-glow" id="headerCrownIcon"></i>
+        <img id="headerCompanyLogo" src="" alt="Palace Logo" class="company-logo-img d-none">
+      </div>
+
+      <h1 class="palace-heading" id="palaceName">THE INVITATION PALACE</h1>
+      <div class="palace-subtext" id="palaceTagline">Automatic Event Reminder Service</div>
+
+      <!-- Event Context Chip -->
+      <div class="event-chip-card">
+        <div class="event-chip-title" id="eventTitleDisplay">
+          <i class="fa-solid fa-spinner fa-spin"></i> Initializing Scanner...
+        </div>
+        <div class="event-chip-host" id="eventHostDisplay">
+          <i class="fa-solid fa-shield-check"></i> Secure Companion Linking
+        </div>
+      </div>
+    </div>
+
+    <!-- Scanner Body -->
+    <div class="scanner-body">
+
+      <!-- VIEW 1: LIVE QR SCANNER (Active by default) -->
+      <div id="scannerView">
+
+        <!-- Centerpiece Scanner Stage -->
+        <div class="scanner-stage">
+          <div class="qr-frame">
+            <!-- Glowing Corner Brackets -->
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+
+            <!-- Moving Laser Scanbeam -->
+            <div class="scan-beam" id="scanBeam"></div>
+
+            <!-- QR Code Image -->
+            <img id="qrCodeImg" src="" alt="WhatsApp QR Code" class="qr-img d-none">
+
+            <!-- Loading Spinner State -->
+            <div id="qrLoadingState" class="qr-spinner">
+              <i class="fa-solid fa-circle-notch fa-spin text-success" style="font-size: 36px;"></i>
+              <span>Generating Secure QR Matrix...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radar Pulse Indicator -->
+        <div class="radar-pulse-bar">
+          <span class="pulse-ring"></span>
+          <span>Point your phone camera to connect automatically</span>
+        </div>
+
+        <!-- Simple 1-2-3 Step Instructions -->
+        <div class="steps-list">
+          <div class="step-item">
+            <span class="step-num">1</span>
+            <div class="step-txt">Open <strong>WhatsApp</strong> on your mobile phone.</div>
+          </div>
+          <div class="step-item">
+            <span class="step-num">2</span>
+            <div class="step-txt">Tap <strong>Settings</strong> (iPhone) or <strong>⋮ Menu</strong> (Android) ➔ <strong class="highlight-wa">Linked Devices</strong>.</div>
+          </div>
+          <div class="step-item">
+            <span class="step-num">3</span>
+            <div class="step-txt">Tap <strong class="highlight-wa">Link a Device</strong> and point your camera at this QR code.</div>
+          </div>
+        </div>
+
+        <!-- Refresh Button -->
+        <div>
+          <button class="btn-refresh-qr" id="btnRefreshQr" onclick="handleRefreshQr()">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span id="refreshBtnText">Refresh QR Code</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- VIEW 2: SUCCESS CELEBRATION SCREEN (Auto-triggered upon scanning) -->
+      <div id="successView" class="celebrate-screen d-none">
+        <div class="celebrate-orb">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h2 class="celebrate-title">WhatsApp Connected!</h2>
+        <div class="connected-phone-badge" id="connectedPhoneDisplay">+91 ...</div>
+        
+        <div class="celebrate-box">
+          <i class="fa-solid fa-circle-check text-success me-1"></i>
+          Your WhatsApp is successfully linked to <strong>THE INVITATION PALACE</strong>. Personalized event invitation reminders will be dispatched to your guest list on schedule.
+        </div>
+
+        <p class="palace-subtext" style="color: #6EE7B7;">
+          <i class="fa-solid fa-circle-info me-1"></i> You can safely close this screen now.
+        </p>
+      </div>
+
+      <!-- VIEW 3: ERROR STATE -->
+      <div id="errorView" class="celebrate-screen d-none">
+        <div class="celebrate-orb" style="border-color: #EF4444; color: #EF4444; background: rgba(239, 68, 68, 0.1);">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h2 class="celebrate-title">Link Expired</h2>
+        <p class="palace-subtext px-3 mb-4" id="errorMessageText">
+          This connection link is invalid or has expired. Please ask the event organizer for a fresh link.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Security Footer -->
+    <div class="scanner-footer">
+      <i class="fa-solid fa-shield-halved text-success"></i>
+      <span>End-to-End Encrypted • Powered by The Invitation Palace</span>
+    </div>
+
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    let pollTimer = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      loadPublicBranding();
+
+      if (!token) {
+        showError('No security token found in URL. Please use the exact link provided.');
+        return;
+      }
+
+      await loadClientSessionData();
+      // Poll every 1.5 seconds for instant detection when customer scans
+      pollTimer = setInterval(pollSessionStatus, 1500);
+    });
+
+    // Load Branding
+    async function loadPublicBranding() {
+      try {
+        const res = await fetch('/api/settings/public');
+        const data = await res.json();
+        if (data.success && data.settings) {
+          const s = data.settings;
+          if (s.business_name) {
+            document.getElementById('palaceName').textContent = s.business_name;
+            document.title = 'Scan WhatsApp | ' + s.business_name;
+          }
+          if (s.business_tagline) {
+            document.getElementById('palaceTagline').textContent = s.business_tagline;
+          }
+          if (s.company_logo) {
+            const logoImg = document.getElementById('headerCompanyLogo');
+            const crown = document.getElementById('headerCrownIcon');
+            logoImg.src = s.company_logo;
+            logoImg.classList.remove('d-none');
+            crown.classList.add('d-none');
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Fetch Session Status and QR Code
+    async function loadClientSessionData() {
+      try {
+        const res = await fetch(`/api/whatsapp/client-session/${token}`);
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          showError(data.error || 'Failed to initialize session.');
+          return;
+        }
+
+        document.getElementById('eventTitleDisplay').textContent = data.event_name || 'Event Reminders';
+        document.getElementById('eventHostDisplay').innerHTML = `<i class="fa-solid fa-crown text-warning me-1"></i> Host: <strong>${data.host_name || 'Valued Client'}</strong>`;
+
+        if (data.isConnected) {
+          showSuccess(data.userPhone);
+          return;
+        }
+
+        if (data.qrDataUrl) {
+          renderQrImage(data.qrDataUrl);
+        }
+      } catch (err) {
+        showError('Unable to connect to Palace server. Please check your network connection.');
+      }
+    }
+
+    // Render QR Code Image
+    function renderQrImage(url) {
+      const img = document.getElementById('qrCodeImg');
+      const loader = document.getElementById('qrLoadingState');
+      if (url) {
+        img.src = url;
+        img.classList.remove('d-none');
+        loader.classList.add('d-none');
+      }
+    }
+
+    // Force Refresh QR Code
+    async function handleRefreshQr() {
+      const btn = document.getElementById('btnRefreshQr');
+      const btnText = document.getElementById('refreshBtnText');
+      btn.disabled = true;
+      btnText.textContent = 'Generating Fresh QR...';
+
+      try {
+        const res = await fetch(`/api/whatsapp/client-session/${token}/refresh-qr`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success && data.qrDataUrl) {
+          renderQrImage(data.qrDataUrl);
+        }
+      } catch (e) {
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Refresh QR Code';
+      }
+    }
+
+    // Real-Time Polling for Scan Auto-Detection
+    async function pollSessionStatus() {
+      if (!token) return;
+      try {
+        const res = await fetch(`/api/whatsapp/client-session/${token}/poll-status`);
+        const data = await res.json();
+
+        if (data.success) {
+          if (data.isConnected) {
+            clearInterval(pollTimer);
+            showSuccess(data.userPhone);
+          } else if (data.qrDataUrl) {
+            renderQrImage(data.qrDataUrl);
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Show Success Screen upon Scanning
+    function showSuccess(phone) {
+      document.getElementById('scannerView').classList.add('d-none');
+      document.getElementById('errorView').classList.add('d-none');
+      document.getElementById('successView').classList.remove('d-none');
+
+      const phoneText = phone ? `+${phone}` : 'Connected';
+      document.getElementById('connectedPhoneDisplay').textContent = phoneText;
+    }
+
+    // Show Error Screen
+    function showError(msg) {
+      if (pollTimer) clearInterval(pollTimer);
+      document.getElementById('scannerView').classList.add('d-none');
+      document.getElementById('successView').classList.add('d-none');
+      document.getElementById('errorView').classList.remove('d-none');
+      if (msg) {
+        document.getElementById('errorMessageText').textContent = msg;
+      }
+    }
+  </script>
+</body>
+</html>

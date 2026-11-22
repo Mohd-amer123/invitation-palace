@@ -1,0 +1,31 @@
+# Dependency directories
+node_modules/
+.git-bin/
+
+# Environment files
+.env
+
+# Database file (keep local)
+database/*.db
+database/*.db-journal
+database/*.db-wal
+database/*.db-shm
+database/backups/*
+database/whatsapp_auth/*
+!database/.gitkeep
+!database/backups/.gitkeep
+!database/whatsapp_auth/.gitkeep
+
+# Uploads
+uploads/*
+public/uploads/logos/*
+!uploads/.gitkeep
+!public/uploads/logos/.gitkeep
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+npm-debug.log*
