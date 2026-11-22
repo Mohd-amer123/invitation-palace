@@ -153,26 +153,21 @@
                PINTEREST DUAL-DECK SHOWCASE (Primary: #6B1724 | Luxury Event Suite)
                ============================================================== -->
           <div class="crimson-hero-deck mb-0">
-            <!-- Top Deck Navigation Row -->
+            <!-- Top Deck Header -->
             <div class="deck-top-nav">
-              <div class="deck-nav-pills">
-                <button class="deck-nav-pill active" onclick="switchSection('dashboard')">Overview</button>
-                <button class="deck-nav-pill" onclick="switchSection('customers')">Customers</button>
-                <button class="deck-nav-pill" onclick="switchSection('events')">Events</button>
-                <button class="deck-nav-pill" onclick="switchSection('guests')">Guests</button>
-                <button class="deck-nav-pill" onclick="switchSection('reminders')">Reminders</button>
-                <button class="deck-nav-pill" onclick="switchSection('customer-hub')">Hub 360°</button>
-                <button class="deck-nav-pill" onclick="switchSection('reports')">Reports</button>
-              </div>
-
               <div class="d-flex align-items-center gap-3">
-                <div class="deck-search-box">
-                  <i class="fa-solid fa-magnifying-glass opacity-75"></i>
-                  <input type="text" placeholder="Search guests, events..." id="deckLiveSearch" onkeyup="if(event.key==='Enter') switchSection('guests')">
+                <div class="deck-title-icon-box">
+                  <i class="fa-solid fa-chart-pie"></i>
                 </div>
-                <div class="p-2 bg-white bg-opacity-10 rounded-circle text-white cursor-pointer" onclick="openBatchDispatchModal()" title="System Runner Monitor">
-                  <i class="fa-solid fa-bell"></i>
+                <div>
+                  <h2 class="deck-title text-white mb-0">Overview Dashboard</h2>
+                  <div class="deck-subtitle text-white-50">Real-time status of guest invitations & automated reminders</div>
                 </div>
+              </div>
+              <div class="d-none d-sm-flex align-items-center gap-2">
+                <span class="badge bg-white bg-opacity-15 text-white border border-white border-opacity-25 px-3 py-1.5 rounded-pill" style="font-size: 11px;">
+                  <i class="fa-solid fa-circle-check text-success me-1"></i> System Active
+                </span>
               </div>
             </div>
 
@@ -236,14 +231,8 @@
             </div>
 
             <div class="profile-strip-actions">
-              <button class="btn-profile-pill" onclick="openAddCustomerModal()">
-                <i class="fa-solid fa-user-plus text-primary"></i> + New Customer
-              </button>
               <button class="btn-profile-primary" onclick="openAddEventModal()">
                 <i class="fa-solid fa-calendar-plus"></i> + Create New Event
-              </button>
-              <button class="btn-profile-pill" onclick="openWhatsAppLinkModal()">
-                <i class="fa-brands fa-whatsapp text-success"></i> WhatsApp Sockets
               </button>
             </div>
           </div>
@@ -286,12 +275,12 @@
               <div>
                 <div class="platform-header-row">
                   <div class="platform-icon-pill">
-                    <div class="platform-icon-circle" style="background: rgba(245, 158, 11, 0.12); color: #D97706;">
+                    <div class="platform-icon-circle amber">
                       <i class="fa-solid fa-hourglass-half"></i>
                     </div>
                     <span>Pending Reminders Queue</span>
                   </div>
-                  <button class="btn btn-sm btn-palace-outline rounded-pill py-0 px-2" style="font-size: 11px;" onclick="openBatchDispatchModal()">Auto Runner</button>
+                  <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 rounded-pill small">Scheduled</span>
                 </div>
                 <div class="platform-metric-value text-warning-emphasis" id="kpiScheduledSecondary">0</div>
                 <div class="platform-metric-label">Total Reminders Pending</div>
@@ -322,7 +311,7 @@
                     </div>
                     <span>Total Events & Scope</span>
                   </div>
-                  <button class="btn btn-sm btn-palace-outline rounded-pill py-0 px-2" style="font-size: 11px;" onclick="switchSection('events')">View Events</button>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill small">Workspaces</span>
                 </div>
                 <div class="platform-metric-value" id="kpiEvents">0</div>
                 <div class="platform-metric-label">Total Events Configured</div>
@@ -353,9 +342,8 @@
               </h3>
               <div class="d-flex gap-2">
                 <button class="btn btn-sm btn-success fw-bold text-white shadow-sm" onclick="openBatchDispatchModal()">
-                  <i class="fa-solid fa-rocket"></i> Send All in Batch
+                  <i class="fa-solid fa-rocket me-1"></i> Send All in Batch
                 </button>
-                <a href="#reminders" class="btn btn-sm btn-palace">Go to Reminders Panel</a>
               </div>
             </div>
             <div class="palace-card-body p-0">
@@ -385,7 +373,6 @@
               <div class="palace-card h-100">
                 <div class="palace-card-header">
                   <h3 class="palace-card-title"><i class="fa-solid fa-calendar-days"></i> Upcoming Events</h3>
-                  <button class="btn btn-sm btn-palace-outline" onclick="openAddEventModal()">+ New Event</button>
                 </div>
                 <div class="palace-card-body p-0">
                   <div class="table-responsive">
@@ -411,7 +398,6 @@
               <div class="palace-card h-100">
                 <div class="palace-card-header">
                   <h3 class="palace-card-title"><i class="fa-solid fa-stopwatch"></i> Upcoming Scheduled Reminders</h3>
-                  <a href="#reminders" class="btn btn-sm btn-palace-outline">View All</a>
                 </div>
                 <div class="palace-card-body p-0">
                   <div class="table-responsive">
