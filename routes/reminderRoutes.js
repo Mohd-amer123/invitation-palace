@@ -596,4 +596,69 @@ router.post('/trigger-auto-batch', async (req, res) => {
   }
 });
 
+// POST /api/reminders/dispatch-event/:eventId - Instantly queue and dispatch event reminders
+router.post('/dispatch-event/:eventId', async (req, res) => {
+  const db = getDb();
+  const eventId = parseInt(req.params.eventId, 10);
+  try {
+    const event = db.prepare('SELECT * FROM events WHERE id = ?').get(eventId);
+    if (!event) return res.status(404).json({ success: false, error: 'Event not found.' });
+
+    // Mark pending or skipped reminders as Ready to Send
+    const updateResult = db.prepare(`
+      UPDATE reminders
+      SET status = 'Ready to Send', failure_reason = NULL, updated_at = CURRENT_TIMESTAMP
+      WHERE event_id = ? AND status IN ('Scheduled', 'Skipped', 'Failed')
+    `).run(eventId);
+
+    // Trigger batch runner immediately
+    runAutomatedBatchQueue().catch(() => {});
+
+    res.json({
+      success: true,
+      message: `Triggered dispatch for "${event.event_name}". ${updateResult.changes} reminder(s) queued for delivery.`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/reminders/batch/failed-skipped - Clear failed and skipped reminders
+router.delete('/batch/failed-skipped', (req, res) => {
+  const db = getDb();
+  try {
+    const result = db.prepare(`DELETE FROM reminders WHERE status IN ('Failed', 'Skipped', 'Cancelled')`).run();
+    res.json({ success: true, message: `Cleared ${result.changes} failed/skipped/cancelled reminders.` });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/reminders/event/:eventId - Delete all reminders for an event
+router.delete('/event/:eventId', (req, res) => {
+  const db = getDb();
+  const eventId = parseInt(req.params.eventId, 10);
+  try {
+    const result = db.prepare('DELETE FROM reminders WHERE event_id = ?').run(eventId);
+    res.json({ success: true, message: `Deleted ${result.changes} reminder(s) for this event.` });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/reminders/:id - Permanently delete a single reminder
+router.delete('/:id', (req, res) => {
+  const db = getDb();
+  const reminderId = parseInt(req.params.id, 10);
+  try {
+    const result = db.prepare('DELETE FROM reminders WHERE id = ?').run(reminderId);
+    if (result.changes === 0) {
+      return res.status(404).json({ success: false, error: 'Reminder not found.' });
+    }
+    res.json({ success: true, message: 'Reminder deleted successfully.' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 module.exports = router;

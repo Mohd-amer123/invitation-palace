@@ -439,9 +439,9 @@ async function viewCustomerDetails(id) {
 }
 
 async function deleteCustomer(id, name) {
-  if (confirm(`Are you sure you want to delete or archive customer "${name}"?`)) {
+  if (confirm(`Are you sure you want to permanently delete customer "${name}" and all their associated events?`)) {
     try {
-      const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/customers/${id}?force=true`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         showToast(data.message, 'success');
@@ -540,17 +540,20 @@ async function loadEvents() {
         </td>
         <td>
           <div class="d-flex gap-1">
-            <button class="btn btn-sm btn-outline-success" onclick="openShareClientLinkModal(${e.id})" title="Share Dedicated Host WhatsApp Link">
+            <button class="btn btn-sm btn-outline-primary" onclick="openEventGuestList(${e.id})" title="Guests & Excel (${e.total_guests || 0})">
+              <i class="fa-solid fa-users"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-success" onclick="openShareClientLinkModal(${e.id})" title="Host WhatsApp Link">
               <i class="fa-brands fa-whatsapp"></i>
             </button>
-            <button class="btn btn-sm btn-outline-primary" onclick="viewEventDetails(${e.id})" title="View Guests & Reminders">
-              <i class="fa-solid fa-eye"></i>
+            <button class="btn btn-sm btn-outline-warning" onclick="dispatchEventRemindersNow(${e.id}, '${escapeHtml(e.event_name)}')" title="Send Reminders Now">
+              <i class="fa-solid fa-paper-plane"></i>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="openEditEventModal(${e.id})" title="Edit">
+            <button class="btn btn-sm btn-outline-secondary" onclick="openEditEventModal(${e.id})" title="Edit Event">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="cancelOrDeleteEvent(${e.id}, '${escapeHtml(e.event_name)}')" title="Cancel/Delete">
-              <i class="fa-solid fa-ban"></i>
+            <button class="btn btn-sm btn-outline-danger" onclick="cancelOrDeleteEvent(${e.id}, '${escapeHtml(e.event_name)}')" title="Delete Event">
+              <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
         </td>
@@ -700,19 +703,40 @@ async function viewEventDetails(id) {
 }
 
 async function cancelOrDeleteEvent(id, name) {
-  if (confirm(`Do you wish to cancel or delete event "${name}"? If messages were already sent, it will be safely marked Cancelled.`)) {
+  if (confirm(`Are you sure you want to delete event "${name}"? This will delete the event, its guest assignments, and its reminders.`)) {
     try {
-      const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/events/${id}?force=true`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         showToast(data.message, 'success');
         loadEvents();
+        if (typeof loadGuestEventCards === 'function') loadGuestEventCards();
+        if (typeof loadDashboard === 'function') loadDashboard();
       } else {
-        showToast(data.error || 'Failed to cancel event', 'error');
+        showToast(data.error || 'Failed to delete event', 'error');
       }
     } catch (err) {
       showToast('Error: ' + err.message, 'error');
     }
+  }
+}
+
+async function dispatchEventRemindersNow(eventId, eventName) {
+  if (!confirm(`Send all reminders for "${eventName}" now via linked WhatsApp?`)) return;
+  try {
+    showToast(`Dispatching reminders for ${eventName}...`, 'info');
+    const res = await fetch(`/api/reminders/dispatch-event/${eventId}`, { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message, 'success');
+      loadEvents();
+      if (typeof loadReminders === 'function') loadReminders();
+      if (typeof loadGuestEventCards === 'function') loadGuestEventCards();
+    } else {
+      showToast(data.error || 'Failed to dispatch reminders', 'error');
+    }
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
   }
 }
 
@@ -903,31 +927,29 @@ function renderGuestEventCards(events) {
           </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Action Buttons (Clean & Streamlined) -->
         <button class="btn btn-palace w-100 mb-2 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 rounded-pill shadow-sm"
                 onclick="event.stopPropagation(); openEventGuestList(${e.id})">
-          <i class="fa-solid fa-address-book"></i>
-          <span>Open Guest List (${totalGuests})</span>
-          <i class="fa-solid fa-arrow-right ms-auto"></i>
-        </button>
-
-        <button class="btn btn-sm btn-outline-success w-100 mb-2 py-1.5 fw-semibold rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-1"
-                onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})"
-                title="Share link with host so they can connect their WhatsApp">
-          <i class="fa-brands fa-whatsapp text-success fs-6"></i>
-          <span>Share WhatsApp Link to Host</span>
+          <i class="fa-solid fa-users"></i>
+          <span>Manage Guests & Excel (${totalGuests})</span>
+          <i class="fa-solid fa-chevron-right ms-auto"></i>
         </button>
 
         <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-palace-gold w-50 rounded-pill shadow-sm"
-                  onclick="event.stopPropagation(); openExcelUploadModal(${e.id})"
-                  title="Upload Excel guest contact list for this event">
-            <i class="fa-solid fa-file-excel text-success me-1"></i> Excel
+          <button class="btn btn-sm btn-outline-success flex-grow-1 rounded-pill fw-semibold shadow-sm py-1.5"
+                  onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})"
+                  title="Host WhatsApp Link">
+            <i class="fa-brands fa-whatsapp text-success me-1"></i> Host Link
           </button>
-          <button class="btn btn-sm btn-outline-secondary w-50 rounded-pill shadow-sm"
-                  onclick="event.stopPropagation(); openAddGuestModal(${e.id})"
-                  title="Add a single guest to this event">
-            <i class="fa-solid fa-user-plus me-1"></i> + Guest
+          <button class="btn btn-sm btn-outline-warning rounded-pill fw-semibold shadow-sm px-2.5 py-1.5"
+                  onclick="event.stopPropagation(); dispatchEventRemindersNow(${e.id}, '${escapeHtml(e.event_name)}')"
+                  title="Send all reminders for this event now">
+            <i class="fa-solid fa-paper-plane me-1"></i> Send Now
+          </button>
+          <button class="btn btn-sm btn-outline-danger rounded-pill shadow-sm px-2.5 py-1.5"
+                  onclick="event.stopPropagation(); cancelOrDeleteEvent(${e.id}, '${escapeHtml(e.event_name)}')"
+                  title="Delete this event">
+            <i class="fa-solid fa-trash-can"></i>
           </button>
         </div>
       </div>
@@ -1211,9 +1233,9 @@ async function openEditGuestModal(id) {
 }
 
 async function deleteGuest(id, name) {
-  if (confirm(`Are you sure you want to delete guest "${name}"?`)) {
+  if (confirm(`Are you sure you want to permanently delete guest "${name}"?`)) {
     try {
-      const res = await fetch(`/api/guests/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/guests/${id}?force=true`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         showToast(data.message, 'success');
@@ -1435,6 +1457,9 @@ async function loadReminders() {
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
             ` : ''}
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteReminderPermanently(${r.id})" title="Delete Reminder Permanently">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
           </div>
         </td>
       </tr>
@@ -1541,6 +1566,42 @@ async function retryReminder(id) {
     }
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
+  }
+}
+
+async function deleteReminderPermanently(id) {
+  if (confirm('Delete this reminder permanently?')) {
+    try {
+      const res = await fetch(`/api/reminders/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Reminder deleted', 'success');
+        loadReminders();
+        if (typeof loadDashboard === 'function') loadDashboard();
+      } else {
+        showToast(data.error || 'Failed to delete reminder', 'error');
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+}
+
+async function clearFailedSkippedReminders() {
+  if (confirm('Are you sure you want to clear all Failed, Skipped, and Cancelled reminders?')) {
+    try {
+      const res = await fetch('/api/reminders/batch/failed-skipped', { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, 'success');
+        loadReminders();
+        if (typeof loadDashboard === 'function') loadDashboard();
+      } else {
+        showToast(data.error || 'Failed to clear reminders', 'error');
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
   }
 }
 
@@ -2447,6 +2508,13 @@ function renderWhatsAppAccountsList() {
                       title="Share link for this number">
                 <i class="fa-solid fa-share-nodes me-1"></i> Share Link
               </button>
+              ${!acc.is_default ? `
+                <button class="btn btn-xs btn-outline-danger rounded-pill py-0.5 px-2 fw-semibold ms-1"
+                        onclick="event.stopPropagation(); removeWhatsAppAccount(${acc.id}, '${escapeHtml(acc.account_name)}')"
+                        title="Remove this WhatsApp account">
+                  <i class="fa-solid fa-trash-can me-1"></i> Remove
+                </button>
+              ` : ''}
             </div>
           </div>
           <div>${badge}</div>
@@ -2548,6 +2616,23 @@ async function handleCreateWhatsAppAccount() {
 
     await loadWhatsAppAccountsInModal(data.accountId);
     await startActiveAccountConnection(true);
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
+  }
+}
+
+async function removeWhatsAppAccount(id, name) {
+  if (!confirm(`Are you sure you want to remove WhatsApp account "${name}"?`)) return;
+  try {
+    const res = await fetch(`/api/whatsapp/accounts/${id}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.success) {
+      showToast('WhatsApp account removed', 'success');
+      currentActiveAccountId = null;
+      await loadWhatsAppAccountsInModal();
+    } else {
+      showToast(data.error || 'Failed to remove account', 'error');
+    }
   } catch (err) {
     showToast('Error: ' + err.message, 'error');
   }

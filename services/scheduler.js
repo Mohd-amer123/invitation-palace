@@ -8,7 +8,13 @@
 const { getDb } = require('../config/db');
 const { renderTemplate } = require('./templateEngine');
 const { sendViaMetaCloudApi } = require('./whatsappService');
-const { getSessionStatus, sendDirectMessage, sendDirectMessageFromAccount } = require('./baileysService');
+const { 
+  getSessionStatus, 
+  getAccountSessionStatus, 
+  listAllAccountsWithStatus, 
+  sendDirectMessage, 
+  sendDirectMessageFromAccount 
+} = require('./baileysService');
 
 let cron = null;
 try {
@@ -73,19 +79,42 @@ async function checkAndProcessReminders() {
 
     const { currentDate, currentTime, timestamp } = getCurrentTimeInfo(timezoneSetting);
 
-    // 1. Handle Overdue Reminders (Scheduled for yesterday or earlier that were missed)
-    // Rule: "Do not automatically send overdue reminders. Mark as Skipped so stale reminders are never sent."
+    // 1. Move reminders for today's or upcoming events whose scheduled date was reached to 'Ready to Send'
+    const dueForUpcoming = db.prepare(`
+      UPDATE reminders
+      SET status = 'Ready to Send',
+          scheduled_date = ?,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id IN (
+        SELECT r.id FROM reminders r
+        JOIN events e ON r.event_id = e.id
+        WHERE r.status = 'Scheduled'
+          AND r.scheduled_date <= ?
+          AND e.status = 'Active'
+          AND e.event_date >= ?
+      )
+    `).run(currentDate, currentDate, currentDate);
+
+    if (dueForUpcoming.changes > 0) {
+      console.log(`[Scheduler] Queued ${dueForUpcoming.changes} due reminder(s) for delivery today.`);
+    }
+
+    // 2. Only mark as Skipped if the EVENT ITSELF is already in the past (event_date < today)
     const overdueResult = db.prepare(`
       UPDATE reminders
       SET status = 'Skipped',
-          failure_reason = 'Overdue: Scheduled date passed while application was offline',
+          failure_reason = 'Event date already passed',
           updated_at = CURRENT_TIMESTAMP
-      WHERE status = 'Scheduled'
-        AND scheduled_date < ?
+      WHERE id IN (
+        SELECT r.id FROM reminders r
+        JOIN events e ON r.event_id = e.id
+        WHERE r.status = 'Scheduled'
+          AND e.event_date < ?
+      )
     `).run(currentDate);
 
     if (overdueResult.changes > 0) {
-      console.log(`[Scheduler] Marked ${overdueResult.changes} overdue reminders as Skipped.`);
+      console.log(`[Scheduler] Marked ${overdueResult.changes} reminders for past events as Skipped.`);
     }
 
     // 2. Fetch Reminders that are scheduled for TODAY and time has arrived
@@ -219,10 +248,11 @@ async function runAutomatedBatchQueue() {
   }
   lastBatchStats.inCooldown = false;
 
-  // Check if WhatsApp Multi-Device session is connected
-  const waSession = getSessionStatus();
-  if (waSession.status !== 'CONNECTED') {
-    return;
+  // Check if any WhatsApp Multi-Device session is connected
+  const allAccounts = listAllAccountsWithStatus();
+  const connectedAccounts = allAccounts.filter(a => a.status === 'CONNECTED');
+  if (connectedAccounts.length === 0) {
+    return; // No WhatsApp session connected
   }
 
   // Fetch reminders that are Ready to Send (due today or marked ready)
@@ -275,8 +305,21 @@ async function runAutomatedBatchQueue() {
 
       const freshMessage = renderTemplate(templateText, context);
 
-      // Send directly in background using event's assigned WhatsApp account
-      const sendResult = await sendDirectMessageFromAccount(item.whatsapp_account_id, item.guest_phone, freshMessage);
+      // Resolve which WhatsApp account to send from:
+      let senderAccountId = item.whatsapp_account_id;
+      let sessionStatus = senderAccountId ? getAccountSessionStatus(senderAccountId) : null;
+      if (!sessionStatus || sessionStatus.status !== 'CONNECTED') {
+        const fallback = connectedAccounts[0];
+        if (fallback) {
+          senderAccountId = fallback.id;
+        } else {
+          console.log(`[Auto-Dispatcher] Waiting for WhatsApp connection for Account #${item.whatsapp_account_id}...`);
+          continue;
+        }
+      }
+
+      // Send directly in background using event's assigned or fallback connected WhatsApp account
+      const sendResult = await sendDirectMessageFromAccount(senderAccountId, item.guest_phone, freshMessage);
 
       if (sendResult.success) {
         db.prepare(`

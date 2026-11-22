@@ -289,17 +289,33 @@ router.put('/:id', (req, res) => {
 // DELETE /api/customers/:id - Delete or archive customer
 router.delete('/:id', (req, res) => {
   const db = getDb();
-  const customerId = req.params.id;
+  const customerId = parseInt(req.params.id, 10);
+  const force = req.query.force === 'true' || req.body?.force;
+
+  if (force) {
+    try {
+      const events = db.prepare('SELECT id FROM events WHERE customer_id = ?').all(customerId);
+      for (const ev of events) {
+        db.prepare('DELETE FROM message_history WHERE event_id = ?').run(ev.id);
+        db.prepare('DELETE FROM reminders WHERE event_id = ?').run(ev.id);
+        db.prepare('DELETE FROM event_guests WHERE event_id = ?').run(ev.id);
+        db.prepare('DELETE FROM events WHERE id = ?').run(ev.id);
+      }
+      db.prepare('DELETE FROM customers WHERE id = ?').run(customerId);
+      return res.json({ success: true, message: 'Customer and all associated events deleted permanently.' });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
 
   // Check if customer has associated events
-  const eventCount = db.prepare('SELECT COUNT(*) as count FROM events WHERE customer_id = ?').get(customerId).count;
+  const eventCount = db.prepare('SELECT COUNT(*) as count FROM events WHERE customer_id = ?').get(customerId)?.count || 0;
 
   if (eventCount > 0) {
-    // If events exist, archive instead of delete to protect integrity
     db.prepare(`UPDATE customers SET status = 'Archived', updated_at = CURRENT_TIMESTAMP WHERE id = ?`).run(customerId);
     return res.json({
       success: true,
-      message: `Customer has ${eventCount} associated event(s). Customer has been archived instead of deleted to protect historical data.`
+      message: `Customer has ${eventCount} associated event(s). Customer has been archived. To delete permanently, confirm again.`
     });
   }
 

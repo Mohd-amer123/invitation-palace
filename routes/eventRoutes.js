@@ -277,25 +277,38 @@ router.put('/:id', (req, res) => {
 // DELETE /api/events/:id - Delete event or cancel
 router.delete('/:id', (req, res) => {
   const db = getDb();
-  const eventId = req.params.id;
+  const eventId = parseInt(req.params.id, 10);
+  const force = req.query.force === 'true' || req.body?.force;
+
+  if (force) {
+    try {
+      db.prepare('DELETE FROM message_history WHERE event_id = ?').run(eventId);
+      db.prepare('DELETE FROM reminders WHERE event_id = ?').run(eventId);
+      db.prepare('DELETE FROM event_guests WHERE event_id = ?').run(eventId);
+      db.prepare('DELETE FROM events WHERE id = ?').run(eventId);
+      return res.json({ success: true, message: 'Event and all its reminders permanently deleted.' });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
 
   // Check if sent messages exist for this event
   const sentCount = db.prepare(`
     SELECT COUNT(*) as count FROM message_history WHERE event_id = ?
-  `).get(eventId).count;
+  `).get(eventId)?.count || 0;
 
   if (sentCount > 0) {
-    // If messages have already been sent, cancel the event instead of hard-deleting
     db.prepare(`UPDATE events SET status = 'Cancelled', updated_at = CURRENT_TIMESTAMP WHERE id = ?`).run(eventId);
     handleEventCancellation(eventId);
     return res.json({
       success: true,
-      message: `Event has ${sentCount} sent message records. It was marked as Cancelled and all pending reminders have been cancelled.`
+      message: `Event has ${sentCount} sent message records. It was marked as Cancelled. To permanently remove it, delete again.`
     });
   }
 
-  // Safe to delete if no sent message history
   handleEventCancellation(eventId);
+  db.prepare('DELETE FROM reminders WHERE event_id = ?').run(eventId);
+  db.prepare('DELETE FROM event_guests WHERE event_id = ?').run(eventId);
   db.prepare('DELETE FROM events WHERE id = ?').run(eventId);
   res.json({ success: true, message: 'Event deleted successfully.' });
 });

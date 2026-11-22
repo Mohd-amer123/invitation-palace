@@ -77,12 +77,24 @@ function generateRemindersForEvent(eventId) {
 
   let createdCount = 0;
 
+  const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: defaultTimezone }).format(new Date());
+
   const tx = db.transaction(() => {
     for (const guest of guests) {
       for (const days of stageDaysList) {
         const scheduledDate = calculateScheduledDate(event.event_date, days);
         const scheduledTime = event.reminder_time || '10:00';
         const stageName = `${days}-Day Reminder`;
+
+        // If scheduled date is today or already passed, but event is today or future, queue it immediately!
+        let effectiveDate = scheduledDate;
+        let effectiveTime = scheduledTime;
+        let initialStatus = REMINDER_STATUSES.SCHEDULED;
+
+        if (scheduledDate <= todayStr && event.event_date >= todayStr) {
+          effectiveDate = todayStr;
+          initialStatus = REMINDER_STATUSES.READY_TO_SEND;
+        }
 
         // Check if reminder already exists
         const existing = db.prepare(`
@@ -120,9 +132,9 @@ function generateRemindersForEvent(eventId) {
           guest.id,
           days,
           stageName,
-          scheduledDate,
-          scheduledTime,
-          REMINDER_STATUSES.SCHEDULED,
+          effectiveDate,
+          effectiveTime,
+          initialStatus,
           rendered
         );
 

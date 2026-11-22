@@ -216,17 +216,32 @@ router.put('/:id', (req, res) => {
 // DELETE /api/guests/:id - Delete guest
 router.delete('/:id', (req, res) => {
   const db = getDb();
-  const guestId = req.params.id;
+  const guestId = parseInt(req.params.id, 10);
+  const force = req.query.force === 'true' || req.body?.force;
 
-  const sentCount = db.prepare('SELECT COUNT(*) as count FROM message_history WHERE guest_id = ?').get(guestId).count;
+  if (force) {
+    try {
+      db.prepare('DELETE FROM message_history WHERE guest_id = ?').run(guestId);
+      db.prepare('DELETE FROM reminders WHERE guest_id = ?').run(guestId);
+      db.prepare('DELETE FROM event_guests WHERE guest_id = ?').run(guestId);
+      db.prepare('DELETE FROM guests WHERE id = ?').run(guestId);
+      return res.json({ success: true, message: 'Guest deleted permanently.' });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  const sentCount = db.prepare('SELECT COUNT(*) as count FROM message_history WHERE guest_id = ?').get(guestId)?.count || 0;
 
   if (sentCount > 0) {
     return res.status(400).json({
       success: false,
-      error: `Cannot delete guest because ${sentCount} message(s) have already been sent to this guest. Historical records must be preserved.`
+      error: `Cannot delete guest because ${sentCount} message(s) have already been sent. Use force delete to remove.`
     });
   }
 
+  db.prepare('DELETE FROM reminders WHERE guest_id = ?').run(guestId);
+  db.prepare('DELETE FROM event_guests WHERE guest_id = ?').run(guestId);
   db.prepare('DELETE FROM guests WHERE id = ?').run(guestId);
   res.json({ success: true, message: 'Guest deleted successfully.' });
 });
