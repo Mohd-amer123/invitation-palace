@@ -1369,13 +1369,14 @@ h1, h2, h3, h4, .brand-title {
 }
 }
 
-/* Deck Glass Metric Cards */
+/* Deck Glass Metric Cards (Vertical Stack, Normal Height) */
 .deck-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   position: relative;
   z-index: 2;
+  margin-top: 14px;
 }
 
 .deck-glass-card {
@@ -1383,42 +1384,58 @@ h1, h2, h3, h4, .brand-title {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 20px;
-  padding: 22px 24px 18px 24px;
+  border-radius: 14px;
+  padding: 12px 20px;
   color: #FFFFFF;
   position: relative;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  min-height: 120px;
+  min-height: unset;
+  transition: all 0.2s ease;
+}
+
+.deck-glass-card:hover {
+  background: rgba(0, 0, 0, 0.32);
+  border-color: rgba(255, 255, 255, 0.24);
+  transform: translateX(3px);
+}
+
+.deck-metric-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.deck-metric-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .deck-metric-value {
-  font-size: 38px;
+  font-size: 22px;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1.05;
-  letter-spacing: -0.5px;
+  line-height: 1;
+  letter-spacing: -0.3px;
   font-family: var(--font-sans);
 }
 
 .deck-metric-label {
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 600;
-  margin-top: 4px;
-}
-
-.deck-sparkline-box {
-  position: absolute;
-  right: 14px;
-  bottom: 12px;
-  width: 95px;
-  height: 40px;
-  opacity: 0.85;
+  margin-top: 0;
 }
 
 /* Floating Seam Profile Strip */
