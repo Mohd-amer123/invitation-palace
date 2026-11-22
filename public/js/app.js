@@ -90,8 +90,10 @@ async function verifyAuthentication() {
     const data = await res.json();
     if (data.success && data.user) {
       currentUser = data.user;
-      document.getElementById('userNameDisplay').textContent = currentUser.fullName || currentUser.username;
-      document.getElementById('userAvatar').textContent = (currentUser.fullName || currentUser.username).charAt(0).toUpperCase();
+      const userNameEl = document.getElementById('userNameDisplay');
+      if (userNameEl) userNameEl.textContent = currentUser.fullName || currentUser.username;
+      const userAvatarEl = document.getElementById('userAvatar');
+      if (userAvatarEl) userAvatarEl.textContent = (currentUser.fullName || currentUser.username).charAt(0).toUpperCase();
     } else {
       window.location.href = '/login.html';
     }
