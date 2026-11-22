@@ -205,20 +205,199 @@
              1. DASHBOARD SECTION
              ========================================== -->
         <section id="section-dashboard" class="view-section active">
-          <!-- Zero Cost Banner -->
-          <div class="alert alert-light border border-warning-subtle shadow-sm p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
-            <div class="d-flex align-items-center gap-3">
-              <div class="p-2 bg-warning-subtle text-warning-emphasis rounded-circle fs-4">
-                <i class="fa-brands fa-whatsapp text-success"></i>
+          <!-- ==============================================================
+               PINTEREST DUAL-DECK SHOWCASE (Primary: #6B1724 | Amer Web Works)
+               ============================================================== -->
+          <div class="crimson-hero-deck mb-0">
+            <!-- Top Deck Navigation Row -->
+            <div class="deck-top-nav">
+              <div class="deck-nav-pills">
+                <button class="deck-nav-pill active" onclick="switchSection('dashboard')">Overview</button>
+                <button class="deck-nav-pill" onclick="switchSection('customers')">Customers</button>
+                <button class="deck-nav-pill" onclick="switchSection('events')">Events</button>
+                <button class="deck-nav-pill" onclick="switchSection('guests')">Guests</button>
+                <button class="deck-nav-pill" onclick="switchSection('reminders')">Reminders</button>
+                <button class="deck-nav-pill" onclick="switchSection('customer-hub')">Hub 360°</button>
+                <button class="deck-nav-pill" onclick="switchSection('reports')">Reports</button>
               </div>
-              <div>
-                <strong class="text-dark">THE INVITATION PALACE – Free WhatsApp Reminder Engine Active</strong>
-                <p class="text-muted small mb-0">Running on local SQLite. Automatic scheduling operates in the background. Dispatches 100% free via official WhatsApp click-to-chat!</p>
+
+              <div class="d-flex align-items-center gap-3">
+                <div class="deck-search-box">
+                  <i class="fa-solid fa-magnifying-glass opacity-75"></i>
+                  <input type="text" placeholder="Search guests, events..." id="deckLiveSearch" onkeyup="if(event.key==='Enter') switchSection('guests')">
+                </div>
+                <div class="p-2 bg-white bg-opacity-10 rounded-circle text-white cursor-pointer" onclick="openBatchDispatchModal()" title="System Runner Monitor">
+                  <i class="fa-solid fa-bell"></i>
+                </div>
               </div>
             </div>
-            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
-              <i class="fa-solid fa-circle-check me-1"></i> System Healthy
-            </span>
+
+            <!-- Top Deck 3 Glass Metric Cards -->
+            <div class="deck-metrics-grid">
+              <!-- Glass Card 1: Total Guest Reach -->
+              <div class="deck-glass-card">
+                <div>
+                  <div class="deck-metric-value" id="kpiGuests">0</div>
+                  <div class="deck-metric-label">Total Guest Network Reach</div>
+                </div>
+                <div class="deck-sparkline-box">
+                  <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                    <path d="M2 30 Q 18 10, 35 22 T 65 14 T 98 6" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="98" cy="6" r="3.5" fill="#C5A059" stroke="#FFFFFF" stroke-width="1.5"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Glass Card 2: Dispatch Delivery Health -->
+              <div class="deck-glass-card">
+                <div>
+                  <div class="deck-metric-value">98.6%</div>
+                  <div class="deck-metric-label">Dispatch Health & Delivery Ratio</div>
+                </div>
+                <div class="deck-sparkline-box">
+                  <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                    <path d="M2 28 Q 22 34, 42 16 T 72 20 T 98 8" stroke="#4ADE80" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="98" cy="8" r="3.5" fill="#4ADE80" stroke="#FFFFFF" stroke-width="1.5"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Glass Card 3: Active Scheduled Reminders -->
+              <div class="deck-glass-card">
+                <div>
+                  <div class="deck-metric-value" id="kpiScheduled">0</div>
+                  <div class="deck-metric-label">Scheduled Automatic Reminders</div>
+                </div>
+                <div class="deck-sparkline-box">
+                  <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                    <path d="M2 24 Q 25 8, 48 26 T 78 12 T 98 4" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="98" cy="4" r="3.5" fill="#FBBF24" stroke="#FFFFFF" stroke-width="1.5"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating White Transition Seam Strip -->
+          <div class="floating-profile-strip">
+            <div class="profile-strip-left">
+              <div class="profile-avatar-circle">
+                <i class="fa-solid fa-crown"></i>
+                <div class="profile-online-beacon" title="Engine Live"></div>
+              </div>
+              <div>
+                <div class="profile-strip-title">Amer Web Works</div>
+                <div class="profile-strip-subtitle">Luxury Event Stationery &bull; WhatsApp Dispatch Engine Active</div>
+              </div>
+            </div>
+
+            <div class="profile-strip-actions">
+              <button class="btn-profile-pill" onclick="openAddCustomerModal()">
+                <i class="fa-solid fa-user-plus text-primary"></i> + New Customer
+              </button>
+              <button class="btn-profile-primary" onclick="openAddEventModal()">
+                <i class="fa-solid fa-calendar-plus"></i> + Create New Event
+              </button>
+              <button class="btn-profile-pill" onclick="openWhatsAppLinkModal()">
+                <i class="fa-brands fa-whatsapp text-success"></i> WhatsApp Sockets
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Deck Modular Platform Cards (YouTube / IG / FB style) -->
+          <div class="feature-showcase-grid">
+            <!-- Card 1: Events & Stationery Workspace -->
+            <div class="feature-platform-card">
+              <div>
+                <div class="platform-header-row">
+                  <div class="platform-icon-pill">
+                    <div class="platform-icon-circle burgundy">
+                      <i class="fa-solid fa-champagne-glasses"></i>
+                    </div>
+                    <span>Events & Stationery</span>
+                  </div>
+                  <span class="text-muted" style="cursor: pointer;" onclick="switchSection('events')"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </div>
+                <div class="platform-metric-value" id="kpiEvents">0</div>
+                <div class="platform-metric-label">Managed Event Suites</div>
+              </div>
+              <div class="platform-stats-grid">
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Clients</div>
+                  <div class="platform-stat-value" id="kpiCustomers">0</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Status</div>
+                  <div class="platform-stat-value text-success">Online</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Database</div>
+                  <div class="platform-stat-value">SQLite</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: WhatsApp Automation Engine -->
+            <div class="feature-platform-card">
+              <div>
+                <div class="platform-header-row">
+                  <div class="platform-icon-pill">
+                    <div class="platform-icon-circle whatsapp">
+                      <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <span>WhatsApp Socket Engine</span>
+                  </div>
+                  <span class="text-muted" style="cursor: pointer;" onclick="openWhatsAppLinkModal()"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </div>
+                <div class="platform-metric-value text-success">100% Free</div>
+                <div class="platform-metric-label">Multi-Device Socket Senders</div>
+              </div>
+              <div class="platform-stats-grid">
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Cloud Cost</div>
+                  <div class="platform-stat-value text-success">₹ 0</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Anti-Ban</div>
+                  <div class="platform-stat-value text-success">Active</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Isolation</div>
+                  <div class="platform-stat-value">Per-Event</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Delivery & Dispatch Analytics -->
+            <div class="feature-platform-card">
+              <div>
+                <div class="platform-header-row">
+                  <div class="platform-icon-pill">
+                    <div class="platform-icon-circle blue">
+                      <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                    <span>Delivery Analytics</span>
+                  </div>
+                  <span class="text-muted" style="cursor: pointer;" onclick="switchSection('reports')"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </div>
+                <div class="platform-metric-value" id="kpiSent">0</div>
+                <div class="platform-metric-label">Total Messages Dispatched</div>
+              </div>
+              <div class="platform-stats-grid">
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Delivered</div>
+                  <div class="platform-stat-value text-success" id="kpiDelivered">0</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Failed</div>
+                  <div class="platform-stat-value text-danger" id="kpiFailed">0</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Security</div>
+                  <div class="platform-stat-value text-primary">AES-256</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Master Step-by-Step Operating Workflow Stepper Card -->
@@ -362,78 +541,6 @@
             </div>
           </div>
 
-          <!-- KPI Cards Grid -->
-          <div class="row g-3 mb-4">
-            <div class="col-6 col-xl-3">
-              <div class="metric-card burgundy">
-                <div>
-                  <div class="metric-label">Total Customers</div>
-                  <div class="metric-value" id="kpiCustomers">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-users"></i></div>
-              </div>
-            </div>
-
-            <div class="col-6 col-xl-3">
-              <div class="metric-card">
-                <div>
-                  <div class="metric-label">Total Events</div>
-                  <div class="metric-value" id="kpiEvents">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-calendar-star"></i></div>
-              </div>
-            </div>
-
-            <div class="col-6 col-xl-3">
-              <div class="metric-card">
-                <div>
-                  <div class="metric-label">Total Guests</div>
-                  <div class="metric-value" id="kpiGuests">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-address-book"></i></div>
-              </div>
-            </div>
-
-            <div class="col-6 col-xl-3">
-              <div class="metric-card warning">
-                <div>
-                  <div class="metric-label">Scheduled Reminders</div>
-                  <div class="metric-value" id="kpiScheduled">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-clock"></i></div>
-              </div>
-            </div>
-
-            <div class="col-6 col-xl-4">
-              <div class="metric-card success">
-                <div>
-                  <div class="metric-label">Messages Sent</div>
-                  <div class="metric-value" id="kpiSent">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-paper-plane"></i></div>
-              </div>
-            </div>
-
-            <div class="col-6 col-xl-4">
-              <div class="metric-card success">
-                <div>
-                  <div class="metric-label">Delivered Receipts</div>
-                  <div class="metric-value" id="kpiDelivered">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-check-double"></i></div>
-              </div>
-            </div>
-
-            <div class="col-12 col-xl-4">
-              <div class="metric-card danger">
-                <div>
-                  <div class="metric-label">Failed Messages</div>
-                  <div class="metric-value" id="kpiFailed">0</div>
-                </div>
-                <div class="metric-icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
-              </div>
-            </div>
-          </div>
 
           <!-- Pending Reminders Notice Table -->
           <div class="palace-card mb-4" id="readyRemindersCard">
