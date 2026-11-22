@@ -240,6 +240,14 @@ async function loadDashboard() {
     document.getElementById('kpiDelivered').textContent = m.totalDeliveredMessages || 0;
     document.getElementById('kpiFailed').textContent = m.totalFailedMessages || 0;
 
+    // Secondary Overview Displays
+    const delivTop = document.getElementById('kpiDeliveredTop');
+    if (delivTop) delivTop.textContent = m.totalDeliveredMessages || 0;
+    const schedSec = document.getElementById('kpiScheduledSecondary');
+    if (schedSec) schedSec.textContent = m.totalScheduledReminders || 0;
+    const guestsSec = document.getElementById('kpiGuestsSecondary');
+    if (guestsSec) guestsSec.textContent = m.totalGuests || 0;
+
     // Upcoming Events Table
     const eventsTbody = document.getElementById('dashboardUpcomingEventsBody');
     if (!data.upcomingEvents || data.upcomingEvents.length === 0) {

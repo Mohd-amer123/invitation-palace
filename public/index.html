@@ -178,25 +178,11 @@
 
             <!-- Top Deck 3 Glass Metric Cards -->
             <div class="deck-metrics-grid">
-              <!-- Glass Card 1: Total Guest Reach -->
+              <!-- Glass Card 1: Total Done Messages -->
               <div class="deck-glass-card">
                 <div>
-                  <div class="deck-metric-value" id="kpiGuests">0</div>
-                  <div class="deck-metric-label">Total Guest Network Reach</div>
-                </div>
-                <div class="deck-sparkline-box">
-                  <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                    <path d="M2 30 Q 18 10, 35 22 T 65 14 T 98 6" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
-                    <circle cx="98" cy="6" r="3.5" fill="#C5A059" stroke="#FFFFFF" stroke-width="1.5"/>
-                  </svg>
-                </div>
-              </div>
-
-              <!-- Glass Card 2: Dispatch Delivery Health -->
-              <div class="deck-glass-card">
-                <div>
-                  <div class="deck-metric-value">98.6%</div>
-                  <div class="deck-metric-label">Dispatch Health & Delivery Ratio</div>
+                  <div class="deck-metric-value" id="kpiDeliveredTop">0</div>
+                  <div class="deck-metric-label">Delivered Receipts (Done)</div>
                 </div>
                 <div class="deck-sparkline-box">
                   <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
@@ -206,16 +192,30 @@
                 </div>
               </div>
 
-              <!-- Glass Card 3: Active Scheduled Reminders -->
+              <!-- Glass Card 2: Total Pending Reminders -->
               <div class="deck-glass-card">
                 <div>
                   <div class="deck-metric-value" id="kpiScheduled">0</div>
-                  <div class="deck-metric-label">Scheduled Automatic Reminders</div>
+                  <div class="deck-metric-label">Total Reminders Pending</div>
                 </div>
                 <div class="deck-sparkline-box">
                   <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
                     <path d="M2 24 Q 25 8, 48 26 T 78 12 T 98 4" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
                     <circle cx="98" cy="4" r="3.5" fill="#FBBF24" stroke="#FFFFFF" stroke-width="1.5"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Glass Card 3: Total Guest Reach -->
+              <div class="deck-glass-card">
+                <div>
+                  <div class="deck-metric-value" id="kpiGuests">0</div>
+                  <div class="deck-metric-label">Total Guest Network Reach</div>
+                </div>
+                <div class="deck-sparkline-box">
+                  <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                    <path d="M2 30 Q 18 10, 35 22 T 65 14 T 98 6" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="98" cy="6" r="3.5" fill="#C5A059" stroke="#FFFFFF" stroke-width="1.5"/>
                   </svg>
                 </div>
               </div>
@@ -248,9 +248,71 @@
             </div>
           </div>
 
-          <!-- Bottom Deck Modular Platform Cards (YouTube / IG / FB style) -->
+          <!-- Bottom Deck Modular Record Overview Cards (Done / Pending / Total Records) -->
           <div class="feature-showcase-grid">
-            <!-- Card 1: Events & Stationery Workspace -->
+            <!-- Card 1: Completed / Done Records -->
+            <div class="feature-platform-card">
+              <div>
+                <div class="platform-header-row">
+                  <div class="platform-icon-pill">
+                    <div class="platform-icon-circle" style="background: rgba(34, 197, 94, 0.12); color: #16A34A;">
+                      <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <span>Messages Completed (Done)</span>
+                  </div>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small">Delivered</span>
+                </div>
+                <div class="platform-metric-value text-success" id="kpiDelivered">0</div>
+                <div class="platform-metric-label">Total Delivered Receipts</div>
+              </div>
+              <div class="platform-stats-grid">
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Dispatched</div>
+                  <div class="platform-stat-value" id="kpiSent">0</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Delivery Health</div>
+                  <div class="platform-stat-value text-success">98.6%</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Failed</div>
+                  <div class="platform-stat-value text-danger" id="kpiFailed">0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Total Pending Reminders Queue -->
+            <div class="feature-platform-card">
+              <div>
+                <div class="platform-header-row">
+                  <div class="platform-icon-pill">
+                    <div class="platform-icon-circle" style="background: rgba(245, 158, 11, 0.12); color: #D97706;">
+                      <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <span>Pending Reminders Queue</span>
+                  </div>
+                  <button class="btn btn-sm btn-palace-outline rounded-pill py-0 px-2" style="font-size: 11px;" onclick="openBatchDispatchModal()">Auto Runner</button>
+                </div>
+                <div class="platform-metric-value text-warning-emphasis" id="kpiScheduledSecondary">0</div>
+                <div class="platform-metric-label">Total Reminders Pending</div>
+              </div>
+              <div class="platform-stats-grid">
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Pacing</div>
+                  <div class="platform-stat-value text-success">Anti-Ban</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Mode</div>
+                  <div class="platform-stat-value">1-Click</div>
+                </div>
+                <div class="platform-stat-item">
+                  <div class="platform-stat-label">Schedule</div>
+                  <div class="platform-stat-value text-primary">Active</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Events & Scope (Total Records) -->
             <div class="feature-platform-card">
               <div>
                 <div class="platform-header-row">
@@ -258,228 +320,25 @@
                     <div class="platform-icon-circle burgundy">
                       <i class="fa-solid fa-champagne-glasses"></i>
                     </div>
-                    <span>Events & Stationery</span>
+                    <span>Total Events & Scope</span>
                   </div>
-                  <span class="text-muted" style="cursor: pointer;" onclick="switchSection('events')"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                  <button class="btn btn-sm btn-palace-outline rounded-pill py-0 px-2" style="font-size: 11px;" onclick="switchSection('events')">View Events</button>
                 </div>
                 <div class="platform-metric-value" id="kpiEvents">0</div>
-                <div class="platform-metric-label">Managed Event Suites</div>
+                <div class="platform-metric-label">Total Events Configured</div>
               </div>
               <div class="platform-stats-grid">
                 <div class="platform-stat-item">
-                  <div class="platform-stat-label">Clients</div>
+                  <div class="platform-stat-label">Total Clients</div>
                   <div class="platform-stat-value" id="kpiCustomers">0</div>
                 </div>
                 <div class="platform-stat-item">
-                  <div class="platform-stat-label">Status</div>
-                  <div class="platform-stat-value text-success">Online</div>
+                  <div class="platform-stat-label">Total Guests</div>
+                  <div class="platform-stat-value" id="kpiGuestsSecondary">0</div>
                 </div>
                 <div class="platform-stat-item">
                   <div class="platform-stat-label">Database</div>
                   <div class="platform-stat-value">SQLite</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card 2: WhatsApp Automation Engine -->
-            <div class="feature-platform-card">
-              <div>
-                <div class="platform-header-row">
-                  <div class="platform-icon-pill">
-                    <div class="platform-icon-circle whatsapp">
-                      <i class="fa-brands fa-whatsapp"></i>
-                    </div>
-                    <span>WhatsApp Socket Engine</span>
-                  </div>
-                  <span class="text-muted" style="cursor: pointer;" onclick="openWhatsAppLinkModal()"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                </div>
-                <div class="platform-metric-value text-success">100% Free</div>
-                <div class="platform-metric-label">Multi-Device Socket Senders</div>
-              </div>
-              <div class="platform-stats-grid">
-                <div class="platform-stat-item">
-                  <div class="platform-stat-label">Cloud Cost</div>
-                  <div class="platform-stat-value text-success">₹ 0</div>
-                </div>
-                <div class="platform-stat-item">
-                  <div class="platform-stat-label">Anti-Ban</div>
-                  <div class="platform-stat-value text-success">Active</div>
-                </div>
-                <div class="platform-stat-item">
-                  <div class="platform-stat-label">Isolation</div>
-                  <div class="platform-stat-value">Per-Event</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card 3: Delivery & Dispatch Analytics -->
-            <div class="feature-platform-card">
-              <div>
-                <div class="platform-header-row">
-                  <div class="platform-icon-pill">
-                    <div class="platform-icon-circle blue">
-                      <i class="fa-solid fa-paper-plane"></i>
-                    </div>
-                    <span>Delivery Analytics</span>
-                  </div>
-                  <span class="text-muted" style="cursor: pointer;" onclick="switchSection('reports')"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                </div>
-                <div class="platform-metric-value" id="kpiSent">0</div>
-                <div class="platform-metric-label">Total Messages Dispatched</div>
-              </div>
-              <div class="platform-stats-grid">
-                <div class="platform-stat-item">
-                  <div class="platform-stat-label">Delivered</div>
-                  <div class="platform-stat-value text-success" id="kpiDelivered">0</div>
-                </div>
-                <div class="platform-stat-item">
-                  <div class="platform-stat-label">Failed</div>
-                  <div class="platform-stat-value text-danger" id="kpiFailed">0</div>
-                </div>
-                <div class="platform-stat-item">
-                  <div class="platform-stat-label">Security</div>
-                  <div class="platform-stat-value text-primary">AES-256</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Master Step-by-Step Operating Workflow Stepper Card -->
-          <div class="palace-card mb-4 border-gold shadow-sm" id="palaceWorkflowGuideCard">
-            <div class="palace-card-header bg-white d-flex align-items-center justify-content-between flex-wrap gap-2 py-3 px-4">
-              <div class="d-flex align-items-center gap-3">
-                <div class="p-2 rounded-circle bg-warning-subtle text-warning-emphasis fs-4">
-                  <i class="fa-solid fa-route text-warning"></i>
-                </div>
-                <div>
-                  <div class="d-flex align-items-center gap-2">
-                    <h3 class="palace-card-title mb-0">Master Step-by-Step Operating Workflow</h3>
-                    <span class="badge bg-palace-gold text-dark font-monospace" style="font-size: 11px;">S.NO 01 &rarr; 06</span>
-                  </div>
-                  <p class="text-muted small mb-0 mt-1">Standard sequence to manage clients, events, guests and automated reminders without confusion.</p>
-                </div>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-palace-outline rounded-pill px-3 py-1.5" type="button" data-bs-toggle="collapse" data-bs-target="#workflowCollapse" aria-expanded="true" aria-controls="workflowCollapse">
-                  <i class="fa-solid fa-chevron-up me-1" id="workflowChevronIcon"></i> <span id="workflowToggleText">Minimize Steps</span>
-                </button>
-              </div>
-            </div>
-            <div class="collapse show" id="workflowCollapse">
-              <div class="palace-card-body p-4 pt-2">
-                <div class="workflow-stepper-container">
-                  <!-- Step 1 -->
-                  <div class="workflow-step-card">
-                    <div class="workflow-step-header">
-                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 01</span>
-                      <div class="step-icon-circle bg-success-subtle text-success">
-                        <i class="fa-brands fa-whatsapp"></i>
-                      </div>
-                    </div>
-                    <h4 class="workflow-step-title">Link WhatsApp Number(s)</h4>
-                    <p class="workflow-step-desc">Scan QR to connect Palace WhatsApp or host numbers. Multi-WhatsApp allows assigning dedicated numbers per event.</p>
-                    <button class="btn btn-sm btn-palace w-100" onclick="openWhatsAppLinkModal()">
-                      <i class="fa-brands fa-whatsapp text-success me-1"></i> Scan & Link Device
-                    </button>
-                    <div class="step-next-hint">
-                      <span>Next: Register Customer</span>
-                      <i class="fa-solid fa-arrow-right ms-auto"></i>
-                    </div>
-                  </div>
-
-                  <!-- Step 2 -->
-                  <div class="workflow-step-card">
-                    <div class="workflow-step-header">
-                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 02</span>
-                      <div class="step-icon-circle bg-primary-subtle text-primary">
-                        <i class="fa-solid fa-user-plus"></i>
-                      </div>
-                    </div>
-                    <h4 class="workflow-step-title">Register Customer / Client</h4>
-                    <p class="workflow-step-desc">Add the event family or client details. Generates an auto-incrementing Palace client code (e.g. CUST-2026-0001).</p>
-                    <button class="btn btn-sm btn-palace w-100" onclick="openAddCustomerModal()">
-                      <i class="fa-solid fa-user-plus text-warning me-1"></i> + Register Customer
-                    </button>
-                    <div class="step-next-hint">
-                      <span>Next: Create Event</span>
-                      <i class="fa-solid fa-arrow-right ms-auto"></i>
-                    </div>
-                  </div>
-
-                  <!-- Step 3 -->
-                  <div class="workflow-step-card">
-                    <div class="workflow-step-header">
-                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 03</span>
-                      <div class="step-icon-circle bg-danger-subtle text-danger">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                      </div>
-                    </div>
-                    <h4 class="workflow-step-title">Create Event & Pick Sender</h4>
-                    <p class="workflow-step-desc">Set event date, time, venue address, Google Maps link, and choose which linked WhatsApp account dispatches.</p>
-                    <button class="btn btn-sm btn-palace w-100" onclick="openAddEventModal()">
-                      <i class="fa-solid fa-calendar-check text-danger me-1"></i> + Create New Event
-                    </button>
-                    <div class="step-next-hint">
-                      <span>Next: Import Guest List</span>
-                      <i class="fa-solid fa-arrow-right ms-auto"></i>
-                    </div>
-                  </div>
-
-                  <!-- Step 4 -->
-                  <div class="workflow-step-card">
-                    <div class="workflow-step-header">
-                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 04</span>
-                      <div class="step-icon-circle bg-success-subtle text-success">
-                        <i class="fa-solid fa-file-excel"></i>
-                      </div>
-                    </div>
-                    <h4 class="workflow-step-title">Import Guests (Excel / Manual)</h4>
-                    <p class="workflow-step-desc">Upload client guest Excel list (.xlsx) or enter single guests. The engine formats 10-digit numbers into standard +91.</p>
-                    <button class="btn btn-sm btn-palace-gold w-100" onclick="openExcelUploadModal()">
-                      <i class="fa-solid fa-file-excel text-success me-1"></i> Import Excel List
-                    </button>
-                    <div class="step-next-hint">
-                      <span>Next: Verify Schedule</span>
-                      <i class="fa-solid fa-arrow-right ms-auto"></i>
-                    </div>
-                  </div>
-
-                  <!-- Step 5 -->
-                  <div class="workflow-step-card">
-                    <div class="workflow-step-header">
-                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 05</span>
-                      <div class="step-icon-circle bg-warning-subtle text-warning-emphasis">
-                        <i class="fa-solid fa-bell"></i>
-                      </div>
-                    </div>
-                    <h4 class="workflow-step-title">Verify Reminder Schedule</h4>
-                    <p class="workflow-step-desc">The Palace engine auto-schedules 7-Day, 3-Day & 1-Day secular reminder messages for every guest in seconds.</p>
-                    <button class="btn btn-sm btn-palace-outline w-100" onclick="switchSection('reminders')">
-                      <i class="fa-solid fa-bell text-warning me-1"></i> Review Reminders
-                    </button>
-                    <div class="step-next-hint">
-                      <span>Next: Automated Dispatch</span>
-                      <i class="fa-solid fa-arrow-right ms-auto"></i>
-                    </div>
-                  </div>
-
-                  <!-- Step 6 -->
-                  <div class="workflow-step-card">
-                    <div class="workflow-step-header">
-                      <span class="sno-badge"><i class="fa-solid fa-hashtag"></i> S.NO 06</span>
-                      <div class="step-icon-circle bg-info-subtle text-info">
-                        <i class="fa-solid fa-rocket"></i>
-                      </div>
-                    </div>
-                    <h4 class="workflow-step-title">Zero-Click Auto Dispatch</h4>
-                    <p class="workflow-step-desc">Sit back! Backend background runner delivers batches of 10 every 30 mins with human anti-ban pauses. Monitor in Customer Hub.</p>
-                    <button class="btn btn-sm btn-batch-runner w-100" onclick="openBatchDispatchModal()">
-                      <i class="fa-solid fa-bolt text-warning me-1"></i> Auto-Runner Monitor
-                    </button>
-                    <div class="step-next-hint text-success fw-bold">
-                      <i class="fa-solid fa-circle-check"></i> Complete & Monitored
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
