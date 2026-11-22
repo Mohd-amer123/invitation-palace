@@ -2023,6 +2023,10 @@ async function loadBranding() {
       }
     }
 
+    // Profile Strip Brand
+    const deckProfileBrand = document.getElementById('deckProfileBrandName');
+    if (deckProfileBrand) deckProfileBrand.textContent = s.business_name || 'THE INVITATION PALACE';
+
     // Document Title
     document.title = (s.business_name || 'THE INVITATION PALACE') + ' | Event Reminder System';
 

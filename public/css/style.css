@@ -834,19 +834,20 @@ h1, h2, h3, h4, .brand-title {
 }
 
 .sidebar-company-logo {
-  max-height: 54px;
-  max-width: 170px;
+  max-height: 56px;
+  max-width: 190px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.35));
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.98);
-  padding: 4px 10px;
-  border: 1px solid var(--palace-gold);
+  filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
   transition: transform 0.25s ease;
 }
 
 .sidebar-company-logo:hover {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 
 .brand-edit-badge {
@@ -887,13 +888,18 @@ h1, h2, h3, h4, .brand-title {
   max-height: 95px;
   max-width: 90%;
   object-fit: contain;
+  border: none !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 .header-brand-logo {
-  max-height: 26px;
-  max-width: 80px;
+  max-height: 28px;
+  max-width: 90px;
   object-fit: contain;
-  border-radius: 4px;
+  border: none !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 /* ==============================================================
