@@ -1296,13 +1296,13 @@ h1, h2, h3, h4, .brand-title {
 /* Top Crimson Deck */
 .crimson-hero-deck {
   background: linear-gradient(135deg, #7C1827 0%, #6B1724 50%, #4D0E18 100%);
-  border-radius: 28px;
-  padding: 28px 32px 52px 32px;
+  border-radius: 24px;
+  padding: 24px 28px 24px 28px;
   color: #FFFFFF;
   position: relative;
   overflow: hidden;
   box-shadow: 0 16px 40px rgba(107, 23, 36, 0.22);
-  margin-bottom: 0;
+  margin-bottom: 24px;
 }
 
 .crimson-hero-deck::before {
