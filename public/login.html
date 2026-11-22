@@ -416,8 +416,8 @@
             class="custom-input-field" 
             id="username" 
             name="username" 
-            placeholder="admin" 
-            value="admin" 
+            placeholder="Enter your email or username" 
+            autocomplete="username" 
             required 
             autofocus>
         </div>
@@ -434,19 +434,13 @@
               class="custom-input-field" 
               id="password" 
               name="password" 
-              placeholder="••••••••" 
-              value="admin123" 
+              placeholder="Enter your password" 
+              autocomplete="current-password" 
               required>
             <button type="button" class="toggle-pass-btn" id="togglePasswordBtn" title="Toggle password visibility">
               <i class="fa-regular fa-eye"></i>
             </button>
           </div>
-        </div>
-
-        <!-- Quick Access Credential Hint -->
-        <div class="cred-pill">
-          <span><i class="fa-solid fa-key text-warning me-1"></i> Default Login:</span>
-          <span>Username: <code>admin</code> | Pass: <code>admin123</code></span>
         </div>
 
         <!-- Submit Button in #6b1724 -->
@@ -457,7 +451,7 @@
       </form>
 
       <div class="form-footer">
-        <span>Powered by <strong>THE INVITATION PALACE</strong></span>
+        <span>Powered by <strong>Amer Web Works</strong></span>
         <div class="text-muted mt-1" style="font-size: 11px;">
           <i class="fa-solid fa-shield-halved text-success me-1"></i> End-to-End Encrypted Session
         </div>
@@ -479,7 +473,7 @@
 
     // Forgot password info toast
     function handleForgotPassword() {
-      alert('The default palace administrator credentials are:\nUsername: admin\nPassword: admin123\n\nYou can change your credentials in Palace Settings once logged in.');
+      alert('To reset your administrator password, please contact Amer Web Works.');
     }
 
     // Handle Login Submit
