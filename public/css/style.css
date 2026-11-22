@@ -197,19 +197,19 @@ h1, h2, h3, h4, .brand-title {
 
 /* Header */
 .top-header {
-  height: var(--header-height);
+  height: 72px;
   background: #FFFFFF;
   border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  margin-bottom: 20px;
+  padding: 0 22px;
+  margin-bottom: 22px;
   position: sticky;
   top: 16px;
   z-index: 900;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
 }
 
 .header-left {
@@ -218,114 +218,243 @@ h1, h2, h3, h4, .brand-title {
   gap: 12px;
 }
 
-.sidebar-toggle-btn {
-  background: #FFFFFF;
-  border: 1px solid var(--palace-ivory-border);
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
-  color: var(--palace-burgundy);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-}
-
-.sidebar-toggle-btn:hover {
-  background: var(--palace-gold-soft);
-  color: var(--palace-burgundy-dark);
-  border-color: var(--palace-gold);
-}
-
-.header-right {
+/* Left Brand Badge */
+.nav-brand-badge {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Quick Action Dropdown Styling */
-.palace-dropdown {
+.nav-brand-icon-box {
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
-  background: #FFFFFF;
-  border: 1px solid rgba(197, 160, 89, 0.3) !important;
-  box-shadow: 0 12px 35px -5px rgba(74, 14, 24, 0.15), 0 4px 12px -2px rgba(0,0,0,0.06);
-  animation: dropdownSlide 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes dropdownSlide {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.palace-dropdown .dropdown-item {
-  transition: all 0.18s ease;
-}
-
-.palace-dropdown .dropdown-item:hover {
-  background-color: rgba(197, 160, 89, 0.12);
-  transform: translateX(3px);
-}
-
-.action-icon-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  background: rgba(107, 23, 36, 0.08);
+  color: #6B1724;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  flex-shrink: 0;
+  font-size: 17px;
+  border: 1px solid rgba(107, 23, 36, 0.12);
+  transition: transform 0.2s ease;
 }
 
-/* Batch Runner Primary Button */
-.btn-batch-runner {
-  background: linear-gradient(135deg, #1E6B47 0%, #155724 100%);
-  color: #FFFFFF;
-  border: 1px solid rgba(197, 160, 89, 0.45);
+.nav-brand-heading {
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #1E293B;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.nav-brand-subheading {
+  font-size: 11px;
+  color: #64748B;
   font-weight: 600;
-  font-size: 13px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22C55E;
+  display: inline-block;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+  animation: pulseGreen 1.8s infinite;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Universal Icon Circles for Navbar Buttons */
+.nav-btn-icon-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.nav-btn-icon-circle.sno {
+  background: rgba(184, 115, 20, 0.16);
+  color: #B87314;
+}
+
+.nav-btn-icon-circle.batch {
+  background: rgba(255, 255, 255, 0.22);
+  color: #FDE047;
+}
+
+.nav-btn-icon-circle.wa {
+  background: rgba(37, 211, 102, 0.15);
+  color: #1EBE5D;
+}
+
+/* 1. S.NO Guide Button */
+.btn-nav-sno {
+  background: linear-gradient(135deg, #FFFDF8 0%, #FFF6E5 100%) !important;
+  color: #8C5B00 !important;
+  border: 1.5px solid #F6D68E !important;
+  border-radius: 50px !important;
+  padding: 7px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 2px 8px rgba(184, 115, 20, 0.08) !important;
+}
+
+.btn-nav-sno:hover {
+  background: linear-gradient(135deg, #FFF3D6 0%, #FFE9B8 100%) !important;
+  color: #633F00 !important;
+  border-color: #E6B347 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(184, 115, 20, 0.2) !important;
+}
+
+.btn-nav-sno:hover .nav-btn-icon-circle.sno {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* 2. Batch Runner Primary Button */
+.btn-batch-runner {
+  background: linear-gradient(135deg, #166534 0%, #14532D 100%) !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #15803D !important;
+  border-radius: 50px !important;
+  padding: 7px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 3px 12px rgba(22, 101, 52, 0.25) !important;
 }
 
 .btn-batch-runner:hover {
-  background: linear-gradient(135deg, #248054 0%, #18652A 100%);
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #15803D 0%, #166534 100%) !important;
+  color: #FFFFFF !important;
+  border-color: #22C55E !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(30, 107, 71, 0.35);
+  box-shadow: 0 6px 18px rgba(22, 101, 52, 0.38) !important;
 }
 
-/* WhatsApp Connection Pill */
+.btn-batch-runner:hover .nav-btn-icon-circle.batch {
+  transform: scale(1.12) rotate(-10deg);
+}
+
+/* 3. WhatsApp Connection Pill */
 .btn-wa-pill {
-  background: #FFFFFF;
-  color: #1E6B47;
-  border: 1px solid rgba(37, 211, 102, 0.5);
-  font-size: 13px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #FFFFFF !important;
+  color: #0F5132 !important;
+  border: 1.5px solid #86EFAC !important;
+  border-radius: 50px !important;
+  padding: 7px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.08) !important;
 }
 
 .btn-wa-pill:hover {
-  background: rgba(37, 211, 102, 0.08);
-  border-color: #25D366;
-  color: #155724;
+  background: #F0FDF4 !important;
+  border-color: #22C55E !important;
+  color: #14532D !important;
   transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(34, 197, 94, 0.18) !important;
 }
 
 .btn-wa-pill.connected {
-  background: linear-gradient(135deg, #25D366 0%, #1EBE5D 100%);
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%) !important;
   color: #FFFFFF !important;
-  border: 1px solid #1AA34F;
+  border: 1.5px solid #15803D !important;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.32) !important;
 }
 
 .btn-wa-pill.connected:hover {
-  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-  color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #16A34A 0%, #15803D 100%) !important;
+  box-shadow: 0 6px 18px rgba(34, 197, 94, 0.42) !important;
 }
 
-.btn-wa-pill.connected i {
+.btn-wa-pill.connected .nav-btn-icon-circle.wa {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* 4. Executive User Profile */
+.nav-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 4px 6px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 50px;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6B1724 0%, #4D0E18 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 12.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(107, 23, 36, 0.2);
+}
+
+/* 5. Clean Simple Attractive Logout Pill */
+.btn-nav-logout {
+  background: #FEF2F2 !important;
+  color: #B91C1C !important;
+  border: 1.5px solid #FECACA !important;
+  border-radius: 50px !important;
+  padding: 7px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(185, 28, 28, 0.06) !important;
+}
+
+.btn-nav-logout:hover {
+  background: #B91C1C !important;
   color: #FFFFFF !important;
+  border-color: #B91C1C !important;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(185, 28, 28, 0.3) !important;
+}
+
+.btn-nav-logout i {
+  font-size: 13px;
+  transition: transform 0.2s ease;
+}
+
+.btn-nav-logout:hover i {
+  transform: translateX(2px);
 }
 
 /* Pulse Dot Indicators */

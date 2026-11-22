@@ -131,9 +131,12 @@ function setupNavigation() {
   });
 
   // Mobile sidebar toggle
-  document.getElementById('sidebarToggleBtn').addEventListener('click', () => {
-    document.getElementById('sidebar').classList.toggle('show');
-  });
+  const sidebarToggle = document.getElementById('sidebarToggleBtn');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+  }
 }
 
 function navigateToSection(sectionId) {

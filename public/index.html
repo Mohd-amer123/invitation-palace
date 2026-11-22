@@ -102,99 +102,51 @@
       <!-- Top Header -->
       <header class="top-header">
         <div class="header-left d-flex align-items-center">
-          <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Toggle Sidebar" title="Toggle Sidebar">
-            <i class="fa-solid fa-bars-staggered fs-5"></i>
-          </button>
+          <div class="nav-brand-badge d-flex align-items-center gap-2">
+            <div class="nav-brand-icon-box" id="headerCrownIcon">
+              <i class="fa-solid fa-crown text-burgundy"></i>
+            </div>
+            <img id="headerBrandLogo" src="" alt="Logo" class="header-brand-logo d-none">
+            <div class="d-none d-sm-block">
+              <div class="nav-brand-heading" id="headerBrandText">THE INVITATION PALACE</div>
+              <div class="nav-brand-subheading"><span class="nav-live-dot"></span> Active Reminder System</div>
+            </div>
+          </div>
         </div>
 
         <div class="header-right d-flex align-items-center gap-2 gap-md-3">
-          <!-- 1. Quick Action Dropdown -->
-          <div class="dropdown">
-            <button class="btn btn-sm btn-palace btn-header-pill dropdown-toggle shadow-sm" type="button" id="quickActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-circle-plus text-warning"></i>
-              <span class="fw-semibold">Quick Action</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end palace-dropdown shadow-lg border-0 mt-2 p-2" aria-labelledby="quickActionsDropdown" style="min-width: 270px;">
-              <li><h6 class="dropdown-header text-uppercase fw-bold text-muted small px-3 pt-2 pb-1">Create New</h6></li>
-              <li>
-                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openAddCustomerModal()">
-                  <div class="action-icon-circle bg-primary-subtle text-primary">
-                    <i class="fa-solid fa-user-plus"></i>
-                  </div>
-                  <div>
-                    <div class="fw-bold small text-dark">New Customer</div>
-                    <div class="text-muted" style="font-size: 11px;">Register event host or family</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openAddEventModal()">
-                  <div class="action-icon-circle bg-danger-subtle text-danger">
-                    <i class="fa-solid fa-calendar-plus"></i>
-                  </div>
-                  <div>
-                    <div class="fw-bold small text-dark">New Event</div>
-                    <div class="text-muted" style="font-size: 11px;">Schedule wedding, reception, etc.</div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openAddGuestModal()">
-                  <div class="action-icon-circle bg-warning-subtle text-warning-emphasis">
-                    <i class="fa-solid fa-user"></i>
-                  </div>
-                  <div>
-                    <div class="fw-bold small text-dark">Add Single Guest</div>
-                    <div class="text-muted" style="font-size: 11px;">Manual guest phone entry</div>
-                  </div>
-                </a>
-              </li>
-              <li><hr class="dropdown-divider my-2"></li>
-              <li><h6 class="dropdown-header text-uppercase fw-bold text-muted small px-3 py-1">Bulk Operations</h6></li>
-              <li>
-                <a class="dropdown-item py-2 px-3 rounded-2 d-flex align-items-center gap-3" href="javascript:void(0)" onclick="openExcelUploadModal()">
-                  <div class="action-icon-circle bg-success-subtle text-success">
-                    <i class="fa-solid fa-file-excel"></i>
-                  </div>
-                  <div>
-                    <div class="fw-bold small text-dark">Import Excel List</div>
-                    <div class="text-muted" style="font-size: 11px;">Upload .xlsx guest contact sheet</div>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <!-- 2. Step-by-Step Workflow Guide Pill Button -->
-          <button class="btn btn-sm btn-palace-gold btn-header-pill shadow-sm" onclick="openWorkflowModal()" title="View Palace Step-by-Step Operating Workflow (S.NO 01 to 06)">
-            <i class="fa-solid fa-list-ol"></i>
+          <!-- 1. Step-by-Step Workflow Guide Pill Button -->
+          <button class="btn btn-sm btn-nav-sno shadow-sm" onclick="openWorkflowModal()" title="View Palace Step-by-Step Operating Workflow (S.NO 01 to 06)">
+            <span class="nav-btn-icon-circle sno"><i class="fa-solid fa-diagram-project"></i></span>
             <span class="d-none d-sm-inline fw-bold">S.NO Guide</span>
           </button>
 
-          <!-- 3. Primary Batch Dispatch Runner Button -->
-          <button class="btn btn-sm btn-batch-runner btn-header-pill shadow-sm" onclick="openBatchDispatchModal()" title="Automated 1-Click Batch WhatsApp Runner">
-            <i class="fa-solid fa-bolt text-warning"></i>
+          <!-- 2. Primary Batch Dispatch Runner Button -->
+          <button class="btn btn-sm btn-batch-runner shadow-sm" onclick="openBatchDispatchModal()" title="Automated 1-Click Batch WhatsApp Runner">
+            <span class="nav-btn-icon-circle batch"><i class="fa-solid fa-paper-plane"></i></span>
             <span class="fw-bold d-none d-sm-inline">Batch Sender</span>
           </button>
 
-          <!-- 4. WhatsApp Status Pill with Pulse Dot -->
-          <button class="btn btn-sm btn-wa-pill btn-header-pill shadow-sm" id="btnHeaderWhatsAppStatus" onclick="openWhatsAppLinkModal()" title="WhatsApp Connection Manager">
-            <i class="fa-brands fa-whatsapp fs-5 text-success"></i>
+          <!-- 3. WhatsApp Status Pill with Pulse Dot -->
+          <button class="btn btn-sm btn-wa-pill shadow-sm" id="btnHeaderWhatsAppStatus" onclick="openWhatsAppLinkModal()" title="WhatsApp Connection Manager">
+            <span class="nav-btn-icon-circle wa"><i class="fa-brands fa-whatsapp fs-6"></i></span>
             <span class="status-indicator-dot offline" id="waStatusDot"></span>
             <span class="fw-bold small" id="headerWhatsAppStatusText">Link WhatsApp</span>
           </button>
 
-          <!-- 5. Executive User Profile Pill -->
-          <div class="user-profile-pill d-flex align-items-center gap-2 shadow-sm px-2.5 py-1 rounded-pill">
-            <div class="user-avatar shadow-sm" id="userAvatar">A</div>
+          <!-- 4. Executive User Profile -->
+          <div class="nav-user-badge d-flex align-items-center gap-2 shadow-sm">
+            <div class="user-avatar" id="userAvatar">A</div>
             <div class="d-none d-md-block text-start pe-1">
               <div class="fw-bold small lh-1 text-dark" id="userNameDisplay">Admin</div>
-              <div class="text-muted" style="font-size: 10px; letter-spacing: 0.5px;">Palace Manager</div>
             </div>
-            <button class="btn btn-logout-icon" onclick="handleLogout()" title="Sign Out">
-              <i class="fa-solid fa-power-off"></i>
-            </button>
           </div>
+
+          <!-- 5. Simple Attractive Logout Button -->
+          <button class="btn btn-sm btn-nav-logout shadow-sm" onclick="handleLogout()" title="Sign Out">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Logout</span>
+          </button>
         </div>
       </header>
 
