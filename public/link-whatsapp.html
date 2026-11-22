@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Scan WhatsApp | THE INVITATION PALACE</title>
+  <title>Connect WhatsApp | THE INVITATION PALACE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
     :root {
-      --bg-dark: #07090E;
-      --card-bg: rgba(16, 20, 31, 0.82);
-      --palace-gold: #D4AF37;
-      --palace-gold-glow: rgba(212, 175, 55, 0.45);
+      --palace-burgundy: #6B1724;
+      --palace-burgundy-dark: #4A0E18;
+      --palace-burgundy-light: #8E2334;
+      --palace-gold: #C5A059;
       --palace-gold-light: #F6E6B4;
       --wa-emerald: #25D366;
-      --wa-emerald-glow: rgba(37, 211, 102, 0.4);
-      --text-main: #FFFFFF;
-      --text-muted: #94A3B8;
-      --border-glass: rgba(212, 175, 55, 0.28);
+      --wa-emerald-dark: #128C7E;
+      --bg-cream: #F8F9FC;
+      --text-dark: #1E293B;
+      --text-muted: #64748B;
+      --border-subtle: #E2E8F0;
     }
 
     * {
@@ -30,408 +31,413 @@
     }
 
     body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 10% 15%, rgba(114, 9, 36, 0.35) 0%, transparent 45%),
-        radial-gradient(circle at 85% 20%, rgba(37, 211, 102, 0.2) 0%, transparent 45%),
-        radial-gradient(circle at 50% 85%, rgba(212, 175, 55, 0.22) 0%, transparent 50%),
-        linear-gradient(180deg, #07090E 0%, #0F121C 100%);
-      background-attachment: fixed;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text-main);
+      padding: 24px 16px;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-dark);
+      background-color: #120508;
+      position: relative;
       overflow-x: hidden;
     }
 
-    /* Ambient animated glow orbs */
-    .ambient-orb {
+    /* Luxury boutique showroom ambient backdrop */
+    body::before {
+      content: '';
       position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
+      inset: 0;
+      background: url('/images/login-bg.jpg') center center / cover no-repeat;
+      opacity: 0.32;
+      filter: blur(10px) brightness(0.6);
+      transform: scale(1.06);
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 25%, rgba(107, 23, 36, 0.55) 0%, rgba(14, 4, 7, 0.88) 100%);
       z-index: 0;
       pointer-events: none;
-      opacity: 0.65;
-      animation: floatOrb 12s infinite alternate ease-in-out;
-    }
-    .orb-1 { width: 380px; height: 380px; background: rgba(212, 175, 55, 0.18); top: -80px; left: -80px; }
-    .orb-2 { width: 320px; height: 320px; background: rgba(37, 211, 102, 0.16); bottom: -60px; right: -60px; animation-delay: -5s; }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(35px, 45px) scale(1.1); }
     }
 
-    /* Main Glass Card */
+    /* Main Trust Container Card */
     .scanner-card {
       position: relative;
-      z-index: 1;
+      z-index: 10;
       width: 100%;
-      max-width: 460px;
-      background: var(--card-bg);
-      backdrop-filter: blur(32px) saturate(180%);
-      -webkit-backdrop-filter: blur(32px) saturate(180%);
+      max-width: 480px;
+      background: #FFFFFF;
       border-radius: 28px;
-      border: 1px solid var(--border-glass);
       box-shadow: 
-        0 25px 60px -15px rgba(0, 0, 0, 0.85),
-        0 0 40px rgba(212, 175, 55, 0.12),
-        inset 0 1px 1px rgba(255, 255, 255, 0.18);
+        0 25px 60px -10px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.15);
       overflow: hidden;
-      animation: cardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: cardSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes cardAppear {
-      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    @keyframes cardSlideUp {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Card Header */
+    /* Top Royal Crimson Header Deck */
     .scanner-header {
-      padding: 28px 24px 18px;
+      background: linear-gradient(135deg, #7C1827 0%, #6B1724 50%, #4D0E18 100%);
+      padding: 28px 24px 22px 24px;
       text-align: center;
+      color: #FFFFFF;
       position: relative;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
-    }
-
-    .ai-live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 14px;
-      background: rgba(37, 211, 102, 0.14);
-      border: 1px solid rgba(37, 211, 102, 0.35);
-      border-radius: 50px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #6EE7B7;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    .radar-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--wa-emerald);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--wa-emerald);
-      animation: blinkDot 1.4s infinite;
-    }
-    @keyframes blinkDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(0.7); }
     }
 
     .brand-crest {
-      margin-bottom: 10px;
-      position: relative;
+      margin-bottom: 8px;
       display: inline-block;
     }
-    .crown-glow {
-      font-size: 36px;
-      color: var(--palace-gold-light);
-      filter: drop-shadow(0 0 16px var(--palace-gold-glow));
-      animation: crownShine 3s infinite alternate ease-in-out;
-    }
-    @keyframes crownShine {
-      0% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
-      100% { filter: drop-shadow(0 0 24px rgba(246, 230, 180, 0.8)); }
-    }
+
     .company-logo-img {
       max-height: 48px;
-      max-width: 180px;
+      max-width: 200px;
       object-fit: contain;
       filter: none !important;
-      box-shadow: none !important;
       border: none !important;
+      box-shadow: none !important;
+    }
+
+    .crown-icon {
+      font-size: 32px;
+      color: #F6E6B4;
     }
 
     .palace-heading {
-      font-family: 'Cinzel', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #FFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #FFFFFF;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .palace-subtext {
-      font-size: 0.82rem;
-      color: var(--text-muted);
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 500;
+      letter-spacing: 0.4px;
     }
 
-    /* Event Chip */
-    .event-chip-card {
-      margin-top: 14px;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.14) 0%, rgba(114, 9, 36, 0.2) 100%);
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      border-radius: 16px;
-      padding: 12px 14px;
-      text-align: center;
-    }
-    .event-chip-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 2px;
-    }
-    .event-chip-host {
-      font-size: 0.8rem;
-      color: var(--palace-gold-light);
+    /* Official WhatsApp Trust Pill */
+    .wa-trust-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-top: 12px;
     }
 
-    /* Card Body */
+    .wa-trust-pill i {
+      color: #4ADE80;
+      font-size: 14px;
+    }
+
+    /* Event Context Card inside Header */
+    .event-chip-card {
+      margin-top: 14px;
+      background: rgba(0, 0, 0, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 12px 16px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .event-chip-title {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 3px;
+    }
+
+    .event-chip-host {
+      font-size: 0.8rem;
+      color: #F6E6B4;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+    }
+
+    /* Main Body Area */
     .scanner-body {
-      padding: 24px 20px 26px;
+      background: #FFFFFF;
+      padding: 26px 24px 22px 24px;
       text-align: center;
     }
 
-    /* Cyber-Palace QR Scanner Frame */
-    .scanner-stage {
-      position: relative;
-      display: inline-block;
-      margin: 4px auto 18px;
-    }
-
-    .qr-frame {
-      position: relative;
+    /* Clean QR Frame Pedestal */
+    .qr-frame-box {
       background: #FFFFFF;
-      padding: 18px;
-      border-radius: 24px;
-      box-shadow: 
-        0 14px 45px rgba(0, 0, 0, 0.7),
-        0 0 35px rgba(212, 175, 55, 0.25);
+      border: 2px solid #F1F5F9;
+      border-radius: 22px;
+      padding: 14px;
       display: inline-block;
-      overflow: hidden;
-    }
-
-    /* Glowing Cyber Corner Brackets */
-    .corner {
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      border: 3.5px solid var(--palace-gold);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .corner-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 18px; }
-    .corner-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 18px; }
-    .corner-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 18px; }
-    .corner-br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 18px; }
-
-    /* Moving Laser Scanline */
-    .scan-beam {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent 0%, rgba(37, 211, 102, 0.9) 50%, transparent 100%);
-      box-shadow: 0 0 14px var(--wa-emerald);
-      top: 0;
-      animation: laserSweep 2.4s infinite ease-in-out;
-      z-index: 3;
-      pointer-events: none;
-    }
-    @keyframes laserSweep {
-      0% { top: 6%; opacity: 0; }
-      15% { opacity: 1; }
-      85% { opacity: 1; }
-      100% { top: 94%; opacity: 0; }
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      position: relative;
+      margin-bottom: 12px;
     }
 
     .qr-img {
-      width: 230px;
-      height: 230px;
+      width: 220px;
+      height: 220px;
       display: block;
       margin: 0 auto;
       border-radius: 10px;
     }
 
     .qr-spinner {
-      width: 230px;
-      height: 230px;
+      width: 220px;
+      height: 220px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      color: #475569;
-      font-size: 0.84rem;
-      font-weight: 500;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
     }
 
-    /* Auto-Sync Radar Pulse */
-    .radar-pulse-bar {
+    /* Live Camera Scan Indicator */
+    .scan-guide-text {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       font-size: 0.8rem;
-      color: #94A3B8;
+      font-weight: 600;
+      color: var(--text-muted);
       margin-bottom: 20px;
     }
-    .pulse-ring {
+
+    .radar-pulse-dot {
       width: 8px;
       height: 8px;
-      background: var(--wa-emerald);
+      background: #22C55E;
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--wa-emerald);
-      animation: pulseAnim 1.6s infinite ease-in-out;
-    }
-    @keyframes pulseAnim {
-      0% { transform: scale(0.9); opacity: 0.5; }
-      50% { transform: scale(1.4); opacity: 1; }
-      100% { transform: scale(0.9); opacity: 0.5; }
+      box-shadow: 0 0 8px #22C55E;
+      animation: pulseRadar 1.5s infinite ease-in-out;
     }
 
-    /* Simple 1-2-3 Step Cards */
-    .steps-list {
+    @keyframes pulseRadar {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.6; }
+    }
+
+    /* Clear 1-2-3 Client Pairing Steps */
+    .steps-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       text-align: left;
       margin-bottom: 20px;
     }
-    .step-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+    .step-pill {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
       border-radius: 14px;
-      padding: 12px 14px;
+      padding: 11px 14px;
       display: flex;
       align-items: center;
       gap: 12px;
       transition: all 0.2s ease;
     }
-    .step-item:hover {
-      background: rgba(255, 255, 255, 0.07);
-      border-color: rgba(212, 175, 55, 0.3);
+
+    .step-pill:hover {
+      background: #F1F5F9;
+      border-color: #CBD5E1;
     }
-    .step-num {
-      width: 28px;
-      height: 28px;
+
+    .step-circle {
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--palace-gold) 0%, #856404 100%);
-      color: #07090E;
-      font-size: 0.8rem;
+      background: var(--palace-burgundy);
+      color: #FFFFFF;
+      font-size: 0.78rem;
       font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
-    .step-txt {
-      font-size: 0.85rem;
-      color: #CBD5E1;
+
+    .step-content {
+      font-size: 0.82rem;
+      color: #334155;
       line-height: 1.4;
     }
-    .step-txt strong {
-      color: #FFFFFF;
+
+    .step-content strong {
+      color: #0F172A;
     }
-    .step-txt .highlight-wa {
-      color: #4ADE80;
+
+    .step-content .highlight-wa {
+      color: #15803D;
       font-weight: 700;
     }
 
-    /* Refresh QR Button */
+    /* Refresh Button */
     .btn-refresh-qr {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #6B1724;
       color: #FFFFFF;
-      padding: 9px 20px;
+      border: none;
+      padding: 10px 24px;
       border-radius: 50px;
       font-size: 0.82rem;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.3px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      box-shadow: 0 4px 14px rgba(107, 23, 36, 0.25);
       transition: all 0.2s ease;
     }
+
     .btn-refresh-qr:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: var(--palace-gold);
+      background: #8E2334;
       transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(107, 23, 36, 0.35);
     }
 
-    /* Celebration Screen (Connected) */
+    .btn-refresh-qr:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Trust & Security Footer */
+    .scanner-footer {
+      background: #F8FAFC;
+      border-top: 1px solid #E2E8F0;
+      padding: 14px 20px;
+      text-align: center;
+    }
+
+    .footer-security-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #15803D;
+      margin-bottom: 4px;
+    }
+
+    .footer-privacy-text {
+      font-size: 0.72rem;
+      color: #94A3B8;
+      line-height: 1.4;
+    }
+
+    /* Success Screen */
     .celebrate-screen {
       text-align: center;
-      padding: 24px 10px;
-      animation: zoomIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes zoomIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .celebrate-orb {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 18px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(37, 211, 102, 0.3) 0%, rgba(37, 211, 102, 0.05) 70%);
-      border: 2px solid var(--wa-emerald);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 44px;
-      color: var(--wa-emerald);
-      box-shadow: 0 0 35px var(--wa-emerald-glow);
-      animation: bounceCheck 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes bounceCheck {
-      0% { transform: scale(0.3); opacity: 0; }
-      70% { transform: scale(1.15); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .celebrate-title {
-      font-size: 1.45rem;
-      font-weight: 800;
-      color: #FFFFFF;
-      margin-bottom: 6px;
-    }
-    .connected-phone-badge {
-      display: inline-block;
-      background: rgba(37, 211, 102, 0.15);
-      border: 1px solid rgba(37, 211, 102, 0.4);
-      padding: 6px 16px;
-      border-radius: 50px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #86EFAC;
-      margin-bottom: 16px;
-    }
-    .celebrate-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 0.85rem;
-      color: #CBD5E1;
-      margin-bottom: 20px;
-      line-height: 1.5;
+      padding: 24px 10px 10px;
+      animation: zoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Footer Security */
-    .scanner-footer {
-      padding: 14px 20px;
-      background: rgba(0, 0, 0, 0.3);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      text-align: center;
-      font-size: 0.74rem;
-      color: #64748B;
+    @keyframes zoomIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .celebrate-orb {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.12);
+      border: 2px solid #22C55E;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      font-size: 34px;
+      color: #16A34A;
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.25);
+    }
+
+    .celebrate-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 6px;
+    }
+
+    .connected-phone-badge {
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #15803D;
+      margin-bottom: 16px;
+    }
+
+    .celebrate-box {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 0.84rem;
+      color: #475569;
+      margin-bottom: 18px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .celebrate-box i {
+      color: #16A34A;
+      margin-right: 6px;
+    }
+
+    .close-notice {
+      font-size: 0.8rem;
+      color: #64748B;
+      font-weight: 600;
+    }
+
+    /* Error Screen */
+    .error-orb {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid #EF4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      color: #DC2626;
     }
 
     .d-none { display: none !important; }
@@ -439,27 +445,23 @@
 </head>
 <body>
 
-  <!-- Ambient Glowing Orbs -->
-  <div class="ambient-orb orb-1"></div>
-  <div class="ambient-orb orb-2"></div>
-
-  <!-- Main Glassmorphism Scanner Card -->
+  <!-- Main Trust Container Card -->
   <div class="scanner-card">
 
-    <!-- Card Header -->
+    <!-- Top Royal Crimson Header Deck -->
     <div class="scanner-header">
-      <div class="ai-live-badge">
-        <span class="radar-dot"></span>
-        Instant WhatsApp Scanner
-      </div>
-
       <div class="brand-crest">
-        <i class="fa-solid fa-crown crown-glow" id="headerCrownIcon"></i>
+        <i class="fa-solid fa-crown crown-icon" id="headerCrownIcon"></i>
         <img id="headerCompanyLogo" src="" alt="Palace Logo" class="company-logo-img d-none">
       </div>
 
       <h1 class="palace-heading" id="palaceName">THE INVITATION PALACE</h1>
-      <div class="palace-subtext" id="palaceTagline">Automatic Event Reminder Service</div>
+      <div class="palace-subtext" id="palaceTagline">Luxury Wedding & Event Stationery</div>
+
+      <div class="wa-trust-pill">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>Official WhatsApp Pairing</span>
+      </div>
 
       <!-- Event Context Chip -->
       <div class="event-chip-card">
@@ -467,7 +469,7 @@
           <i class="fa-solid fa-spinner fa-spin"></i> Initializing Scanner...
         </div>
         <div class="event-chip-host" id="eventHostDisplay">
-          <i class="fa-solid fa-shield-check"></i> Secure Companion Linking
+          <i class="fa-solid fa-shield-halved text-warning"></i> Secure Companion Linking
         </div>
       </div>
     </div>
@@ -478,48 +480,37 @@
       <!-- VIEW 1: LIVE QR SCANNER (Active by default) -->
       <div id="scannerView">
 
-        <!-- Centerpiece Scanner Stage -->
-        <div class="scanner-stage">
-          <div class="qr-frame">
-            <!-- Glowing Corner Brackets -->
-            <div class="corner corner-tl"></div>
-            <div class="corner corner-tr"></div>
-            <div class="corner corner-bl"></div>
-            <div class="corner corner-br"></div>
+        <!-- Centerpiece QR Frame Box -->
+        <div class="qr-frame-box">
+          <!-- QR Code Image -->
+          <img id="qrCodeImg" src="" alt="WhatsApp QR Code" class="qr-img d-none">
 
-            <!-- Moving Laser Scanbeam -->
-            <div class="scan-beam" id="scanBeam"></div>
-
-            <!-- QR Code Image -->
-            <img id="qrCodeImg" src="" alt="WhatsApp QR Code" class="qr-img d-none">
-
-            <!-- Loading Spinner State -->
-            <div id="qrLoadingState" class="qr-spinner">
-              <i class="fa-solid fa-circle-notch fa-spin text-success" style="font-size: 36px;"></i>
-              <span>Generating Secure QR Matrix...</span>
-            </div>
+          <!-- Loading Spinner State -->
+          <div id="qrLoadingState" class="qr-spinner">
+            <i class="fa-solid fa-circle-notch fa-spin text-success" style="font-size: 36px; color: #16A34A;"></i>
+            <span>Generating Secure QR Matrix...</span>
           </div>
         </div>
 
-        <!-- Radar Pulse Indicator -->
-        <div class="radar-pulse-bar">
-          <span class="pulse-ring"></span>
+        <!-- Live Camera Scan Indicator -->
+        <div class="scan-guide-text">
+          <span class="radar-pulse-dot"></span>
           <span>Point your phone camera to connect automatically</span>
         </div>
 
         <!-- Simple 1-2-3 Step Instructions -->
-        <div class="steps-list">
-          <div class="step-item">
-            <span class="step-num">1</span>
-            <div class="step-txt">Open <strong>WhatsApp</strong> on your mobile phone.</div>
+        <div class="steps-container">
+          <div class="step-pill">
+            <span class="step-circle">1</span>
+            <div class="step-content">Open <strong>WhatsApp</strong> on your mobile phone.</div>
           </div>
-          <div class="step-item">
-            <span class="step-num">2</span>
-            <div class="step-txt">Tap <strong>Settings</strong> (iPhone) or <strong>⋮ Menu</strong> (Android) ➔ <strong class="highlight-wa">Linked Devices</strong>.</div>
+          <div class="step-pill">
+            <span class="step-circle">2</span>
+            <div class="step-content">Go to <strong>Settings</strong> (iPhone) or <strong>⋮ Menu</strong> (Android) ➔ <strong class="highlight-wa">Linked Devices</strong>.</div>
           </div>
-          <div class="step-item">
-            <span class="step-num">3</span>
-            <div class="step-txt">Tap <strong class="highlight-wa">Link a Device</strong> and point your camera at this QR code.</div>
+          <div class="step-pill">
+            <span class="step-circle">3</span>
+            <div class="step-content">Tap <strong class="highlight-wa">Link a Device</strong> and point your camera at this QR code.</div>
           </div>
         </div>
 
@@ -533,7 +524,7 @@
 
       </div>
 
-      <!-- VIEW 2: SUCCESS CELEBRATION SCREEN (Auto-triggered upon scanning) -->
+      <!-- VIEW 2: SUCCESS CELEBRATION SCREEN -->
       <div id="successView" class="celebrate-screen d-none">
         <div class="celebrate-orb">
           <i class="fa-solid fa-check"></i>
@@ -542,32 +533,37 @@
         <div class="connected-phone-badge" id="connectedPhoneDisplay">+91 ...</div>
         
         <div class="celebrate-box">
-          <i class="fa-solid fa-circle-check text-success me-1"></i>
+          <i class="fa-solid fa-circle-check"></i>
           Your WhatsApp is successfully linked to <strong>THE INVITATION PALACE</strong>. Personalized event invitation reminders will be dispatched to your guest list on schedule.
         </div>
 
-        <p class="palace-subtext" style="color: #6EE7B7;">
-          <i class="fa-solid fa-circle-info me-1"></i> You can safely close this screen now.
+        <p class="close-notice">
+          <i class="fa-solid fa-circle-info text-success me-1"></i> You can safely close this screen now.
         </p>
       </div>
 
       <!-- VIEW 3: ERROR STATE -->
       <div id="errorView" class="celebrate-screen d-none">
-        <div class="celebrate-orb" style="border-color: #EF4444; color: #EF4444; background: rgba(239, 68, 68, 0.1);">
+        <div class="error-orb">
           <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
-        <h2 class="celebrate-title">Link Expired</h2>
-        <p class="palace-subtext px-3 mb-4" id="errorMessageText">
+        <h2 class="celebrate-title" style="color: #DC2626;">Link Expired</h2>
+        <p class="palace-subtext text-muted px-3 mb-4" id="errorMessageText" style="color: #64748B;">
           This connection link is invalid or has expired. Please ask the event organizer for a fresh link.
         </p>
       </div>
 
     </div>
 
-    <!-- Security Footer -->
+    <!-- Security & Trust Footer -->
     <div class="scanner-footer">
-      <i class="fa-solid fa-shield-halved text-success"></i>
-      <span>End-to-End Encrypted • Powered by The Invitation Palace</span>
+      <div class="footer-security-row">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>End-to-End Encrypted via Official Meta WhatsApp Protocol</span>
+      </div>
+      <div class="footer-privacy-text">
+        Your personal chats and media remain completely private on your device. Powered by The Invitation Palace.
+      </div>
     </div>
 
   </div>
@@ -600,7 +596,7 @@
           const s = data.settings;
           if (s.business_name) {
             document.getElementById('palaceName').textContent = s.business_name;
-            document.title = 'Scan WhatsApp | ' + s.business_name;
+            document.title = 'Connect WhatsApp | ' + s.business_name;
           }
           if (s.business_tagline) {
             document.getElementById('palaceTagline').textContent = s.business_tagline;
