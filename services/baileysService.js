@@ -118,7 +118,7 @@ async function initializeAccountSession(accountId, forceRestart = false) {
 
       if (connection === 'close') {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && statusCode !== 408 && statusCode !== 401;
 
         console.log(`[WhatsApp Multi-Device] Account #${accountId} (${account.account_name}) closed. Code: ${statusCode}. Reconnecting: ${shouldReconnect}`);
         session.connectionStatus = 'DISCONNECTED';
