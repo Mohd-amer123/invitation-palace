@@ -484,7 +484,7 @@ async function loadEvents() {
 
     const tbody = document.getElementById('eventsTableBody');
     if (!data.events || data.events.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">No events found. Click <strong>Create New Event</strong> to start.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No events found. Click <strong>Create New Event</strong> to start.</td></tr>`;
       return;
     }
 
@@ -514,12 +514,35 @@ async function loadEvents() {
         </td>
         <td><span class="badge bg-secondary-subtle text-dark">${e.total_guests || 0}</span></td>
         <td>
+          ${e.whatsapp_status === 'CONNECTED' ? `
+            <div class="d-flex align-items-center gap-1">
+              <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" title="WhatsApp Connected">
+                <i class="fa-brands fa-whatsapp me-1"></i> Connected
+              </span>
+              <button class="btn btn-xs btn-outline-secondary rounded-circle" style="width:24px;height:24px;padding:0;" onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})" title="View Host WhatsApp QR / Link">
+                <i class="fa-solid fa-link" style="font-size:10px;"></i>
+              </button>
+            </div>
+            ${e.whatsapp_sender_phone ? `<div class="small text-muted font-monospace" style="font-size:10px;">+${e.whatsapp_sender_phone}</div>` : ''}
+          ` : `
+            <button class="btn btn-xs btn-outline-success fw-semibold rounded-pill px-2.5 py-1 shadow-sm d-inline-flex align-items-center gap-1"
+                    onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})"
+                    title="Generate unique WhatsApp login link for this host">
+              <i class="fa-brands fa-whatsapp text-success"></i>
+              <span>Link Host</span>
+            </button>
+          `}
+        </td>
+        <td>
           <span class="badge ${e.status === 'Active' ? 'bg-success-subtle text-success' : e.status === 'Completed' ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger'}">
             ${e.status}
           </span>
         </td>
         <td>
           <div class="d-flex gap-1">
+            <button class="btn btn-sm btn-outline-success" onclick="openShareClientLinkModal(${e.id})" title="Share Dedicated Host WhatsApp Link">
+              <i class="fa-brands fa-whatsapp"></i>
+            </button>
             <button class="btn btn-sm btn-outline-primary" onclick="viewEventDetails(${e.id})" title="View Guests & Reminders">
               <i class="fa-solid fa-eye"></i>
             </button>
@@ -2995,7 +3018,7 @@ function renderCustomerHub(data) {
   // Render Events Table
   const eventsTbody = document.getElementById('hubEventsTableBody');
   if (events.length === 0) {
-    eventsTbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No events created for this customer yet. <button class="btn btn-sm btn-palace ms-2" onclick="openAddEventModalForCurrentCustomer()">+ Create First Event</button></td></tr>`;
+    eventsTbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">No events created for this customer yet. <button class="btn btn-sm btn-palace ms-2" onclick="openAddEventModalForCurrentCustomer()">+ Create First Event</button></td></tr>`;
   } else {
     eventsTbody.innerHTML = events.map(e => `
       <tr>
@@ -3008,9 +3031,19 @@ function renderCustomerHub(data) {
         <td><strong>${e.event_date}</strong> at ${e.event_time}</td>
         <td>${escapeHtml(e.venue_name || '-')}</td>
         <td><span class="badge bg-info-subtle text-info border">${e.total_guests || 0} Guest(s)</span></td>
+        <td>
+          <button class="btn btn-xs btn-outline-success fw-semibold rounded-pill px-2.5 py-1"
+                  onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})"
+                  title="Generate unique WhatsApp login link for this host">
+            <i class="fa-brands fa-whatsapp text-success me-1"></i> Host Link
+          </button>
+        </td>
         <td><span class="badge ${e.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-muted'}">${e.status}</span></td>
         <td>
           <div class="d-flex gap-1">
+            <button class="btn btn-sm btn-outline-success" onclick="openShareClientLinkModal(${e.id})" title="Share Dedicated Host WhatsApp Link">
+              <i class="fa-brands fa-whatsapp"></i>
+            </button>
             <button class="btn btn-sm btn-outline-primary" onclick="openBatchDispatchModal(${e.id})" title="Batch Dispatch Reminders for this event">
               <i class="fa-solid fa-rocket"></i>
             </button>
@@ -3196,9 +3229,14 @@ async function openShareClientLinkModal(eventId = null, accountId = null) {
     currentLinkData = data;
 
     // Populate modal fields
+    const eventNameSmall = document.getElementById('shareLinkEventNameSmall');
+    if (eventNameSmall) eventNameSmall.textContent = data.eventName ? `"${data.eventName}"` : 'this event';
+
     document.getElementById('shareLinkEventName').textContent = data.eventName || 'Event Reminders';
     document.getElementById('shareLinkHostName').textContent = data.hostName || 'Valued Client';
     document.getElementById('shareLinkHostPhone').textContent = data.targetPhone ? `+${data.targetPhone}` : 'No phone prefilled';
+
+    const isCloudHost = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
 
     // Populate custom tunnel URL if saved
     const tunnelInput = document.getElementById('customTunnelUrlInput');
@@ -3206,8 +3244,8 @@ async function openShareClientLinkModal(eventId = null, accountId = null) {
       tunnelInput.value = data.savedBaseUrl;
     }
 
-    // Default to Wi-Fi mode or Public mode if public tunnel is configured
-    if (data.savedBaseUrl) {
+    // Default to Public mode if cloud deployed or public tunnel is configured
+    if (isCloudHost || data.savedBaseUrl) {
       document.getElementById('netModePublic').checked = true;
       switchLinkNetworkMode('public');
     } else {
@@ -3232,6 +3270,7 @@ function switchLinkNetworkMode(mode) {
   const tunnelBox = document.getElementById('publicTunnelSettingsBox');
   const linkInput = document.getElementById('shareClientLinkInput');
   const waBtn = document.getElementById('shareViaWhatsAppBtn');
+  const isCloudHost = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
 
   let activeUrl = currentLinkData.clientLink;
 
@@ -3240,18 +3279,33 @@ function switchLinkNetworkMode(mode) {
     if (badge) badge.innerHTML = `<i class="fa-solid fa-wifi me-1"></i> Wi-Fi Mobile / Phone (${currentLinkData.localIp || '192.168.1.x'})`;
     if (tunnelBox) tunnelBox.style.display = 'none';
   } else if (mode === 'public') {
-    if (tunnelBox) tunnelBox.style.display = 'block';
-    if (currentLinkData.savedBaseUrl) {
-      activeUrl = `${currentLinkData.savedBaseUrl}/link-whatsapp.html?token=${currentLinkData.token}`;
-      if (badge) badge.innerHTML = `<i class="fa-solid fa-globe me-1"></i> Remote Internet (Tunnel Active)`;
+    if (isCloudHost) {
+      activeUrl = `${window.location.origin}/link-whatsapp.html?token=${currentLinkData.token}`;
+      if (badge) badge.innerHTML = `<i class="fa-solid fa-globe me-1 text-success"></i> Remote Internet (Cloud Active)`;
+      if (tunnelBox) tunnelBox.style.display = 'none';
     } else {
-      activeUrl = currentLinkData.wifiLink || currentLinkData.clientLink;
-      if (badge) badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-warning me-1"></i> Enter Public Tunnel URL below`;
+      if (tunnelBox) tunnelBox.style.display = 'block';
+      if (currentLinkData.savedBaseUrl) {
+        activeUrl = `${currentLinkData.savedBaseUrl}/link-whatsapp.html?token=${currentLinkData.token}`;
+        if (badge) badge.innerHTML = `<i class="fa-solid fa-globe me-1"></i> Remote Internet (Tunnel Active)`;
+      } else {
+        activeUrl = currentLinkData.wifiLink || currentLinkData.clientLink;
+        if (badge) badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-warning me-1"></i> Enter Public Tunnel URL below`;
+      }
     }
   } else {
     activeUrl = currentLinkData.localhostLink || `http://localhost:3000/link-whatsapp.html?token=${currentLinkData.token}`;
     if (badge) badge.innerHTML = `<i class="fa-solid fa-laptop me-1"></i> This PC (Localhost only)`;
     if (tunnelBox) tunnelBox.style.display = 'none';
+  }
+
+  if (linkInput) linkInput.value = activeUrl;
+  if (waBtn) {
+    const cleanPhone = (currentLinkData.targetPhone || '').replace(/\D/g, '');
+    const shareMessage = `Namaste ${currentLinkData.hostName || 'Host'}! 🙏\n\nPlease click this secure link to connect your WhatsApp with *THE INVITATION PALACE* so personalized invitation reminders for *${currentLinkData.eventName || 'your event'}* can be dispatched to your guests on time:\n\n👉 ${activeUrl}\n\n(Simply open the link and scan the QR code in WhatsApp Linked Devices)`;
+    waBtn.href = cleanPhone 
+      ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(shareMessage)}`
+      : `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
   }
 
   if (linkInput) linkInput.value = activeUrl;

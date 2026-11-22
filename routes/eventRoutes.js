@@ -27,6 +27,8 @@ router.get('/', (req, res) => {
            c.customer_code,
            wa.account_name as whatsapp_account_name,
            wa.phone_number as whatsapp_sender_phone,
+           wa.status as whatsapp_status,
+           wa.status as whatsapp_status,
            (SELECT COUNT(*) FROM event_guests eg WHERE eg.event_id = e.id) as total_guests,
            (SELECT COUNT(*) FROM reminders r WHERE r.event_id = e.id AND r.status = 'Scheduled') as pending_reminders,
            (SELECT COUNT(*) FROM reminders r WHERE r.event_id = e.id AND r.status = 'Sent') as sent_reminders
@@ -73,7 +75,8 @@ router.get('/:id', (req, res) => {
            c.email as customer_email,
            c.customer_code,
            wa.account_name as whatsapp_account_name,
-           wa.phone_number as whatsapp_sender_phone
+           wa.phone_number as whatsapp_sender_phone,
+           wa.status as whatsapp_status
     FROM events e
     JOIN customers c ON e.customer_id = c.id
     LEFT JOIN whatsapp_accounts wa ON wa.id = e.whatsapp_account_id

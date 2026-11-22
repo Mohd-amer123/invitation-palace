@@ -783,12 +783,13 @@
                             <th>Event Date & Time</th>
                             <th>Venue</th>
                             <th>Guests</th>
+                            <th>Host WhatsApp</th>
                             <th>Status</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
                         <tbody id="hubEventsTableBody">
-                          <tr><td colspan="8" class="text-center text-muted py-4">No events found for this customer.</td></tr>
+                          <tr><td colspan="9" class="text-center text-muted py-4">No events found for this customer.</td></tr>
                         </tbody>
                       </table>
                     </div>
@@ -955,12 +956,13 @@
                       <th>Date & Time</th>
                       <th>Venue</th>
                       <th>Guests</th>
+                      <th>Host WhatsApp</th>
                       <th>Status</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody id="eventsTableBody">
-                    <tr><td colspan="9" class="text-center text-muted py-4">Loading events...</td></tr>
+                    <tr><td colspan="10" class="text-center text-muted py-4">Loading events...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -2476,9 +2478,9 @@
             </div>
 
             <!-- How it works explanation -->
-            <div class="alert alert-warning py-2.5 px-3 small border-0 mb-3" style="background: #FFF8E7; color: #856404; border-radius: 10px;">
-              <i class="fa-solid fa-mobile-screen-button text-success me-1"></i> <strong>Effortless 1-Phone Linking:</strong><br>
-              The client opens this link on their mobile phone, enters their number, and gets an <strong>8-digit code</strong> to paste in WhatsApp (<em>Linked Devices &gt; Link with phone number</em>). They don't need a 2nd phone or QR scan!
+            <div class="alert alert-success py-2.5 px-3 small border-0 mb-3" style="background: rgba(16, 185, 129, 0.1); color: #065F46; border-radius: 10px;">
+              <i class="fa-brands fa-whatsapp text-success me-1"></i> <strong>Dedicated WhatsApp for this Event:</strong><br>
+              When the host opens this link, they scan the QR code in WhatsApp (<em>Settings &gt; Linked Devices</em>). Their WhatsApp will be connected specifically for <strong id="shareLinkEventNameSmall">this event</strong> so all invitation reminders are sent directly from their number!
             </div>
 
             <!-- Network Mode Switcher -->
