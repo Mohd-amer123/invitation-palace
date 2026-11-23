@@ -263,7 +263,7 @@ function initDb() {
   const defaultSettings = [
     { key: 'business_name', value: 'THE INVITATION PALACE', description: 'Business trading name' },
     { key: 'business_tagline', value: 'Luxury Wedding & Event Stationery', description: 'Business tagline' },
-    { key: 'company_logo', value: '', description: 'Custom uploaded company logo URL' },
+    { key: 'company_logo', value: '/images/company-logo.png', description: 'Custom uploaded company logo URL' },
     { key: 'business_phone', value: '+919876543210', description: 'Business contact WhatsApp number' },
     { key: 'business_email', value: 'contact@theinvitationpalace.com', description: 'Business contact email' },
     { key: 'business_address', value: 'Royal Palace Road, M.G. Boulevard, Bangalore, Karnataka - 560001', description: 'Physical store address' },

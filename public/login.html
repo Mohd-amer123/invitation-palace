@@ -118,6 +118,19 @@
     }
 
     /* Minimal Underline Input Style */
+    .login-brand-header {
+      margin-bottom: 20px;
+    }
+
+    .login-brand-logo {
+      max-height: 54px;
+      max-width: 220px;
+      object-fit: contain;
+      filter: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
     .custom-input-group {
       position: relative;
       margin-bottom: 28px;
@@ -324,6 +337,9 @@
 
     <!-- Right Login Form Column -->
     <div class="login-form-pane">
+      <div class="login-brand-header text-center">
+        <img id="loginCompanyLogo" src="/images/company-logo.png" alt="Company Logo" class="login-brand-logo">
+      </div>
       <h2 class="login-header-title">Login</h2>
       <p class="login-header-desc">Enter your administrator credentials to continue</p>
 
@@ -445,18 +461,34 @@
       });
     }
 
-    // Load Public Branding
+    // Immediate Instant Cache Load (Zero-delay before network fetch)
+    (function initCachedBranding() {
+      try {
+        const cachedLogo = localStorage.getItem('palace_company_logo') || '/images/company-logo.png';
+        const logoEl = document.getElementById('loginCompanyLogo');
+        if (logoEl) logoEl.src = cachedLogo;
+        const cachedName = localStorage.getItem('palace_business_name');
+        if (cachedName) document.title = `Login | ${cachedName}`;
+      } catch (e) {}
+    })();
+
+    // Load Public Branding from Server
     (async function loadPublicBranding() {
       try {
         const res = await fetch('/api/settings/public');
         const data = await res.json();
         if (data.success && data.settings) {
-          if (data.settings.business_name) {
-            const bName = data.settings.business_name;
-            const heroBrand = document.getElementById('loginHeroBrand');
-            if (heroBrand) heroBrand.textContent = bName;
-            document.title = `Login | ${bName}`;
+          const s = data.settings;
+          const logoUrl = s.company_logo || '/images/company-logo.png';
+          const logoEl = document.getElementById('loginCompanyLogo');
+          if (logoEl) logoEl.src = logoUrl;
+          if (s.business_name) {
+            document.title = `Login | ${s.business_name}`;
           }
+          try {
+            localStorage.setItem('palace_company_logo', logoUrl);
+            if (s.business_name) localStorage.setItem('palace_business_name', s.business_name);
+          } catch (e) {}
         }
       } catch (e) {
         // Fallback to default branding

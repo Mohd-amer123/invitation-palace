@@ -19,14 +19,26 @@ router.get('/public', (req, res) => {
     const publicSettings = {
       business_name: 'THE INVITATION PALACE',
       business_tagline: 'Luxury Wedding & Event Stationery',
-      company_logo: ''
+      company_logo: '/images/company-logo.png'
     };
     rows.forEach(r => {
       publicSettings[r.key] = r.value;
     });
+
+    // Resilient fallback: ensure company_logo always resolves to a valid image
+    if (!publicSettings.company_logo || publicSettings.company_logo.trim() === '') {
+      publicSettings.company_logo = '/images/company-logo.png';
+    } else {
+      const cleanPath = publicSettings.company_logo.split('?')[0];
+      const fullPath = path.join(__dirname, '..', 'public', cleanPath);
+      if (!fs.existsSync(fullPath)) {
+        publicSettings.company_logo = '/images/company-logo.png';
+      }
+    }
+
     res.json({ success: true, settings: publicSettings });
   } catch (err) {
-    res.json({ success: true, settings: { business_name: 'THE INVITATION PALACE', business_tagline: 'Luxury Wedding & Event Stationery', company_logo: '' } });
+    res.json({ success: true, settings: { business_name: 'THE INVITATION PALACE', business_tagline: 'Luxury Wedding & Event Stationery', company_logo: '/images/company-logo.png' } });
   }
 });
 
@@ -205,6 +217,15 @@ function saveBase64Logo(base64Str) {
     buffer = Buffer.from(base64Str, 'base64');
   }
 
+  // 1. Always save a canonical persistent copy to public/images/company-logo.png
+  const CANONICAL_PATH = path.join(__dirname, '..', 'public', 'images', 'company-logo.png');
+  try {
+    fs.writeFileSync(CANONICAL_PATH, buffer);
+  } catch (e) {
+    console.warn('Could not write canonical company-logo.png:', e);
+  }
+
+  // 2. Also save to public/uploads/logos/ for history
   const filename = `logo-${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
   const LOGOS_DIR = path.join(__dirname, '..', 'public', 'uploads', 'logos');
   if (!fs.existsSync(LOGOS_DIR)) {
@@ -212,7 +233,9 @@ function saveBase64Logo(base64Str) {
   }
   const filePath = path.join(LOGOS_DIR, filename);
   fs.writeFileSync(filePath, buffer);
-  return `/uploads/logos/${filename}`;
+
+  // Return canonical URL with cache-busting timestamp
+  return `/images/company-logo.png?v=${Date.now()}`;
 }
 
 function processLogoUpdate(req, res, logoRelativeUrl) {
@@ -280,7 +303,12 @@ router.post('/logo', (req, res) => {
     }
     let logoUrl = null;
     if (req.file) {
-      logoUrl = `/uploads/logos/${req.file.filename}`;
+      // Copy to canonical public/images/company-logo.png
+      const CANONICAL_PATH = path.join(__dirname, '..', 'public', 'images', 'company-logo.png');
+      try {
+        fs.copyFileSync(req.file.path, CANONICAL_PATH);
+      } catch (e) {}
+      logoUrl = `/images/company-logo.png?v=${Date.now()}`;
     } else if (req.body && req.body.logo_base64) {
       try {
         logoUrl = saveBase64Logo(req.body.logo_base64);

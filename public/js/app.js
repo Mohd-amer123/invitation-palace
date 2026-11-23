@@ -12,10 +12,41 @@ let currentDispatchReminderId = null;
 let currentDispatchMessageText = '';
 let currentViewEventId = null;
 
+// Immediate Instant Branding Bootstrap (Zero-delay, resilient cache)
+function applyInstantBranding() {
+  try {
+    const cachedLogo = localStorage.getItem('palace_company_logo') || '/images/company-logo.png';
+    const cachedName = localStorage.getItem('palace_business_name') || 'THE INVITATION PALACE';
+    const sidebarLogo = document.getElementById('sidebarCompanyLogo');
+    const sidebarIcon = document.getElementById('sidebarBrandIcon');
+    if (sidebarLogo) {
+      sidebarLogo.src = cachedLogo;
+      sidebarLogo.classList.remove('d-none');
+      if (sidebarIcon) sidebarIcon.classList.add('d-none');
+    }
+    const headerLogo = document.getElementById('headerBrandLogo');
+    const headerCrown = document.getElementById('headerCrownIcon');
+    if (headerLogo) {
+      headerLogo.src = cachedLogo;
+      headerLogo.classList.remove('d-none');
+      if (headerCrown) headerCrown.classList.add('d-none');
+    }
+    const sidebarName = document.getElementById('sidebarBrandName');
+    if (sidebarName) sidebarName.textContent = cachedName;
+    const headerText = document.getElementById('headerBrandText');
+    if (headerText) headerText.textContent = cachedName;
+    document.title = cachedName + ' | Event Reminder Management System';
+  } catch (e) {}
+}
+
+// Run immediate bootstrap as early as possible
+applyInstantBranding();
+
 // Initialization
 document.addEventListener('DOMContentLoaded', async () => {
+  applyInstantBranding();
+  loadBranding(); // Run branding fetch concurrently
   await verifyAuthentication();
-  loadBranding();
   setupNavigation();
   setupClock();
   setupEventListeners();
@@ -1843,15 +1874,10 @@ async function loadSettings() {
     const settingsLogoImg = document.getElementById('settingsCurrentLogoImg');
     const settingsFallback = document.getElementById('settingsLogoFallbackCrest');
     if (settingsLogoImg && settingsFallback) {
-      if (s.company_logo) {
-        settingsLogoImg.src = s.company_logo;
-        settingsLogoImg.classList.remove('d-none');
-        settingsFallback.classList.add('d-none');
-      } else {
-        settingsLogoImg.src = '';
-        settingsLogoImg.classList.add('d-none');
-        settingsFallback.classList.remove('d-none');
-      }
+      const activeLogo = s.company_logo || '/images/company-logo.png';
+      settingsLogoImg.src = activeLogo;
+      settingsLogoImg.classList.remove('d-none');
+      settingsFallback.classList.add('d-none');
     }
 
     // WhatsApp settings
@@ -1996,6 +2022,14 @@ async function loadBranding() {
 
     currentPalaceBranding = data.settings;
     const s = currentPalaceBranding;
+    const activeLogo = s.company_logo || '/images/company-logo.png';
+    s.company_logo = activeLogo;
+
+    // Cache locally for instant loading across reloads and logins
+    try {
+      localStorage.setItem('palace_company_logo', activeLogo);
+      if (s.business_name) localStorage.setItem('palace_business_name', s.business_name);
+    } catch (e) {}
 
     // Sidebar Branding
     const brandNameEl = document.getElementById('sidebarBrandName');
@@ -2006,16 +2040,10 @@ async function loadBranding() {
     if (brandNameEl) brandNameEl.textContent = s.business_name || 'THE INVITATION PALACE';
     if (brandSubEl) brandSubEl.textContent = s.business_tagline || 'WhatsApp Reminder System';
 
-    if (sidebarLogo && sidebarIcon) {
-      if (s.company_logo) {
-        sidebarLogo.src = s.company_logo;
-        sidebarLogo.classList.remove('d-none');
-        sidebarIcon.classList.add('d-none');
-      } else {
-        sidebarLogo.src = '';
-        sidebarLogo.classList.add('d-none');
-        sidebarIcon.classList.remove('d-none');
-      }
+    if (sidebarLogo) {
+      sidebarLogo.src = activeLogo;
+      sidebarLogo.classList.remove('d-none');
+      if (sidebarIcon) sidebarIcon.classList.add('d-none');
     }
 
     // Top Header Crumb
@@ -2023,17 +2051,11 @@ async function loadBranding() {
     const headerCrown = document.getElementById('headerCrownIcon');
     const headerText = document.getElementById('headerBrandText');
 
-    if (headerText) headerText.textContent = s.business_name || 'INVITATION PALACE';
-    if (headerLogo && headerCrown) {
-      if (s.company_logo) {
-        headerLogo.src = s.company_logo;
-        headerLogo.classList.remove('d-none');
-        headerCrown.classList.add('d-none');
-      } else {
-        headerLogo.src = '';
-        headerLogo.classList.add('d-none');
-        headerCrown.classList.remove('d-none');
-      }
+    if (headerText) headerText.textContent = s.business_name || 'THE INVITATION PALACE';
+    if (headerLogo) {
+      headerLogo.src = activeLogo;
+      headerLogo.classList.remove('d-none');
+      if (headerCrown) headerCrown.classList.add('d-none');
     }
 
     // Profile Strip Brand
@@ -2046,16 +2068,10 @@ async function loadBranding() {
     // Settings Preview (if on settings view)
     const settingsLogo = document.getElementById('settingsCurrentLogoImg');
     const settingsCrest = document.getElementById('settingsLogoFallbackCrest');
-    if (settingsLogo && settingsCrest) {
-      if (s.company_logo) {
-        settingsLogo.src = s.company_logo;
-        settingsLogo.classList.remove('d-none');
-        settingsCrest.classList.add('d-none');
-      } else {
-        settingsLogo.src = '';
-        settingsLogo.classList.add('d-none');
-        settingsCrest.classList.remove('d-none');
-      }
+    if (settingsLogo) {
+      settingsLogo.src = activeLogo;
+      settingsLogo.classList.remove('d-none');
+      if (settingsCrest) settingsCrest.classList.add('d-none');
     }
 
     // Inputs
@@ -2079,16 +2095,11 @@ function openBrandingModal() {
   if (modalName) modalName.value = currentPalaceBranding.business_name || 'THE INVITATION PALACE';
   if (modalTag) modalTag.value = currentPalaceBranding.business_tagline || 'Luxury Wedding & Event Stationery';
 
-  if (modalLogoImg && modalFallback) {
-    if (currentPalaceBranding.company_logo) {
-      modalLogoImg.src = currentPalaceBranding.company_logo;
-      modalLogoImg.classList.remove('d-none');
-      modalFallback.classList.add('d-none');
-    } else {
-      modalLogoImg.src = '';
-      modalLogoImg.classList.add('d-none');
-      modalFallback.classList.remove('d-none');
-    }
+  if (modalLogoImg) {
+    const activeLogo = currentPalaceBranding.company_logo || '/images/company-logo.png';
+    modalLogoImg.src = activeLogo;
+    modalLogoImg.classList.remove('d-none');
+    if (modalFallback) modalFallback.classList.add('d-none');
   }
 
   const modal = new bootstrap.Modal(document.getElementById('brandingModal'));
@@ -2110,6 +2121,7 @@ async function handleResetLogo() {
     const data = await res.json();
     if (data.success) {
       showToast(data.message, 'success');
+      try { localStorage.removeItem('palace_company_logo'); } catch (e) {}
       await loadBranding();
       if (document.getElementById('section-settings')?.classList.contains('active')) {
         loadSettings();
@@ -2187,6 +2199,9 @@ async function handleBrandingFormSubmit(formEl, modalIdToHide = null) {
     const data = await res.json();
     if (data.success) {
       showToast(data.message, 'success');
+      if (data.logoUrl) {
+        try { localStorage.setItem('palace_company_logo', data.logoUrl); } catch (e) {}
+      }
       await loadBranding();
       if (modalIdToHide) {
         bootstrap.Modal.getInstance(document.getElementById(modalIdToHide))?.hide();
