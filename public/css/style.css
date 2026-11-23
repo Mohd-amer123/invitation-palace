@@ -1692,4 +1692,190 @@ h1, h2, h3, h4, .brand-title {
   color: #FFFFFF !important;
 }
 
+/* ==============================================================
+   EVENTS MODULE LUXURY STYLING
+   ============================================================== */
+.events-hero-deck {
+  background: linear-gradient(135deg, #7C1827 0%, #6B1724 50%, #4D0E18 100%);
+  border-radius: 22px;
+  padding: 24px 28px 20px 28px;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(107, 23, 36, 0.18);
+}
+
+.events-hero-deck::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -30px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+}
+
+.events-stat-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.event-stat-chip {
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-stat-chip strong {
+  color: #FFFFFF;
+  font-size: 13px;
+}
+
+/* Enhanced Link Host Button */
+.btn-link-host-pill {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF !important;
+  border: none;
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-link-host-pill:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  color: #FFFFFF !important;
+}
+
+.btn-link-host-pill i {
+  font-size: 13px;
+}
+
+.host-connected-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  border-radius: 50px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #15803D;
+  white-space: nowrap;
+}
+
+.btn-share-link-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #FFFFFF;
+  color: #64748B;
+  transition: all 0.2s ease;
+  font-size: 11px;
+}
+
+.btn-share-link-circle:hover {
+  background: var(--palace-burgundy);
+  color: #FFFFFF;
+  border-color: var(--palace-burgundy);
+  transform: scale(1.08);
+}
+
+/* Action Icons */
+.btn-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.btn-action-icon:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  background: #F8FAFC;
+}
+
+.btn-action-icon.text-primary:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.btn-action-icon.text-warning-emphasis:hover {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+.btn-action-icon.text-secondary:hover {
+  background: rgba(100, 116, 139, 0.08);
+  border-color: rgba(100, 116, 139, 0.3);
+}
+
+.btn-action-icon.text-danger:hover {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot-active {
+  background: #22C55E;
+  box-shadow: 0 0 6px #22C55E;
+}
+
+.status-dot-completed {
+  background: #3B82F6;
+  box-shadow: 0 0 6px #3B82F6;
+}
+
+.status-dot-cancelled {
+  background: #EF4444;
+  box-shadow: 0 0 6px #EF4444;
+}
+
+.hover-burgundy:hover {
+  color: var(--palace-burgundy) !important;
+}
+
 

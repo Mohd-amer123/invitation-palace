@@ -526,77 +526,121 @@ async function loadEvents() {
       });
     }
 
+    // Update Quick Overview Metric Chips
+    const eventsList = data.events || [];
+    const totalEvents = eventsList.length;
+    const activeEvents = eventsList.filter(e => e.status === 'Active').length;
+    const totalGuests = eventsList.reduce((sum, e) => sum + (Number(e.total_guests) || 0), 0);
+    const linkedHosts = eventsList.filter(e => e.whatsapp_status === 'CONNECTED').length;
+
+    const stTotal = document.getElementById('statEventsTotal');
+    if (stTotal) stTotal.textContent = totalEvents;
+    const stActive = document.getElementById('statEventsActive');
+    if (stActive) stActive.textContent = activeEvents;
+    const stGuests = document.getElementById('statEventsGuests');
+    if (stGuests) stGuests.textContent = totalGuests;
+    const stLinked = document.getElementById('statEventsLinked');
+    if (stLinked) stLinked.textContent = linkedHosts;
+
     const tbody = document.getElementById('eventsTableBody');
-    if (!data.events || data.events.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No events found. Click <strong>Create New Event</strong> to start.</td></tr>`;
+    if (eventsList.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-5">
+        <i class="fa-solid fa-calendar-xmark fs-2 text-muted mb-2 d-block"></i>
+        No ceremonies found. Click <strong>+ Create New Event</strong> to add your first ceremony.
+      </td></tr>`;
       return;
     }
 
-    tbody.innerHTML = data.events.map(e => `
+    tbody.innerHTML = eventsList.map(e => `
       <tr>
-        <td>
-          <a href="javascript:void(0)" onclick="viewEventDetails(${e.id})" class="fw-bold text-decoration-none text-dark">
+        <td class="ps-3">
+          <a href="javascript:void(0)" onclick="viewEventDetails(${e.id})" class="fw-bold text-decoration-none text-dark hover-burgundy d-inline-block">
             ${escapeHtml(e.event_name)}
           </a>
-          ${e.whatsapp_sender_name ? `<div class="small text-success mt-1" title="Sender WhatsApp Account"><i class="fa-brands fa-whatsapp me-1"></i>${escapeHtml(e.whatsapp_sender_name)}</div>` : ''}
+          ${e.whatsapp_sender_name ? `<div class="small text-muted mt-0.5 d-flex align-items-center gap-1" style="font-size: 11px;"><i class="fa-brands fa-whatsapp text-success"></i><span>${escapeHtml(e.whatsapp_sender_name)}</span></div>` : ''}
         </td>
         <td>
-          <strong class="text-dark"><i class="fa-solid fa-crown text-warning me-1"></i> ${escapeHtml(e.host_name)}</strong>
+          <div class="fw-bold text-dark d-flex align-items-center gap-1.5">
+            <i class="fa-solid fa-crown text-warning" style="font-size: 12px;"></i>
+            <span>${escapeHtml(e.host_name)}</span>
+          </div>
+          ${e.host_phone ? `<div class="small text-muted" style="font-size: 11px;">+${e.host_phone}</div>` : ''}
         </td>
         <td>
-          <div>${escapeHtml(e.customer_name)}</div>
-          <small class="text-muted">${e.customer_code}</small>
-        </td>
-        <td><span class="badge bg-light text-dark border">${e.event_category}</span></td>
-        <td>
-          <strong>${formatDate(e.event_date)}</strong>
-          <div class="small text-muted">${e.event_time}</div>
+          <div class="fw-semibold text-dark">${escapeHtml(e.customer_name)}</div>
+          <span class="badge bg-light text-muted border px-2 py-0.5" style="font-size: 10px;">${escapeHtml(e.customer_code)}</span>
         </td>
         <td>
-          <div>${escapeHtml(e.venue_name)}</div>
-          ${e.maps_link ? `<a href="${e.maps_link}" target="_blank" class="small text-primary"><i class="fa-solid fa-location-dot"></i> Map</a>` : ''}
+          <span class="badge bg-light text-dark border px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 11.5px;">
+            <i class="fa-solid fa-tag me-1 text-muted" style="font-size: 10px;"></i>${escapeHtml(e.event_category)}
+          </span>
         </td>
-        <td><span class="badge bg-secondary-subtle text-dark">${e.total_guests || 0}</span></td>
+        <td>
+          <div class="fw-bold text-dark" style="font-size: 13px;">
+            <i class="fa-regular fa-calendar me-1 text-secondary"></i>${formatDate(e.event_date)}
+          </div>
+          <div class="small text-muted" style="font-size: 11.5px;">
+            <i class="fa-regular fa-clock me-1 text-muted"></i>${e.event_time}
+          </div>
+        </td>
+        <td>
+          <div class="text-truncate" style="max-width: 170px;" title="${escapeHtml(e.venue_name || 'N/A')}">
+            ${escapeHtml(e.venue_name || 'N/A')}
+          </div>
+          ${e.maps_link ? `<a href="${e.maps_link}" target="_blank" class="small text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-1 mt-0.5" style="font-size: 11px;"><i class="fa-solid fa-map-location-dot"></i> Directions</a>` : ''}
+        </td>
+        <td>
+          <span class="badge bg-light text-dark border px-2.5 py-1 rounded-pill fw-bold" style="font-size: 12px;">
+            <i class="fa-solid fa-user-group me-1 text-muted" style="font-size: 10px;"></i>${e.total_guests || 0}
+          </span>
+        </td>
         <td>
           ${e.whatsapp_status === 'CONNECTED' ? `
-            <div class="d-flex align-items-center gap-1">
-              <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2" title="WhatsApp Connected">
-                <i class="fa-brands fa-whatsapp me-1"></i> Connected
+            <div class="d-flex align-items-center gap-1.5">
+              <span class="host-connected-capsule" title="Host WhatsApp is Connected & Active">
+                <i class="fa-solid fa-circle-check text-success"></i>
+                <span>${e.whatsapp_sender_phone ? '+' + e.whatsapp_sender_phone : 'Linked'}</span>
               </span>
-              <button class="btn btn-xs btn-outline-secondary rounded-circle" style="width:24px;height:24px;padding:0;" onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})" title="View Host WhatsApp QR / Link">
-                <i class="fa-solid fa-link" style="font-size:10px;"></i>
+              <button class="btn btn-sm btn-share-link-circle" onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})" title="View QR / Share Link with Host">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
               </button>
             </div>
-            ${e.whatsapp_sender_phone ? `<div class="small text-muted font-monospace" style="font-size:10px;">+${e.whatsapp_sender_phone}</div>` : ''}
           ` : `
-            <button class="btn btn-xs btn-outline-success fw-semibold rounded-pill px-2.5 py-1 shadow-sm d-inline-flex align-items-center gap-1"
+            <button class="btn btn-link-host-pill shadow-sm"
                     onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})"
-                    title="Generate unique WhatsApp login link for this host">
-              <i class="fa-brands fa-whatsapp text-success"></i>
+                    title="Open WhatsApp pairing QR code & share link for ${escapeHtml(e.host_name)}">
+              <i class="fa-brands fa-whatsapp"></i>
               <span>Link Host</span>
             </button>
           `}
         </td>
         <td>
-          <span class="badge ${e.status === 'Active' ? 'bg-success-subtle text-success' : e.status === 'Completed' ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger'}">
-            ${e.status}
-          </span>
+          ${e.status === 'Active' ? `
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill fw-semibold">
+              <span class="status-dot status-dot-active me-1"></span> Active
+            </span>
+          ` : e.status === 'Completed' ? `
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 rounded-pill fw-semibold">
+              <span class="status-dot status-dot-completed me-1"></span> Completed
+            </span>
+          ` : `
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1 rounded-pill fw-semibold">
+              <span class="status-dot status-dot-cancelled me-1"></span> Cancelled
+            </span>
+          `}
         </td>
-        <td>
-          <div class="d-flex gap-1">
-            <button class="btn btn-sm btn-outline-primary" onclick="openEventGuestList(${e.id})" title="Guests & Excel (${e.total_guests || 0})">
+        <td class="text-end pe-3">
+          <div class="d-inline-flex align-items-center gap-1">
+            <button class="btn btn-action-icon text-primary" onclick="openEventGuestList(${e.id})" title="Guest Roster (${e.total_guests || 0} Guests)">
               <i class="fa-solid fa-users"></i>
             </button>
-            <button class="btn btn-sm btn-outline-success" onclick="openShareClientLinkModal(${e.id})" title="Host WhatsApp Link">
-              <i class="fa-brands fa-whatsapp"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-warning" onclick="dispatchEventRemindersNow(${e.id}, '${escapeHtml(e.event_name)}')" title="Send Reminders Now">
+            <button class="btn btn-action-icon text-warning-emphasis" onclick="dispatchEventRemindersNow(${e.id}, '${escapeHtml(e.event_name)}')" title="Send Scheduled Reminders Now">
               <i class="fa-solid fa-paper-plane"></i>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="openEditEventModal(${e.id})" title="Edit Event">
+            <button class="btn btn-action-icon text-secondary" onclick="openEditEventModal(${e.id})" title="Edit Ceremony Details">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="cancelOrDeleteEvent(${e.id}, '${escapeHtml(e.event_name)}')" title="Delete Event">
+            <button class="btn btn-action-icon text-danger" onclick="cancelOrDeleteEvent(${e.id}, '${escapeHtml(e.event_name)}')" title="Delete Event">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -606,6 +650,16 @@ async function loadEvents() {
   } catch (err) {
     console.error('Error loading events:', err);
   }
+}
+
+function resetEventFilters() {
+  const search = document.getElementById('eventSearchInput');
+  const cat = document.getElementById('eventCategoryFilter');
+  const stat = document.getElementById('eventStatusFilter');
+  if (search) search.value = '';
+  if (cat) cat.value = 'All';
+  if (stat) stat.value = 'Active';
+  loadEvents();
 }
 
 async function populateCustomerSelect(targetSelectId, selectedVal = null) {
@@ -3149,22 +3203,19 @@ function renderCustomerHub(data) {
         <td>${escapeHtml(e.venue_name || '-')}</td>
         <td><span class="badge bg-info-subtle text-info border">${e.total_guests || 0} Guest(s)</span></td>
         <td>
-          <button class="btn btn-xs btn-outline-success fw-semibold rounded-pill px-2.5 py-1"
+          <button class="btn btn-link-host-pill shadow-sm"
                   onclick="event.stopPropagation(); openShareClientLinkModal(${e.id})"
                   title="Generate unique WhatsApp login link for this host">
-            <i class="fa-brands fa-whatsapp text-success me-1"></i> Host Link
+            <i class="fa-brands fa-whatsapp"></i> Link Host
           </button>
         </td>
         <td><span class="badge ${e.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-muted'}">${e.status}</span></td>
         <td>
           <div class="d-flex gap-1">
-            <button class="btn btn-sm btn-outline-success" onclick="openShareClientLinkModal(${e.id})" title="Share Dedicated Host WhatsApp Link">
-              <i class="fa-brands fa-whatsapp"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-primary" onclick="openBatchDispatchModal(${e.id})" title="Batch Dispatch Reminders for this event">
+            <button class="btn btn-action-icon text-primary" onclick="openBatchDispatchModal(${e.id})" title="Batch Dispatch Reminders for this event">
               <i class="fa-solid fa-rocket"></i>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="openEditEventModal(${e.id})" title="Edit / Reschedule">
+            <button class="btn btn-action-icon text-secondary" onclick="openEditEventModal(${e.id})" title="Edit / Reschedule">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
           </div>
