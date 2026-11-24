@@ -1234,6 +1234,7 @@
                       <span class="variable-chip" onclick="insertVariable('{{venue_name}}')">{{venue_name}}</span>
                       <span class="variable-chip" onclick="insertVariable('{{venue_address}}')">{{venue_address}}</span>
                       <span class="variable-chip" onclick="insertVariable('{{maps_link}}')">{{maps_link}}</span>
+                      <span class="variable-chip" onclick="insertVariable('{{digital_card_link}}')"><i class="fa-solid fa-id-card me-1"></i>{{digital_card_link}}</span>
                       <span class="variable-chip" onclick="insertVariable('{{business_name}}')">{{business_name}}</span>
                     </div>
                   </div>
@@ -1773,6 +1774,17 @@
               <div class="col-md-6">
                 <label class="form-label">Google Maps Link (Optional)</label>
                 <input type="url" class="form-control" id="eventMapsLinkInput" placeholder="https://maps.app.goo.gl/...">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-semibold">
+                  <i class="fa-solid fa-id-card text-palace me-1"></i> Digital Invitation Card Link (Optional)
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-link"></i></span>
+                  <input type="url" class="form-control" id="eventDigitalCardLinkInput" placeholder="https://theinvitationpalace.com/card/... or Canva / Drive / PDF link">
+                </div>
+                <small class="text-muted"><i class="fa-solid fa-circle-info me-1"></i> Included dynamically in WhatsApp templates using the <code>{{digital_card_link}}</code> tag.</small>
               </div>
 
               <div class="col-12">

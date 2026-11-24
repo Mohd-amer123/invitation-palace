@@ -49,6 +49,8 @@ function renderTemplate(templateText, context = {}) {
     '{{venue_name}}': (context.venue_name || '').trim(),
     '{{venue_address}}': (context.venue_address || '').trim(),
     '{{maps_link}}': (context.maps_link || '').trim(),
+    '{{digital_card_link}}': (context.digital_card_link || context.card_link || '').trim(),
+    '{{card_link}}': (context.digital_card_link || context.card_link || '').trim(),
     '{{business_name}}': (context.business_name || 'THE INVITATION PALACE').trim()
   };
 
@@ -68,7 +70,17 @@ function renderTemplate(templateText, context = {}) {
   const lines = rendered.split('\n');
   const cleanedLines = lines.filter(line => {
     const trimmed = line.trim();
-    if (trimmed === 'Address:' || trimmed === 'Venue:' || trimmed === 'Google Map:' || trimmed === 'Map:') {
+    if (
+      trimmed === 'Address:' ||
+      trimmed === 'Venue:' ||
+      trimmed === 'Google Map:' ||
+      trimmed === 'Map:' ||
+      trimmed === 'Digital Card:' ||
+      trimmed === 'Digital Invitation:' ||
+      trimmed === 'Digital Card Link:' ||
+      trimmed === 'Invitation Card:' ||
+      trimmed === 'Card:'
+    ) {
       return false;
     }
     return true;
@@ -98,6 +110,7 @@ function getSamplePreview(templateText, stageDays = 7) {
     venue_name: 'Royal Heritage Palace, King’s Hall',
     venue_address: 'No. 42, Palace Cross Road, Vasanth Nagar, Bengaluru',
     maps_link: 'https://maps.google.com/?q=Royal+Heritage+Palace',
+    digital_card_link: 'https://theinvitationpalace.com/card/farhan-amina-wedding',
     business_name: 'THE INVITATION PALACE',
     timeZone: 'Asia/Kolkata',
     sendDate: new Date()

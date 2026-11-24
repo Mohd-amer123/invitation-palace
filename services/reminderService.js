@@ -121,6 +121,7 @@ function generateRemindersForEvent(eventId) {
           venue_name: event.venue_name,
           venue_address: event.venue_address,
           maps_link: event.maps_link,
+          digital_card_link: event.digital_card_link,
           business_name: businessNameSetting,
           timeZone: defaultTimezone
         };
@@ -198,6 +199,7 @@ function handleEventReschedule(eventId, newEventDate, newEventTime) {
         venue_name: event.venue_name,
         venue_address: event.venue_address,
         maps_link: event.maps_link,
+        digital_card_link: event.digital_card_link,
         business_name: businessNameSetting,
         timeZone: defaultTimezone
       };

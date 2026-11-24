@@ -126,6 +126,7 @@ router.post('/', (req, res) => {
     venue_name,
     venue_address,
     maps_link,
+    digital_card_link,
     description,
     reminder_days,
     reminder_time,
@@ -153,8 +154,8 @@ router.post('/', (req, res) => {
       INSERT INTO events (
         customer_id, event_name, event_category, host_name,
         event_date, event_time, venue_name, venue_address,
-        maps_link, description, reminder_days, reminder_time, whatsapp_account_id, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')
+        maps_link, digital_card_link, description, reminder_days, reminder_time, whatsapp_account_id, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')
     `);
 
     const result = stmt.run(
@@ -167,6 +168,7 @@ router.post('/', (req, res) => {
       venue_name.trim(),
       venue_address.trim(),
       maps_link ? maps_link.trim() : null,
+      digital_card_link ? digital_card_link.trim() : null,
       description ? description.trim() : null,
       reminder_days || defaultReminderDays,
       reminder_time || defaultReminderTime,
@@ -207,6 +209,7 @@ router.put('/:id', (req, res) => {
     venue_name,
     venue_address,
     maps_link,
+    digital_card_link,
     description,
     reminder_days,
     reminder_time,
@@ -233,6 +236,7 @@ router.put('/:id', (req, res) => {
           venue_name = ?,
           venue_address = ?,
           maps_link = ?,
+          digital_card_link = ?,
           description = ?,
           reminder_days = ?,
           reminder_time = ?,
@@ -249,6 +253,7 @@ router.put('/:id', (req, res) => {
       venue_name.trim(),
       venue_address.trim(),
       maps_link ? maps_link.trim() : null,
+      digital_card_link !== undefined ? (digital_card_link ? digital_card_link.trim() : null) : currentEvent.digital_card_link,
       description ? description.trim() : null,
       reminder_days || currentEvent.reminder_days,
       reminder_time || currentEvent.reminder_time,

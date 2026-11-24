@@ -700,6 +700,7 @@ async function openAddEventModal() {
   document.getElementById('eventForm').reset();
   document.getElementById('eventReminderDaysInput').value = '7,3,1';
   document.getElementById('eventReminderTimeInput').value = '10:00';
+  if (document.getElementById('eventDigitalCardLinkInput')) document.getElementById('eventDigitalCardLinkInput').value = '';
   await populateCustomerSelect('eventCustomerSelect');
   await populateEventWhatsAppSelect();
   const modal = new bootstrap.Modal(document.getElementById('eventModal'));
@@ -726,6 +727,7 @@ async function openEditEventModal(id) {
     document.getElementById('eventVenueNameInput').value = e.venue_name;
     document.getElementById('eventVenueAddressInput').value = e.venue_address;
     document.getElementById('eventMapsLinkInput').value = e.maps_link || '';
+    if (document.getElementById('eventDigitalCardLinkInput')) document.getElementById('eventDigitalCardLinkInput').value = e.digital_card_link || '';
     document.getElementById('eventReminderDaysInput').value = e.reminder_days || '7,3,1';
     document.getElementById('eventReminderTimeInput').value = e.reminder_time || '10:00';
     document.getElementById('eventDescInput').value = e.description || '';
@@ -753,7 +755,8 @@ async function viewEventDetails(id) {
       <div class="col-md-4"><strong>Category:</strong> ${e.event_category}</div>
       <div class="col-md-4"><strong>Event Date & Time:</strong> ${formatDate(e.event_date)} at ${e.event_time}</div>
       <div class="col-md-8"><strong>Venue:</strong> ${escapeHtml(e.venue_name)} &bull; ${escapeHtml(e.venue_address)}</div>
-      ${e.maps_link ? `<div class="col-12"><strong>Google Maps:</strong> <a href="${e.maps_link}" target="_blank">${e.maps_link}</a></div>` : ''}
+      ${e.maps_link ? `<div class="col-md-6"><strong>Google Maps:</strong> <a href="${e.maps_link}" target="_blank" class="text-primary">${e.maps_link} <i class="fa-solid fa-arrow-up-right-from-square small ms-1"></i></a></div>` : ''}
+      ${e.digital_card_link ? `<div class="col-md-6"><strong><i class="fa-solid fa-id-card text-palace me-1"></i> Digital Invitation Card:</strong> <a href="${e.digital_card_link}" target="_blank" class="fw-semibold text-palace">${escapeHtml(e.digital_card_link)} <i class="fa-solid fa-arrow-up-right-from-square small ms-1"></i></a></div>` : ''}
     `;
 
     document.getElementById('eventGuestCountSpan').textContent = data.guests ? data.guests.length : 0;
@@ -2335,6 +2338,7 @@ function setupEventListeners() {
       venue_name: document.getElementById('eventVenueNameInput').value,
       venue_address: document.getElementById('eventVenueAddressInput').value,
       maps_link: document.getElementById('eventMapsLinkInput').value,
+      digital_card_link: document.getElementById('eventDigitalCardLinkInput') ? document.getElementById('eventDigitalCardLinkInput').value.trim() : null,
       reminder_days: document.getElementById('eventReminderDaysInput').value,
       reminder_time: document.getElementById('eventReminderTimeInput').value,
       description: document.getElementById('eventDescInput').value

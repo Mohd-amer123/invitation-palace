@@ -85,6 +85,7 @@ router.post('/preview', (req, res) => {
     venue_name: sample_data?.venue_name || 'Royal Heritage Palace, King’s Hall',
     venue_address: sample_data?.venue_address || 'No. 42, Palace Cross Road, Bengaluru',
     maps_link: sample_data?.maps_link || 'https://maps.google.com/?q=Royal+Heritage+Palace',
+    digital_card_link: sample_data?.digital_card_link || 'https://theinvitationpalace.com/card/farhan-amina-wedding',
     business_name: businessName,
     timeZone: defaultTimezone,
     sendDate: new Date()

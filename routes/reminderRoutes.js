@@ -43,6 +43,7 @@ router.get('/', (req, res) => {
       e.venue_name,
       e.venue_address,
       e.maps_link,
+      e.digital_card_link,
       c.full_name as customer_name,
       c.customer_code
     FROM reminders r
@@ -103,6 +104,7 @@ router.get('/batch-queue', (req, res) => {
       e.venue_name,
       e.venue_address,
       e.maps_link,
+      e.digital_card_link,
       t.template_text
     FROM reminders r
     JOIN guests g ON r.guest_id = g.id
@@ -149,6 +151,7 @@ router.get('/batch-queue', (req, res) => {
       venue_name: r.venue_name,
       venue_address: r.venue_address,
       maps_link: r.maps_link,
+      digital_card_link: r.digital_card_link,
       business_name: businessName,
       timeZone: defaultTimezone,
       sendDate: new Date()
@@ -230,7 +233,7 @@ router.post('/:id/send-direct', async (req, res) => {
   const reminder = db.prepare(`
     SELECT r.*, g.full_name as guest_name, g.mobile as guest_phone,
            e.event_name, e.host_name, e.event_date, e.event_time,
-           e.venue_name, e.venue_address, e.maps_link, e.whatsapp_account_id, t.template_text
+           e.venue_name, e.venue_address, e.maps_link, e.digital_card_link, e.whatsapp_account_id, t.template_text
     FROM reminders r
     JOIN guests g ON r.guest_id = g.id
     JOIN events e ON r.event_id = e.id
@@ -255,6 +258,7 @@ router.post('/:id/send-direct', async (req, res) => {
     venue_name: reminder.venue_name,
     venue_address: reminder.venue_address,
     maps_link: reminder.maps_link,
+    digital_card_link: reminder.digital_card_link,
     business_name: businessName,
     timeZone: defaultTimezone,
     sendDate: new Date()
@@ -314,6 +318,7 @@ router.get('/:id', (req, res) => {
       e.venue_name,
       e.venue_address,
       e.maps_link,
+      e.digital_card_link,
       c.full_name as customer_name,
       c.customer_code,
       t.template_text
@@ -342,6 +347,7 @@ router.get('/:id', (req, res) => {
     venue_name: reminder.venue_name,
     venue_address: reminder.venue_address,
     maps_link: reminder.maps_link,
+    digital_card_link: reminder.digital_card_link,
     business_name: businessName,
     timeZone: defaultTimezone,
     sendDate: new Date()
@@ -373,6 +379,7 @@ router.post('/:id/generate-link', (req, res) => {
       e.venue_name,
       e.venue_address,
       e.maps_link,
+      e.digital_card_link,
       t.template_text
     FROM reminders r
     JOIN guests g ON r.guest_id = g.id
@@ -398,6 +405,7 @@ router.post('/:id/generate-link', (req, res) => {
     venue_name: reminder.venue_name,
     venue_address: reminder.venue_address,
     maps_link: reminder.maps_link,
+    digital_card_link: reminder.digital_card_link,
     business_name: businessName,
     timeZone: defaultTimezone,
     sendDate: new Date()

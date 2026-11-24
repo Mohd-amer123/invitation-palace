@@ -119,6 +119,7 @@ function initDb() {
       venue_name TEXT NOT NULL,
       venue_address TEXT NOT NULL,
       maps_link TEXT,
+      digital_card_link TEXT,
       description TEXT,
       reminder_days TEXT DEFAULT '7,3,1',
       reminder_time TEXT DEFAULT '10:00',
@@ -364,12 +365,16 @@ THE INVITATION PALACE`
   });
   seedTemplatesTx(defaultTemplates);
 
-  // Migration: Check and add whatsapp_account_id to events table if not exists
+  // Migration: Check and add whatsapp_account_id & digital_card_link to events table if not exists
   try {
     const eventCols = db.prepare(`PRAGMA table_info(events)`).all();
     if (!eventCols.some(c => c.name === 'whatsapp_account_id')) {
       db.exec(`ALTER TABLE events ADD COLUMN whatsapp_account_id INTEGER REFERENCES whatsapp_accounts(id)`);
       console.log('[Database] Migrated events table: added whatsapp_account_id column.');
+    }
+    if (!eventCols.some(c => c.name === 'digital_card_link')) {
+      db.exec(`ALTER TABLE events ADD COLUMN digital_card_link TEXT`);
+      console.log('[Database] Migrated events table: added digital_card_link column.');
     }
   } catch (e) {
     console.error('[Database] Column migration error:', e.message);

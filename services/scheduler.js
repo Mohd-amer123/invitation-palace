@@ -124,7 +124,7 @@ async function checkAndProcessReminders() {
         r.scheduled_date, r.scheduled_time, r.rendered_message, r.status,
         g.full_name as guest_name, g.mobile as guest_phone, g.consent_status,
         e.event_name, e.event_category, e.host_name, e.event_date, e.event_time,
-        e.venue_name, e.venue_address, e.maps_link, e.status as event_status,
+        e.venue_name, e.venue_address, e.maps_link, e.digital_card_link, e.status as event_status,
         t.template_text
       FROM reminders r
       JOIN guests g ON r.guest_id = g.id
@@ -152,6 +152,7 @@ async function checkAndProcessReminders() {
           venue_name: item.venue_name,
           venue_address: item.venue_address,
           maps_link: item.maps_link,
+          digital_card_link: item.digital_card_link,
           business_name: businessName,
           timeZone: timezoneSetting,
           sendDate: timestamp
@@ -262,7 +263,7 @@ async function runAutomatedBatchQueue() {
       r.scheduled_date, r.scheduled_time, r.rendered_message, r.status,
       g.full_name as guest_name, g.mobile as guest_phone, g.consent_status,
       e.event_name, e.event_category, e.host_name, e.event_date, e.event_time,
-      e.venue_name, e.venue_address, e.maps_link, e.status as event_status,
+      e.venue_name, e.venue_address, e.maps_link, e.digital_card_link, e.status as event_status,
       e.whatsapp_account_id,
       t.template_text
     FROM reminders r
@@ -298,6 +299,7 @@ async function runAutomatedBatchQueue() {
         venue_name: item.venue_name,
         venue_address: item.venue_address,
         maps_link: item.maps_link,
+        digital_card_link: item.digital_card_link,
         business_name: businessName,
         timeZone: timezoneSetting,
         sendDate: timestamp
