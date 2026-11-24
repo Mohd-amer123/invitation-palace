@@ -214,6 +214,62 @@ function handleEventReschedule(eventId, newEventDate, newEventTime) {
 }
 
 /**
+ * Refresh rendered message for all pending reminders of an event
+ * (e.g. when venue, host name, or digital card link is updated)
+ */
+function refreshEventReminders(eventId) {
+  const db = getDb();
+  const event = db.prepare('SELECT * FROM events WHERE id = ?').get(eventId);
+  if (!event) return;
+
+  const pendingReminders = db.prepare(`
+    SELECT r.*, g.full_name as guest_name
+    FROM reminders r
+    JOIN guests g ON r.guest_id = g.id
+    WHERE r.event_id = ? AND r.status IN ('Scheduled', 'Pending', 'Ready to Send', 'Awaiting WhatsApp')
+  `).all(eventId);
+
+  if (pendingReminders.length === 0) return;
+
+  const businessNameSetting = db.prepare(`SELECT value FROM settings WHERE key = 'business_name'`).get()?.value || 'THE INVITATION PALACE';
+  const defaultTimezone = db.prepare(`SELECT value FROM settings WHERE key = 'default_timezone'`).get()?.value || 'Asia/Kolkata';
+
+  const templates = db.prepare('SELECT stage_days, template_text FROM templates WHERE is_active = 1').all();
+  const templateMap = {};
+  templates.forEach(t => { templateMap[t.stage_days] = t.template_text; });
+
+  const updateStmt = db.prepare(`
+    UPDATE reminders
+    SET rendered_message = ?,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `);
+
+  const tx = db.transaction(() => {
+    for (const rem of pendingReminders) {
+      const templateText = templateMap[rem.stage_days] || rem.rendered_message;
+      const context = {
+        guest_name: rem.guest_name,
+        event_name: event.event_name,
+        host_name: event.host_name,
+        event_date: event.event_date,
+        event_time: event.event_time,
+        venue_name: event.venue_name,
+        venue_address: event.venue_address,
+        maps_link: event.maps_link,
+        digital_card_link: event.digital_card_link,
+        business_name: businessNameSetting,
+        timeZone: defaultTimezone
+      };
+      const updatedRendered = renderTemplate(templateText, context);
+      updateStmt.run(updatedRendered, rem.id);
+    }
+  });
+
+  tx();
+}
+
+/**
  * Handle event cancellation:
  * Mark all pending reminders as Cancelled.
  */
@@ -232,5 +288,6 @@ module.exports = {
   calculateScheduledDate,
   generateRemindersForEvent,
   handleEventReschedule,
+  refreshEventReminders,
   handleEventCancellation
 };

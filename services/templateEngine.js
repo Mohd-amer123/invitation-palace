@@ -88,6 +88,18 @@ function renderTemplate(templateText, context = {}) {
 
   rendered = cleanedLines.join('\n');
 
+  // Ensure digital card link is 100% included whenever provided for an event/customer
+  const cardUrl = (context.digital_card_link || context.card_link || '').trim();
+  if (cardUrl && !rendered.includes(cardUrl)) {
+    if (rendered.includes('Regards,')) {
+      rendered = rendered.replace('Regards,', `Digital Invitation Card: ${cardUrl}\n\nRegards,`);
+    } else if (rendered.includes('We look forward')) {
+      rendered = rendered.replace('We look forward', `Digital Invitation Card: ${cardUrl}\n\nWe look forward`);
+    } else {
+      rendered = rendered + `\n\nDigital Invitation Card: ${cardUrl}`;
+    }
+  }
+
   // Ensure no unrendered {{tag}} remains
   rendered = rendered.replace(/\{\{[a-zA-Z0-9_]+\}\}/g, '').trim();
 

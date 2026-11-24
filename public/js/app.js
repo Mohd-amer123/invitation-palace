@@ -1798,9 +1798,9 @@ document.getElementById('templateEditForm')?.addEventListener('submit', async (e
 
 function resetCurrentTemplateDefault() {
   const defaults = {
-    7: `{{time_greeting}},\n\nWe are delighted to remind you about the upcoming {{event_name}} hosted by {{host_name}}.\n\nDate: {{event_date}}\nTime: {{event_time}}\nVenue: {{venue_name}}\nAddress: {{venue_address}}\n\nWe look forward to welcoming you and sharing this special occasion with you!\n\nRegards,\nTHE INVITATION PALACE`,
-    3: `{{time_greeting}},\n\nJust 3 days to go!\n\nA friendly reminder about {{host_name}}'s upcoming {{event_name}}.\n\nDate: {{event_date}}\nTime: {{event_time}}\nVenue: {{venue_name}}\n\nWe look forward to seeing you!\n\nRegards,\nTHE INVITATION PALACE`,
-    1: `{{time_greeting}},\n\nA gentle reminder that {{event_name}} hosted by {{host_name}} is happening tomorrow!\n\nTime: {{event_time}}\nVenue: {{venue_name}}\nAddress: {{venue_address}}\n\nWe hope to see you there!\n\nRegards,\nTHE INVITATION PALACE`
+    7: `{{time_greeting}},\n\nWe are delighted to remind you about the upcoming {{event_name}} hosted by {{host_name}}.\n\nDate: {{event_date}}\nTime: {{event_time}}\nVenue: {{venue_name}}\nAddress: {{venue_address}}\nDigital Invitation: {{digital_card_link}}\n\nWe look forward to welcoming you and sharing this special occasion with you!\n\nRegards,\nTHE INVITATION PALACE`,
+    3: `{{time_greeting}},\n\nJust 3 days to go!\n\nA friendly reminder about {{host_name}}'s upcoming {{event_name}}.\n\nDate: {{event_date}}\nTime: {{event_time}}\nVenue: {{venue_name}}\nDigital Invitation: {{digital_card_link}}\n\nWe look forward to seeing you!\n\nRegards,\nTHE INVITATION PALACE`,
+    1: `{{time_greeting}},\n\nA gentle reminder that {{event_name}} hosted by {{host_name}} is happening tomorrow!\n\nTime: {{event_time}}\nVenue: {{venue_name}}\nAddress: {{venue_address}}\nDigital Invitation: {{digital_card_link}}\n\nWe hope to see you there!\n\nRegards,\nTHE INVITATION PALACE`
   };
 
   const def = defaults[activeTemplateStage];

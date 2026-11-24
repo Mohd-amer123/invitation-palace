@@ -309,6 +309,7 @@ Date: {{event_date}}
 Time: {{event_time}}
 Venue: {{venue_name}}
 Address: {{venue_address}}
+Digital Invitation: {{digital_card_link}}
 
 We look forward to welcoming you and sharing this special occasion with you!
 
@@ -327,6 +328,7 @@ A friendly reminder about {{host_name}}'s upcoming {{event_name}}.
 Date: {{event_date}}
 Time: {{event_time}}
 Venue: {{venue_name}}
+Digital Invitation: {{digital_card_link}}
 
 We look forward to seeing you!
 
@@ -343,6 +345,7 @@ A gentle reminder that {{event_name}} hosted by {{host_name}} is happening tomor
 Time: {{event_time}}
 Venue: {{venue_name}}
 Address: {{venue_address}}
+Digital Invitation: {{digital_card_link}}
 
 We hope to see you there!
 

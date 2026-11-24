@@ -8,7 +8,7 @@ const router = express.Router();
 const { getDb } = require('../config/db');
 const { requireAuth } = require('../middlewares/auth');
 const { EVENT_CATEGORIES } = require('../config/constants');
-const { generateRemindersForEvent, handleEventReschedule, handleEventCancellation } = require('../services/reminderService');
+const { generateRemindersForEvent, handleEventReschedule, refreshEventReminders, handleEventCancellation } = require('../services/reminderService');
 
 router.use(requireAuth);
 
@@ -268,6 +268,9 @@ router.put('/:id', (req, res) => {
     } else if (dateChanged) {
       // If date/time changed, automatically update pending reminders schedule
       handleEventReschedule(eventId, event_date, event_time);
+    } else {
+      // Refresh reminder messages with updated event info (including digital_card_link)
+      refreshEventReminders(eventId);
     }
 
     res.json({
