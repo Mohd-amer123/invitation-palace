@@ -391,13 +391,13 @@ async function loadCustomers() {
             <button class="btn btn-sm btn-palace px-2 py-1" onclick="openCustomerWorkspace(${c.id})" title="Open Dedicated Customer Workspace">
               <i class="fa-solid fa-folder-open me-1"></i> Hub
             </button>
-            <button class="btn btn-sm btn-outline-primary" onclick="viewCustomerDetails(${c.id})" title="Quick Info">
+            <button class="btn btn-action-icon text-primary" onclick="viewCustomerDetails(${c.id})" title="Quick Info">
               <i class="fa-solid fa-eye"></i>
             </button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="openEditCustomerModal(${c.id})" title="Edit">
+            <button class="btn btn-action-icon text-secondary" onclick="openEditCustomerModal(${c.id})" title="Edit">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(${c.id}, '${escapeHtml(c.full_name)}')" title="Delete / Archive">
+            <button class="btn btn-action-icon text-danger" onclick="deleteCustomer(${c.id}, '${escapeHtml(c.full_name)}')" title="Delete / Archive">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -1177,13 +1177,13 @@ function renderEventSpecificGuestsTable(guests) {
         </td>
         <td>
           <div class="d-flex gap-1">
-            <button class="btn btn-sm btn-outline-secondary table-action-btn" onclick="openEditGuestModal(${g.id})" title="Edit Guest">
+            <button class="btn btn-action-icon text-secondary" onclick="openEditGuestModal(${g.id})" title="Edit Guest">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-sm btn-outline-warning table-action-btn" onclick="unlinkGuestFromCurrentEvent(${g.id}, '${escapeHtml(g.full_name)}')" title="Remove from this Event">
-              <i class="fa-solid fa-user-minus text-warning"></i>
+            <button class="btn btn-action-icon text-warning" onclick="unlinkGuestFromCurrentEvent(${g.id}, '${escapeHtml(g.full_name)}')" title="Remove from this Event">
+              <i class="fa-solid fa-user-minus"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger table-action-btn" onclick="deleteGuest(${g.id}, '${escapeHtml(g.full_name)}')" title="Delete permanently">
+            <button class="btn btn-action-icon text-danger" onclick="deleteGuest(${g.id}, '${escapeHtml(g.full_name)}')" title="Delete permanently">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -1283,10 +1283,10 @@ async function loadGuests() {
         <td><span class="badge bg-light text-dark border">${g.total_events || 0} Event(s)</span></td>
         <td>
           <div class="d-flex gap-1">
-            <button class="btn btn-sm btn-outline-secondary" onclick="openEditGuestModal(${g.id})" title="Edit">
+            <button class="btn btn-action-icon text-secondary" onclick="openEditGuestModal(${g.id})" title="Edit Guest">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteGuest(${g.id}, '${escapeHtml(g.full_name)}')" title="Delete">
+            <button class="btn btn-action-icon text-danger" onclick="deleteGuest(${g.id}, '${escapeHtml(g.full_name)}')" title="Delete Guest">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -1549,16 +1549,16 @@ async function loadReminders() {
         <td>
           <div class="d-flex gap-1">
             ${r.status !== 'Sent' && r.status !== 'Delivered' && r.status !== 'Cancelled' ? `
-              <button class="btn btn-sm btn-outline-danger" onclick="cancelReminder(${r.id})" title="Cancel Reminder">
+              <button class="btn btn-action-icon text-danger" onclick="cancelReminder(${r.id})" title="Cancel Reminder">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             ` : ''}
             ${r.status === 'Failed' ? `
-              <button class="btn btn-sm btn-outline-warning" onclick="retryReminder(${r.id})" title="Retry Reminder">
+              <button class="btn btn-action-icon text-warning" onclick="retryReminder(${r.id})" title="Retry Reminder">
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
             ` : ''}
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteReminderPermanently(${r.id})" title="Delete Reminder Permanently">
+            <button class="btn btn-action-icon text-danger" onclick="deleteReminderPermanently(${r.id})" title="Delete Reminder Permanently">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
@@ -3240,7 +3240,7 @@ function renderCustomerHub(data) {
         <td><span class="badge bg-light text-dark border">${escapeHtml(g.event_name)}</span></td>
         <td><span class="badge bg-success-subtle text-success">Opted-In</span></td>
         <td>
-          <button class="btn btn-sm btn-outline-secondary" onclick="openEditGuestModal(${g.id})" title="Edit Guest">
+          <button class="btn btn-action-icon text-secondary" onclick="openEditGuestModal(${g.id})" title="Edit Guest">
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
         </td>
@@ -3269,7 +3269,7 @@ function renderCustomerHub(data) {
           <td><strong>${r.scheduled_date}</strong> at ${r.scheduled_time}</td>
           <td><span class="badge-status ${badgeClass}">${r.status}</span></td>
           <td>
-            <button class="btn btn-sm btn-outline-success" onclick="previewAndSendReminder(${r.id})" title="Test / Send Message">
+            <button class="btn btn-action-icon text-success" onclick="previewAndSendReminder(${r.id})" title="Test / Send Message">
               <i class="fa-brands fa-whatsapp"></i>
             </button>
           </td>

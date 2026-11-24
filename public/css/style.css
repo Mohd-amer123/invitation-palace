@@ -1183,17 +1183,21 @@ h1, h2, h3, h4, .brand-title {
 .table-action-btn {
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   padding: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   font-size: 13px !important;
-  transition: all 0.15s ease !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .table-action-btn:hover {
-  transform: scale(1.08);
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .modal-footer {
@@ -1898,5 +1902,182 @@ h1, h2, h3, h4, .brand-title {
 .hover-burgundy:hover {
   color: var(--palace-burgundy) !important;
 }
+
+/* ==============================================================
+   Modern Luxury Icon System & Smooth Micro-Animations
+   ============================================================== */
+
+/* Base Icon Alignment & Rendering */
+i.fa-solid,
+i.fa-regular,
+i.fa-brands {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: -0.12em;
+  line-height: 1;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              color 0.2s ease, 
+              opacity 0.2s ease;
+  will-change: transform;
+}
+
+/* Button Icon Micro-Hover Lift */
+.btn:hover i.fa-solid,
+.btn:hover i.fa-regular,
+.btn:hover i.fa-brands {
+  transform: translateY(-1px) scale(1.08);
+}
+
+.btn:active i.fa-solid,
+.btn:active i.fa-regular,
+.btn:active i.fa-brands {
+  transform: scale(0.96);
+}
+
+/* Subtle Animated Micro-Interactions */
+
+/* 1. Refresh & Rotate Icons (Arrows Rotate / Clock Rotate) */
+.btn:hover .fa-arrows-rotate,
+.btn:hover .fa-rotate,
+.btn:hover .fa-rotate-left,
+.btn:hover .fa-clock-rotate-left {
+  transform: rotate(180deg) scale(1.1);
+}
+
+/* 2. Paper Plane & Rocket (Send / Dispatch) */
+.btn:hover .fa-paper-plane,
+.btn:hover .fa-rocket {
+  transform: translate(2px, -2px) scale(1.12);
+}
+
+/* 3. WhatsApp Brand Icon (Smooth Pop) */
+.btn:hover .fa-whatsapp,
+.nav-btn-icon-circle.wa:hover i {
+  transform: scale(1.16);
+  color: #16A34A !important;
+}
+
+/* 4. Bell Sway Animation */
+@keyframes palaceBellSway {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(12deg); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(6deg); }
+  80% { transform: rotate(-4deg); }
+}
+
+.btn:hover .fa-bell,
+.nav-link:hover .fa-bell {
+  animation: palaceBellSway 0.65s ease;
+}
+
+/* 5. Plus / Add Icon (Slight Spin) */
+.btn:hover .fa-plus,
+.btn:hover .fa-user-plus,
+.btn:hover .fa-calendar-plus {
+  transform: rotate(90deg) scale(1.12);
+}
+
+/* 6. Edit Pencil Icon (Tilt & Lift) */
+.btn:hover .fa-pen-to-square,
+.btn-action-icon:hover .fa-pen-to-square {
+  transform: rotate(-12deg) scale(1.14);
+}
+
+/* 7. View / Eye Icon */
+.btn:hover .fa-eye,
+.btn-action-icon:hover .fa-eye {
+  transform: scale(1.18);
+}
+
+/* 8. Download / Excel Icon (Nudge Down) */
+.btn:hover .fa-download,
+.btn:hover .fa-file-arrow-down,
+.btn:hover .fa-file-excel {
+  transform: translateY(2px) scale(1.08);
+}
+
+/* 9. Share / External Link Icon */
+.btn:hover .fa-share-nodes,
+.btn:hover .fa-arrow-up-right-from-square {
+  transform: translate(1px, -1.5px) scale(1.12);
+}
+
+/* 10. Trash / Delete Icon */
+.btn:hover .fa-trash,
+.btn:hover .fa-trash-can,
+.btn-action-icon:hover .fa-trash-can {
+  transform: scale(1.14);
+  color: #DC2626 !important;
+}
+
+/* Sidebar Nav Icon Styling */
+.sidebar-menu .nav-link i {
+  font-size: 15px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: #64748B;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-menu .nav-link:hover i {
+  transform: scale(1.15) translateX(2px);
+  color: var(--palace-burgundy);
+}
+
+.sidebar-menu .nav-link.active i {
+  color: #FFFFFF !important;
+  transform: scale(1.08);
+}
+
+/* Metric / Stat Card Icon Boxes - Standard Proportions */
+.metric-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metric-card:hover .metric-icon-box {
+  transform: scale(1.08);
+}
+
+.deck-metric-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.deck-glass-card:hover .deck-metric-icon {
+  transform: scale(1.12);
+}
+
+/* Input Group Icon Alignment */
+.input-group-text i {
+  font-size: 13.5px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.input-group:focus-within .input-group-text i {
+  color: var(--palace-burgundy) !important;
+  transform: scale(1.1);
+}
+
 
 
