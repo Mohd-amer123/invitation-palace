@@ -960,6 +960,9 @@ h1, h2, h3, h4, .brand-title {
   justify-content: center;
   min-height: 52px;
   margin-bottom: 8px;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
 .sidebar-company-logo {
@@ -969,6 +972,7 @@ h1, h2, h3, h4, .brand-title {
   filter: none !important;
   box-shadow: none !important;
   border: none !important;
+  outline: none !important;
   background: transparent !important;
   padding: 0 !important;
   border-radius: 0 !important;
@@ -977,6 +981,9 @@ h1, h2, h3, h4, .brand-title {
 
 .sidebar-company-logo:hover {
   transform: scale(1.03);
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
 }
 
 .brand-edit-badge {
@@ -997,20 +1004,23 @@ h1, h2, h3, h4, .brand-title {
 .logo-preview-box {
   width: 100%;
   height: 120px;
-  border: 2px dashed rgba(197, 160, 89, 0.6);
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FCFBF9;
+  background: transparent !important;
   overflow: hidden;
   position: relative;
   transition: all 0.2s ease;
 }
 
 .logo-preview-box:hover {
-  border-color: var(--palace-burgundy);
-  background: #FFF;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
 
 .logo-preview-img {
@@ -1019,7 +1029,9 @@ h1, h2, h3, h4, .brand-title {
   object-fit: contain;
   border: none !important;
   box-shadow: none !important;
+  outline: none !important;
   filter: none !important;
+  background: transparent !important;
 }
 
 .header-brand-logo {
@@ -1028,7 +1040,9 @@ h1, h2, h3, h4, .brand-title {
   object-fit: contain;
   border: none !important;
   box-shadow: none !important;
+  outline: none !important;
   filter: none !important;
+  background: transparent !important;
 }
 
 /* ==============================================================
