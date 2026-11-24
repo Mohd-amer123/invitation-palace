@@ -91,6 +91,17 @@ router.get('/batch-queue', (req, res) => {
   const eventId = req.query.eventId || null;
   const status = req.query.status || 'All';
   const includeSent = req.query.includeSent === '1' || status === 'include_sent';
+  const forceAllDates = req.query.forceAllDates === '1' || req.query.allDates === '1';
+
+  const defaultTimezone = db.prepare(`SELECT value FROM settings WHERE key = 'default_timezone'`).get()?.value || 'Asia/Kolkata';
+  const now = new Date();
+  const currentDate = new Intl.DateTimeFormat('en-CA', { timeZone: defaultTimezone }).format(now);
+  const currentTime = new Intl.DateTimeFormat('en-GB', { 
+    timeZone: defaultTimezone, 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: false 
+  }).format(now);
 
   let query = `
     SELECT 
@@ -120,6 +131,15 @@ router.get('/batch-queue', (req, res) => {
     params.push(eventId);
   }
 
+  // STRICT TARGET DATE & TIME FILTER:
+  // Only dispatch reminders whose scheduled target date and time have arrived.
+  // Future reminder stages (e.g. 3-day or 1-day reminders when event is still in the future)
+  // must NOT be pulled into the queue.
+  if (!forceAllDates && !includeSent) {
+    query += ` AND (r.scheduled_date < ? OR (r.scheduled_date = ? AND r.scheduled_time <= ?))`;
+    params.push(currentDate, currentDate, currentTime);
+  }
+
   if (includeSent) {
     // Include all active reminders even if marked Sent (for re-sending / testing)
     query += ` AND r.status != 'Cancelled'`;
@@ -133,12 +153,24 @@ router.get('/batch-queue', (req, res) => {
     query += ` AND r.status NOT IN ('Sent', 'Delivered', 'Cancelled', 'Skipped')`;
   }
 
-  query += ` ORDER BY r.scheduled_date ASC, r.id ASC`;
+  // Order by event, guest, and stage_days ASC so the closest stage comes first
+  query += ` ORDER BY r.event_id ASC, r.guest_id ASC, r.stage_days ASC, r.scheduled_date ASC, r.id ASC`;
 
-  const rows = db.prepare(query).all(...params);
+  const rawRows = db.prepare(query).all(...params);
+
+  // Deduplicate per guest and event:
+  // A guest must NEVER receive multiple reminder stages for the same event in the same batch/cycle!
+  const seenGuestEvents = new Set();
+  const rows = [];
+  for (const r of rawRows) {
+    const key = `${r.event_id}_${r.guest_id}`;
+    if (!seenGuestEvents.has(key)) {
+      seenGuestEvents.add(key);
+      rows.push(r);
+    }
+  }
 
   const businessName = db.prepare(`SELECT value FROM settings WHERE key = 'business_name'`).get()?.value || 'THE INVITATION PALACE';
-  const defaultTimezone = db.prepare(`SELECT value FROM settings WHERE key = 'default_timezone'`).get()?.value || 'Asia/Kolkata';
 
   const batchQueue = rows.map(r => {
     const templateText = r.template_text || r.rendered_message;
@@ -604,7 +636,7 @@ router.post('/trigger-auto-batch', async (req, res) => {
   }
 });
 
-// POST /api/reminders/dispatch-event/:eventId - Instantly queue and dispatch event reminders
+// POST /api/reminders/dispatch-event/:eventId - Queue and dispatch DUE reminders for an event
 router.post('/dispatch-event/:eventId', async (req, res) => {
   const db = getDb();
   const eventId = parseInt(req.params.eventId, 10);
@@ -612,19 +644,37 @@ router.post('/dispatch-event/:eventId', async (req, res) => {
     const event = db.prepare('SELECT * FROM events WHERE id = ?').get(eventId);
     if (!event) return res.status(404).json({ success: false, error: 'Event not found.' });
 
-    // Mark pending or skipped reminders as Ready to Send
+    const defaultTimezone = db.prepare(`SELECT value FROM settings WHERE key = 'default_timezone'`).get()?.value || 'Asia/Kolkata';
+    const now = new Date();
+    const currentDate = new Intl.DateTimeFormat('en-CA', { timeZone: defaultTimezone }).format(now);
+    const currentTime = new Intl.DateTimeFormat('en-GB', { 
+      timeZone: defaultTimezone, 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
+    }).format(now);
+
+    // ONLY mark reminders as Ready to Send if their target scheduled date & time are DUE!
+    // Never activate future stages (e.g. 1-day reminder when event is next week).
     const updateResult = db.prepare(`
       UPDATE reminders
       SET status = 'Ready to Send', failure_reason = NULL, updated_at = CURRENT_TIMESTAMP
-      WHERE event_id = ? AND status IN ('Scheduled', 'Skipped', 'Failed')
-    `).run(eventId);
+      WHERE event_id = ? 
+        AND status IN ('Scheduled', 'Failed')
+        AND (
+          scheduled_date < ?
+          OR (scheduled_date = ? AND scheduled_time <= ?)
+        )
+    `).run(eventId, currentDate, currentDate, currentTime);
 
     // Trigger batch runner immediately
     runAutomatedBatchQueue().catch(() => {});
 
     res.json({
       success: true,
-      message: `Triggered dispatch for "${event.event_name}". ${updateResult.changes} reminder(s) queued for delivery.`
+      message: updateResult.changes > 0 
+        ? `Queued ${updateResult.changes} due reminder(s) for "${event.event_name}".`
+        : `No reminders are due right now for "${event.event_name}". Scheduled stages will be sent automatically on their target dates.`
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

@@ -68,8 +68,8 @@ function generateRemindersForEvent(eventId) {
   const insertStmt = db.prepare(`
     INSERT OR IGNORE INTO reminders (
       event_id, guest_id, stage_days, reminder_stage,
-      scheduled_date, scheduled_time, status, rendered_message
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      scheduled_date, scheduled_time, status, rendered_message, failure_reason
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   const businessNameSetting = db.prepare(`SELECT value FROM settings WHERE key = 'business_name'`).get()?.value || 'THE INVITATION PALACE';
@@ -77,7 +77,14 @@ function generateRemindersForEvent(eventId) {
 
   let createdCount = 0;
 
-  const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: defaultTimezone }).format(new Date());
+  const now = new Date();
+  const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: defaultTimezone }).format(now);
+  const currentTimeStr = new Intl.DateTimeFormat('en-GB', { 
+    timeZone: defaultTimezone, 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: false 
+  }).format(now);
 
   const tx = db.transaction(() => {
     for (const guest of guests) {
@@ -86,14 +93,26 @@ function generateRemindersForEvent(eventId) {
         const scheduledTime = event.reminder_time || '10:00';
         const stageName = `${days}-Day Reminder`;
 
-        // If scheduled date is today or already passed, but event is today or future, queue it immediately!
-        let effectiveDate = scheduledDate;
-        let effectiveTime = scheduledTime;
+        // Determine accurate status based strictly on target scheduled date & time:
         let initialStatus = REMINDER_STATUSES.SCHEDULED;
+        let failureReason = null;
 
-        if (scheduledDate <= todayStr && event.event_date >= todayStr) {
-          effectiveDate = todayStr;
-          initialStatus = REMINDER_STATUSES.READY_TO_SEND;
+        if (scheduledDate < todayStr) {
+          // If the reminder date already passed before this guest/event was created,
+          // do NOT queue or spam the guest with obsolete past reminders ("in 7 days" when event is tomorrow).
+          // Mark as Skipped so the schedule history is cleanly preserved without immediate false delivery.
+          initialStatus = REMINDER_STATUSES.SKIPPED;
+          failureReason = 'Stage date already passed prior to registration';
+        } else if (scheduledDate === todayStr) {
+          // Scheduled for today: only mark Ready to Send if the scheduled time has arrived!
+          if (scheduledTime <= currentTimeStr) {
+            initialStatus = REMINDER_STATUSES.READY_TO_SEND;
+          } else {
+            initialStatus = REMINDER_STATUSES.SCHEDULED;
+          }
+        } else {
+          // Future scheduled date: strictly Scheduled for the future target date and time!
+          initialStatus = REMINDER_STATUSES.SCHEDULED;
         }
 
         // Check if reminder already exists
@@ -133,10 +152,11 @@ function generateRemindersForEvent(eventId) {
           guest.id,
           days,
           stageName,
-          effectiveDate,
-          effectiveTime,
+          scheduledDate,
+          scheduledTime,
           initialStatus,
-          rendered
+          rendered,
+          failureReason
         );
 
         if (res.changes > 0) createdCount++;
@@ -174,11 +194,22 @@ function handleEventReschedule(eventId, newEventDate, newEventTime) {
   const templateMap = {};
   templates.forEach(t => { templateMap[t.stage_days] = t.template_text; });
 
+  const now = new Date();
+  const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: defaultTimezone }).format(now);
+  const currentTimeStr = new Intl.DateTimeFormat('en-GB', { 
+    timeZone: defaultTimezone, 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: false 
+  }).format(now);
+
   const updateStmt = db.prepare(`
     UPDATE reminders
     SET scheduled_date = ?,
         scheduled_time = ?,
         rendered_message = ?,
+        status = ?,
+        failure_reason = ?,
         updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
   `);
@@ -187,6 +218,18 @@ function handleEventReschedule(eventId, newEventDate, newEventTime) {
     for (const rem of pendingReminders) {
       const newScheduledDate = calculateScheduledDate(newEventDate, rem.stage_days);
       const scheduledTime = newEventTime || event.reminder_time || '10:00';
+
+      let targetStatus = REMINDER_STATUSES.SCHEDULED;
+      let reason = null;
+
+      if (newScheduledDate < todayStr) {
+        targetStatus = REMINDER_STATUSES.SKIPPED;
+        reason = 'Stage date passed after rescheduling';
+      } else if (newScheduledDate === todayStr) {
+        targetStatus = (scheduledTime <= currentTimeStr) ? REMINDER_STATUSES.READY_TO_SEND : REMINDER_STATUSES.SCHEDULED;
+      } else {
+        targetStatus = REMINDER_STATUSES.SCHEDULED;
+      }
 
       const templateText = templateMap[rem.stage_days] || rem.rendered_message;
 
@@ -206,7 +249,7 @@ function handleEventReschedule(eventId, newEventDate, newEventTime) {
 
       const updatedRendered = renderTemplate(templateText, context);
 
-      updateStmt.run(newScheduledDate, scheduledTime, updatedRendered, rem.id);
+      updateStmt.run(newScheduledDate, scheduledTime, updatedRendered, targetStatus, reason, rem.id);
     }
   });
 

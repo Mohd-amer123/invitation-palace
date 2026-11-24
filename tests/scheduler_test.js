@@ -13,6 +13,12 @@ console.log('====================================================\n');
 
 initDb();
 const db = getDb();
+const oldCusts = db.prepare("SELECT id FROM customers WHERE customer_code LIKE 'SCHED-TEST%'").all();
+for (const c of oldCusts) {
+  db.prepare("DELETE FROM reminders WHERE event_id IN (SELECT id FROM events WHERE customer_id = ?)").run(c.id);
+  db.prepare("DELETE FROM events WHERE customer_id = ?").run(c.id);
+  db.prepare("DELETE FROM customers WHERE id = ?").run(c.id);
+}
 
 // 1. Timezone test
 const timeInfo = getCurrentTimeInfo('Asia/Kolkata');
@@ -25,10 +31,11 @@ console.log(`[PASS] Asia/Kolkata Time: ${timeInfo.currentDate} at ${timeInfo.cur
 console.log('Testing Overdue Policy...');
 
 // Insert an overdue reminder with scheduled_date = '2020-01-01'
+const testCode = 'SCHED-TEST-' + Date.now();
 const testCust = db.prepare(`
   INSERT INTO customers (customer_code, full_name, mobile, status)
-  VALUES ('SCHED-TEST-001', 'Scheduler Test Customer', '+919876543211', 'Active')
-`).run();
+  VALUES (?, 'Scheduler Test Customer', '+919876543211', 'Active')
+`).run(testCode);
 
 const testEvent = db.prepare(`
   INSERT INTO events (

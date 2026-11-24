@@ -79,21 +79,28 @@ async function checkAndProcessReminders() {
 
     const { currentDate, currentTime, timestamp } = getCurrentTimeInfo(timezoneSetting);
 
-    // 1. Move reminders for today's or upcoming events whose scheduled date was reached to 'Ready to Send'
+    // 1. Move reminders for active events whose scheduled target date and time have actually arrived to 'Ready to Send'
+    // Target conditions:
+    // a) scheduled_date < currentDate (due from past days)
+    // OR
+    // b) (scheduled_date = currentDate AND scheduled_time <= currentTime) (due today at or after target time)
+    // NOTE: Keep original scheduled_date intact so reporting and stage tracking remain 100% accurate!
     const dueForUpcoming = db.prepare(`
       UPDATE reminders
       SET status = 'Ready to Send',
-          scheduled_date = ?,
           updated_at = CURRENT_TIMESTAMP
       WHERE id IN (
         SELECT r.id FROM reminders r
         JOIN events e ON r.event_id = e.id
         WHERE r.status = 'Scheduled'
-          AND r.scheduled_date <= ?
+          AND (
+            r.scheduled_date < ?
+            OR (r.scheduled_date = ? AND r.scheduled_time <= ?)
+          )
           AND e.status = 'Active'
           AND e.event_date >= ?
       )
-    `).run(currentDate, currentDate, currentDate);
+    `).run(currentDate, currentDate, currentTime, currentDate);
 
     if (dueForUpcoming.changes > 0) {
       console.log(`[Scheduler] Queued ${dueForUpcoming.changes} due reminder(s) for delivery today.`);
@@ -103,12 +110,12 @@ async function checkAndProcessReminders() {
     const overdueResult = db.prepare(`
       UPDATE reminders
       SET status = 'Skipped',
-          failure_reason = 'Event date already passed',
+          failure_reason = 'Overdue: Event date already passed',
           updated_at = CURRENT_TIMESTAMP
       WHERE id IN (
         SELECT r.id FROM reminders r
         JOIN events e ON r.event_id = e.id
-        WHERE r.status = 'Scheduled'
+        WHERE r.status IN ('Scheduled', 'Ready to Send')
           AND e.event_date < ?
       )
     `).run(currentDate);
@@ -256,8 +263,8 @@ async function runAutomatedBatchQueue() {
     return; // No WhatsApp session connected
   }
 
-  // Fetch reminders that are Ready to Send (due today or marked ready)
-  const pendingBatch = db.prepare(`
+  // Fetch reminders that are Ready to Send (due today or overdue)
+  const pendingBatchRaw = db.prepare(`
     SELECT 
       r.id as reminder_id, r.event_id, r.guest_id, r.stage_days, r.reminder_stage,
       r.scheduled_date, r.scheduled_time, r.rendered_message, r.status,
@@ -271,15 +278,40 @@ async function runAutomatedBatchQueue() {
     JOIN events e ON r.event_id = e.id
     LEFT JOIN templates t ON t.stage_days = r.stage_days
     WHERE r.status = 'Ready to Send'
-      AND r.scheduled_date <= ?
+      AND (
+        r.scheduled_date < ?
+        OR (r.scheduled_date = ? AND r.scheduled_time <= ?)
+      )
       AND e.status = 'Active'
       AND g.consent_status = 1
-    ORDER BY r.scheduled_date ASC, r.scheduled_time ASC, r.id ASC
-    LIMIT ?
-  `).all(currentDate, batchLimit);
+    ORDER BY r.event_id ASC, r.guest_id ASC, r.stage_days ASC, r.scheduled_date ASC, r.id ASC
+  `).all(currentDate, currentDate, currentTime);
 
-  if (pendingBatch.length === 0) {
+  if (pendingBatchRaw.length === 0) {
     return;
+  }
+
+  // Deduplicate per guest and event:
+  // A guest must NEVER receive multiple reminder stages for the same event in the same batch/cycle!
+  const seenGuestEvents = new Set();
+  const pendingBatch = [];
+
+  for (const item of pendingBatchRaw) {
+    const key = `${item.event_id}_${item.guest_id}`;
+    if (!seenGuestEvents.has(key)) {
+      seenGuestEvents.add(key);
+      pendingBatch.push(item);
+      if (pendingBatch.length >= batchLimit) break;
+    } else {
+      // Obsolete redundant stage for same guest: mark skipped
+      db.prepare(`
+        UPDATE reminders
+        SET status = 'Skipped',
+            failure_reason = 'Superseded by closer reminder stage in current cycle',
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(item.reminder_id);
+    }
   }
 
   isAutoBatchActive = true;
